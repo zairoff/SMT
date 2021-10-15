@@ -1,6 +1,6 @@
 ﻿namespace SMT.Domain
 {
-    public class Brand
+    public class Line
     {
         public int Id { get; set; }
 
