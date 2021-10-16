@@ -37,7 +37,7 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{defectId}")]
+        [HttpGet]
         [Route("GetByDefectId")]
         public async Task<IActionResult> GetByDefectId(int defectId)
         {
@@ -46,7 +46,7 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{pcdPositionId}")]
+        [HttpGet]
         [Route("GetByPcbPositionId")]
         public async Task<IActionResult> GetByPcbPositionId(int pcdPositionId)
         {
@@ -55,7 +55,7 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{modelId}")]
+        [HttpGet]
         [Route("GetByModelId")]
         public async Task<IActionResult> GetByModelId(int modelId)
         {
@@ -75,11 +75,11 @@ namespace SMT.Api.Controllers
 
                 return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.ToString());
                 //return StatusCode(500);
-            }            
+            }
         }
 
         [HttpPut("{id}")]
@@ -95,14 +95,14 @@ namespace SMT.Api.Controllers
 
                 return Ok(result);
             }
-            catch(NotFoundException)
+            catch (NotFoundException)
             {
                 return NotFound();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.ToString());
-            }            
+            }
         }
 
         [HttpDelete("{id}")]
