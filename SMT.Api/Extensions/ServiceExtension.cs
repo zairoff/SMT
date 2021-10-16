@@ -20,7 +20,7 @@ namespace SMT.Api.Extensions
         {
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(configuration["ConnectionStrings:DatabaseConnection"]));
+                options.UseSqlServer(configuration.GetConnectionString("DatabaseConnection")));
 
             AddServices(services);
 
