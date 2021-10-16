@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SMT.Api.Common.Dto;
+using SMT.Common.Dto;
 using SMT.Common.Exceptions;
 using SMT.Services.Interfaces;
 using System;
