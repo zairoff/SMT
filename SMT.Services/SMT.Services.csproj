@@ -4,4 +4,15 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SMT.Access\SMT.Access.csproj" />
+    <ProjectReference Include="..\SMT.Common\SMT.Common.csproj" />
+    <ProjectReference Include="..\SMT.Domain\SMT.Domain.csproj" />
+    <ProjectReference Include="..\SMT.Dto\SMT.Api.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+  </ItemGroup>
+
 </Project>

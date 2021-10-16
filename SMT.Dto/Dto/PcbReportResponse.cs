@@ -1,12 +1,13 @@
-﻿using System;
+﻿using SMT.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SMT.Domain
+namespace SMT.Api.Common.Dto
 {
-    public class PcbReport
+    public class PcbReportResponse
     {
         public int Id { get; set; }
 

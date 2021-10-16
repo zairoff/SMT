@@ -1,27 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SMT.Domain
+namespace SMT.Api.Common.Dto
 {
-    public class PcbReport
+    public class PcbReportCreate
     {
-        public int Id { get; set; }
-
+        [Required]
         public int ModelId { get; set; }
 
-        public Model Model { get; set; }
-
+        [Required]
         public int DefectId { get; set; }
 
-        public Defect Defect { get; set; }
-
+        [Required]
         public int PcbPositionId { get; set; }
 
-        public PcbPosition PcbPosition { get; set; }
-
-        public DateTime Date { get; set; }
+        [Required]
+        public DateTime Date => DateTime.UtcNow;
     }
 }
