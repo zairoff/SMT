@@ -45,7 +45,7 @@ namespace SMT.Api.Extensions
                 foreach (var type in types)
                 {
                     var serviceInterface = type.GetTypeInfo().GetInterfaces().First();
-                    services.AddScoped(type, serviceInterface);
+                    services.AddScoped(serviceInterface, type);
                 }
             }
         }

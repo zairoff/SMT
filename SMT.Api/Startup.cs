@@ -28,6 +28,7 @@ namespace SMT.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddServices(Configuration);
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
