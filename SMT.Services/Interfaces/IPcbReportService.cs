@@ -1,4 +1,4 @@
-﻿using SMT.Api.Common.Dto;
+﻿using SMT.Common.Dto;
 using SMT.Domain;
 using System;
 using System.Collections.Generic;

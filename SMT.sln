@@ -9,11 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Access", "SMT.Access\SM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Services", "SMT.Services\SMT.Services.csproj", "{ABE92835-36D2-4D16-897D-740B52167B18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMT.Common", "SMT.Common\SMT.Common.csproj", "{AB668EDA-0797-40E5-B5BB-B7813BA1A3C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Common", "SMT.Common\SMT.Common.csproj", "{AB668EDA-0797-40E5-B5BB-B7813BA1A3C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMT.Api", "SMT.Api\SMT.Api.csproj", "{DD1E8906-A476-4C2A-AA53-F217F83BDB78}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMT.Api.Common", "SMT.Dto\SMT.Api.Common.csproj", "{AE354EDB-D0CC-4F1D-B0DD-50D055317A34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Api", "SMT.Api\SMT.Api.csproj", "{DD1E8906-A476-4C2A-AA53-F217F83BDB78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +39,6 @@ Global
 		{DD1E8906-A476-4C2A-AA53-F217F83BDB78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD1E8906-A476-4C2A-AA53-F217F83BDB78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD1E8906-A476-4C2A-AA53-F217F83BDB78}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AE354EDB-D0CC-4F1D-B0DD-50D055317A34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AE354EDB-D0CC-4F1D-B0DD-50D055317A34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AE354EDB-D0CC-4F1D-B0DD-50D055317A34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AE354EDB-D0CC-4F1D-B0DD-50D055317A34}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,7 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SMT.Dto\SMT.Api.Common.csproj" />
     <ProjectReference Include="..\SMT.Services\SMT.Services.csproj" />
   </ItemGroup>
 
