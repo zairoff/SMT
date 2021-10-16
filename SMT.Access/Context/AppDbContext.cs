@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using SMT.Domain;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,19 +19,19 @@ namespace SMT.Access.Context
         {
         }
 
-        //public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
-        //{
-        //    public AppDbContext CreateDbContext(string[] args)
-        //    {
-        //        IConfigurationRoot configuration = new ConfigurationBuilder()
-        //            .SetBasePath(Directory.GetCurrentDirectory())
-        //            .AddJsonFile(@Directory.GetCurrentDirectory() + "/../Sport.API/appsettings.json")
-        //            .Build();
-        //        var builder = new DbContextOptionsBuilder<AppDbContext>();
-        //        var connectionString = configuration.GetConnectionString("DatabaseConnection");
-        //        builder.UseSqlServer(connectionString);
-        //        return new AppDbContext(builder.Options);
-        //    }
-        //}
+        public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+        {
+            public AppDbContext CreateDbContext(string[] args)
+            {
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile(@Directory.GetCurrentDirectory() + "/../SMT.Api/appsettings.json")
+                    .Build();
+                var builder = new DbContextOptionsBuilder<AppDbContext>();
+                var connectionString = configuration.GetConnectionString("DatabaseConnection");
+                builder.UseSqlServer(connectionString);
+                return new AppDbContext(builder.Options);
+            }
+        }
     }
 }
