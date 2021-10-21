@@ -1,4 +1,4 @@
-﻿using SMT.Common.Dto;
+﻿using SMT.Common.Dto.PcbReportDto;
 using SMT.Domain;
 using System;
 using System.Collections.Generic;

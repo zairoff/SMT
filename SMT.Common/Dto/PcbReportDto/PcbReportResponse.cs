@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SMT.Common.Dto
+namespace SMT.Common.Dto.PcbReportDto
 {
     public class PcbReportResponse
     {

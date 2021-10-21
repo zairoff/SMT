@@ -49,7 +49,7 @@ namespace SMT.Access
             return DbSet.AsQueryable();
         }
 
-        public async Task<int> SaveChangesAsync()
+        private async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
         }

@@ -11,7 +11,6 @@ namespace SMT.Access
         Task AddAsync(T entity);
         Task DeleteAsync(T entity);
         Task UpdateAsync(T entity);
-        Task<int> SaveChangesAsync();
         IQueryable<T> Get();
         IQueryable<T> GetAll();
     }
