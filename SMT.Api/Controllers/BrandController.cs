@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SMT.Common.Dto.PcbReportDto;
+using SMT.Common.Dto.BrandDto;
 using SMT.Common.Exceptions;
 using SMT.Services.Interfaces;
 using System;
@@ -12,11 +12,11 @@ namespace SMT.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PcbReportController : ControllerBase
+    public class BrandController : ControllerBase
     {
-        private readonly IPcbReportService _service;
+        private readonly IBrandService _service;
 
-        public PcbReportController(IPcbReportService service)
+        public BrandController(IBrandService service)
         {
             _service = service;
         }
@@ -38,28 +38,10 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
-        [Route("GetByDefectId")]
-        public async Task<IActionResult> GetByDefectId(int defectId)
+        [Route("GetByName")]
+        public async Task<IActionResult> GetByName(string name)
         {
-            var result = await _service.GetByDefectIdAsync(defectId);
-
-            return Ok(result);
-        }
-
-        [HttpGet]
-        [Route("GetByPcbPositionId")]
-        public async Task<IActionResult> GetByPcbPositionId(int pcdPositionId)
-        {
-            var result = await _service.GetByPositionIdAsync(pcdPositionId);
-
-            return Ok(result);
-        }
-
-        [HttpGet]
-        [Route("GetByModelId")]
-        public async Task<IActionResult> GetByModelId(int modelId)
-        {
-            var result = await _service.GetByModelIdAsync(modelId);
+            var result = await _service.GetByNameAsync(name);
 
             return Ok(result);
         }
@@ -67,11 +49,11 @@ namespace SMT.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateReport([FromBody] PcbReportCreate reportCreate)
+        public async Task<IActionResult> CreateReport([FromBody] BrandCreate brandCreate)
         {
             try
             {
-                var result = await _service.AddAsync(reportCreate);
+                var result = await _service.AddAsync(brandCreate);
 
                 return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
             }
@@ -87,11 +69,11 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateReport(int id, [FromBody] PcbReportUpdate reportUpdate)
+        public async Task<IActionResult> UpdateReport(int id, [FromBody] BrandUpdate brandUpdate)
         {
             try
             {
-                var result = await _service.UpdateAsync(id, reportUpdate);
+                var result = await _service.UpdateAsync(id, brandUpdate);
 
                 return Ok(result);
             }

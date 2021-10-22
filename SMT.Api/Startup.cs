@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using SMT.Api.Extensions;
+using SMT.Services.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,8 +28,13 @@ namespace SMT.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            services.AddAutoMapper(typeof(ModelToResourceProfile), typeof(ResourceToModelProfile));
             services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(Configuration["AppSettings:CORS"].ToString(), policy => policy.AllowAnyOrigin());
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SMT.Api", Version = "v1" });
@@ -46,6 +52,8 @@ namespace SMT.Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SMT.Api v1"));
             }
+
+            app.UseCors(Configuration["AppSettings:CORS"]);
 
             app.UseHttpsRedirection();
 

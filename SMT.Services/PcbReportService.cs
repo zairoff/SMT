@@ -35,7 +35,14 @@ namespace SMT.Services
 
         public async Task<PcbReportResponse> DeleteAsync(int id)
         {
-            var report = await _repository.Get().Where(r => r.Id == id).FirstOrDefaultAsync();
+            var report = await _repository.Get().Where(r => r.Id == id)
+                                            .Include(r => r.Model)
+                                            .ThenInclude(r => r.Product)
+                                            .Include(r => r.Model)
+                                            .ThenInclude(r => r.Brand)
+                                            .Include(r => r.Defect)
+                                            .Include(r => r.PcbPosition)
+                                            .FirstOrDefaultAsync();
 
             if (report == null)
                 throw new NotFoundException();
