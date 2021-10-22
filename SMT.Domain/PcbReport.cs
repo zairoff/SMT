@@ -22,6 +22,6 @@ namespace SMT.Domain
 
         public PcbPosition PcbPosition { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; } = DateTime.Now;
     }
 }
