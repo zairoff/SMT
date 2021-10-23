@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SMT.Common.Dto.ModelDto;
+using SMT.Common.Dto.ProductBrandDto;
 using SMT.Common.Exceptions;
 using SMT.Services.Interfaces;
 using System;
@@ -12,11 +12,11 @@ namespace SMT.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ModelController : ControllerBase
+    public class ProductBrandController : ControllerBase
     {
-        private readonly IModelService _service;
+        private readonly IProductBrandService _service;
 
-        public ModelController(IModelService service)
+        public ProductBrandController(IProductBrandService service)
         {
             _service = service;
         }
@@ -38,19 +38,10 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
-        [Route("GetByName")]
-        public async Task<IActionResult> GetByName(string name)
+        [Route("GetByProductIdAsync")]
+        public async Task<IActionResult> GetByProductIdAsync(int productId)
         {
-            var result = await _service.GetByNameAsync(name);
-
-            return Ok(result);
-        }
-
-        [HttpGet]
-        [Route("GetByProductBrandId")]
-        public async Task<IActionResult> GetByProductBrandId(int productBrandId)
-        {
-            var result = await _service.GetByProductBrandId(productBrandId);
+            var result = await _service.GetByProductIdAsync(productId);
 
             return Ok(result);
         }
@@ -58,11 +49,11 @@ namespace SMT.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateReport([FromBody] ModelCreate modelCreate)
+        public async Task<IActionResult> CreateReport([FromBody] ProductBrandCreate productBrandCreate)
         {
             try
             {
-                var result = await _service.AddAsync(modelCreate);
+                var result = await _service.AddAsync(productBrandCreate);
 
                 return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
             }
@@ -78,11 +69,11 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateReport(int id, [FromBody] ModelUpdate modelUpdate)
+        public async Task<IActionResult> UpdateReport(int id, [FromBody] ProductBrandUpdate productBrandUpdate)
         {
             try
             {
-                var result = await _service.UpdateAsync(id, modelUpdate);
+                var result = await _service.UpdateAsync(id, productBrandUpdate);
 
                 return Ok(result);
             }

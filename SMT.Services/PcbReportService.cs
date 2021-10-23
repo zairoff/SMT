@@ -37,9 +37,12 @@ namespace SMT.Services
         {
             var report = await _repository.Get().Where(r => r.Id == id)
                                             .Include(r => r.Model)
+                                            .ThenInclude(r => r.ProductBrand)
                                             .ThenInclude(r => r.Product)
                                             .Include(r => r.Model)
+                                            .ThenInclude(r => r.ProductBrand)
                                             .ThenInclude(r => r.Brand)
+                                            .Include(r => r.Model)
                                             .Include(r => r.Defect)
                                             .Include(r => r.PcbPosition)
                                             .FirstOrDefaultAsync();
@@ -56,9 +59,12 @@ namespace SMT.Services
         {
             var reports = await _repository.GetAll()
                                     .Include(r => r.Model)
+                                    .ThenInclude(r => r.ProductBrand)
                                     .ThenInclude(r => r.Product)
                                     .Include(r => r.Model)
+                                    .ThenInclude(r => r.ProductBrand)
                                     .ThenInclude(r => r.Brand)
+                                    .Include(r => r.Model)
                                     .Include(r => r.Defect)
                                     .Include(r => r.PcbPosition)
                                     .ToListAsync();
@@ -71,9 +77,12 @@ namespace SMT.Services
             var report = await _repository.Get()
                                     .Where(r => r.Id == id)
                                     .Include(r => r.Model)
+                                    .ThenInclude(r => r.ProductBrand)
                                     .ThenInclude(r => r.Product)
                                     .Include(r => r.Model)
+                                    .ThenInclude(r => r.ProductBrand)
                                     .ThenInclude(r => r.Brand)
+                                    .Include(r => r.Model)
                                     .Include(r => r.Defect)
                                     .Include(r => r.PcbPosition)
                                     .FirstOrDefaultAsync();
@@ -87,9 +96,12 @@ namespace SMT.Services
             var reports = await _repository.GetAll()
                                     .Where(r => r.DefectId == defectId)
                                     .Include(r => r.Model)
+                                    .ThenInclude(r => r.ProductBrand)
                                     .ThenInclude(r => r.Product)
                                     .Include(r => r.Model)
+                                    .ThenInclude(r => r.ProductBrand)
                                     .ThenInclude(r => r.Brand)
+                                    .Include(r => r.Model)
                                     .Include(r => r.Defect)
                                     .Include(r => r.PcbPosition)
                                     .ToListAsync();
@@ -102,9 +114,12 @@ namespace SMT.Services
             var reports = await _repository.GetAll()
                                     .Where(r => r.ModelId == modelId)
                                     .Include(r => r.Model)
+                                    .ThenInclude(r => r.ProductBrand)
                                     .ThenInclude(r => r.Product)
                                     .Include(r => r.Model)
+                                    .ThenInclude(r => r.ProductBrand)
                                     .ThenInclude(r => r.Brand)
+                                    .Include(r => r.Model)
                                     .Include(r => r.Defect)
                                     .Include(r => r.PcbPosition)
                                     .ToListAsync();
@@ -117,9 +132,12 @@ namespace SMT.Services
             var reports = await _repository.GetAll()
                                     .Where(r => r.PcbPositionId == positionId)
                                     .Include(r => r.Model)
+                                    .ThenInclude(r => r.ProductBrand)
                                     .ThenInclude(r => r.Product)
                                     .Include(r => r.Model)
+                                    .ThenInclude(r => r.ProductBrand)
                                     .ThenInclude(r => r.Brand)
+                                    .Include(r => r.Model)
                                     .Include(r => r.Defect)
                                     .Include(r => r.PcbPosition)
                                     .ToListAsync();
@@ -129,7 +147,17 @@ namespace SMT.Services
 
         public async Task<PcbReportResponse> UpdateAsync(int id, PcbReportUpdate report)
         {
-            var existingReport = await _repository.Get().Where(r => r.Id == id).FirstOrDefaultAsync();
+            var existingReport = await _repository.Get().Where(r => r.Id == id)
+                                                    .Include(r => r.Model)
+                                                    .ThenInclude(r => r.ProductBrand)
+                                                    .ThenInclude(r => r.Product)
+                                                    .Include(r => r.Model)
+                                                    .ThenInclude(r => r.ProductBrand)
+                                                    .ThenInclude(r => r.Brand)
+                                                    .Include(r => r.Model)
+                                                    .Include(r => r.Defect)
+                                                    .Include(r => r.PcbPosition)
+                                                    .FirstOrDefaultAsync();
 
             if (existingReport == null)
                 throw new NotFoundException();

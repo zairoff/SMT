@@ -41,8 +41,10 @@ namespace SMT.Services
         public async Task<ModelResponse> DeleteAsync(int id)
         {
             var model = await _repository.Get().Where(p => p.Id == id)
-                                                .Include(p => p.Product)
-                                                .Include(p => p.Brand)
+                                                .Include(p => p.ProductBrand)
+                                                .ThenInclude(p => p.Brand)
+                                                .Include(p => p.ProductBrand)
+                                                .ThenInclude(p => p.Product)
                                                 .FirstOrDefaultAsync();
 
             if (model == null)
@@ -56,8 +58,10 @@ namespace SMT.Services
         public async Task<IEnumerable<ModelResponse>> GetAllAsync()
         {
             var models = await _repository.GetAll()
-                                            .Include(p => p.Product)
-                                            .Include(p => p.Brand)
+                                            .Include(p => p.ProductBrand)
+                                            .ThenInclude(p => p.Brand)
+                                            .Include(p => p.ProductBrand)
+                                            .ThenInclude(p => p.Product)
                                             .ToListAsync();
 
             return _mapper.Map<IEnumerable<Model>, IEnumerable<ModelResponse>>(models);
@@ -66,19 +70,23 @@ namespace SMT.Services
         public async Task<ModelResponse> GetAsync(int id)
         {
             var Model = await _repository.Get().Where(p => p.Id == id)
-                                                .Include(p => p.Product)
-                                                .Include(p => p.Brand)
+                                                .Include(p => p.ProductBrand)
+                                                .ThenInclude(p => p.Brand)
+                                                .Include(p => p.ProductBrand)
+                                                .ThenInclude(p => p.Product)
                                                 .FirstOrDefaultAsync();
 
             return _mapper.Map<Model, ModelResponse>(Model);
         }
 
-        public async Task<IEnumerable<ModelResponse>> GetByBrandIdAsync(int productId, int brandId)
+        public async Task<IEnumerable<ModelResponse>> GetByProductBrandId(int productBrandId)
         {
             var models = await _repository.GetAll()
-                                            .Where(m => m.ProductId == productId && m.BrandId == brandId)
-                                            .Include(p => p.Product)
-                                            .Include(p => p.Brand)
+                                            .Where(m => m.ProductBrandId == productBrandId)
+                                            .Include(p => p.ProductBrand)
+                                            .ThenInclude(p => p.Brand)
+                                            .Include(p => p.ProductBrand)
+                                            .ThenInclude(p => p.Product)
                                             .ToListAsync();
 
             return _mapper.Map<IEnumerable<Model>, IEnumerable<ModelResponse>>(models);
@@ -87,8 +95,10 @@ namespace SMT.Services
         public async Task<ModelResponse> GetByNameAsync(string name)
         {
             var model = await _repository.Get().Where(p => p.Name == name)
-                                                .Include(p => p.Product)
-                                                .Include(p => p.Brand)
+                                                .Include(p => p.ProductBrand)
+                                                .ThenInclude(p => p.Brand)
+                                                .Include(p => p.ProductBrand)
+                                                .ThenInclude(p => p.Product)
                                                 .FirstOrDefaultAsync();
 
             return _mapper.Map<Model, ModelResponse>(model);
@@ -97,8 +107,10 @@ namespace SMT.Services
         public async Task<ModelResponse> UpdateAsync(int id, ModelUpdate modelUpdate)
         {
             var model = await _repository.Get().Where(p => p.Id == id)
-                                                .Include(p => p.Product)
-                                                .Include(p => p.Brand)
+                                                .Include(p => p.ProductBrand)
+                                                .ThenInclude(p => p.Brand)
+                                                .Include(p => p.ProductBrand)
+                                                .ThenInclude(p => p.Product)
                                                 .FirstOrDefaultAsync();
 
             if (model == null)

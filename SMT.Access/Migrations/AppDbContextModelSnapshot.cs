@@ -118,20 +118,15 @@ namespace SMT.Access.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("BrandId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int>("ProductBrandId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BrandId");
-
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductBrandId");
 
                     b.ToTable("Models");
                 });
@@ -194,6 +189,28 @@ namespace SMT.Access.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("SMT.Domain.ProductBrand", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BrandId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductBrands");
                 });
 
             modelBuilder.Entity("SMT.Domain.Repair", b =>
@@ -290,21 +307,13 @@ namespace SMT.Access.Migrations
 
             modelBuilder.Entity("SMT.Domain.Model", b =>
                 {
-                    b.HasOne("SMT.Domain.Brand", "Brand")
+                    b.HasOne("SMT.Domain.ProductBrand", "ProductBrand")
                         .WithMany()
-                        .HasForeignKey("BrandId")
+                        .HasForeignKey("ProductBrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SMT.Domain.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Brand");
-
-                    b.Navigation("Product");
+                    b.Navigation("ProductBrand");
                 });
 
             modelBuilder.Entity("SMT.Domain.PcbReport", b =>
@@ -332,6 +341,25 @@ namespace SMT.Access.Migrations
                     b.Navigation("Model");
 
                     b.Navigation("PcbPosition");
+                });
+
+            modelBuilder.Entity("SMT.Domain.ProductBrand", b =>
+                {
+                    b.HasOne("SMT.Domain.Brand", "Brand")
+                        .WithMany()
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SMT.Domain.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("SMT.Domain.Repair", b =>

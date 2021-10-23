@@ -14,6 +14,7 @@ namespace SMT.Access.Context
     public class AppDbContext : DbContext
     {
         public DbSet<Brand> Brands { get; set; }
+        public DbSet<ProductBrand> ProductBrands { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Line> Lines { get; set; }

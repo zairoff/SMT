@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SMT.Access.Migrations
 {
-    public partial class addedTables : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,6 +18,19 @@ namespace SMT.Access.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Brands", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Defects",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Defects", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,26 +110,25 @@ namespace SMT.Access.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Models",
+                name: "ProductBrands",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BrandId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    BrandId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Models", x => x.Id);
+                    table.PrimaryKey("PK_ProductBrands", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Models_Brands_BrandId",
+                        name: "FK_ProductBrands_Brands_BrandId",
                         column: x => x.BrandId,
                         principalTable: "Brands",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Models_Products_ProductId",
+                        name: "FK_ProductBrands_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
@@ -138,6 +150,26 @@ namespace SMT.Access.Migrations
                         name: "FK_Repairers_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Models",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductBrandId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Models", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Models_ProductBrands_ProductBrandId",
+                        column: x => x.ProductBrandId,
+                        principalTable: "ProductBrands",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -246,14 +278,9 @@ namespace SMT.Access.Migrations
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Models_BrandId",
+                name: "IX_Models_ProductBrandId",
                 table: "Models",
-                column: "BrandId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Models_ProductId",
-                table: "Models",
-                column: "ProductId");
+                column: "ProductBrandId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PcbReports_DefectId",
@@ -269,6 +296,16 @@ namespace SMT.Access.Migrations
                 name: "IX_PcbReports_PcbPositionId",
                 table: "PcbReports",
                 column: "PcbPositionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductBrands_BrandId",
+                table: "ProductBrands",
+                column: "BrandId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductBrands_ProductId",
+                table: "ProductBrands",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Repairers_EmployeeId",
@@ -322,6 +359,9 @@ namespace SMT.Access.Migrations
                 name: "Employees");
 
             migrationBuilder.DropTable(
+                name: "Defects");
+
+            migrationBuilder.DropTable(
                 name: "Lines");
 
             migrationBuilder.DropTable(
@@ -329,6 +369,9 @@ namespace SMT.Access.Migrations
 
             migrationBuilder.DropTable(
                 name: "Departments");
+
+            migrationBuilder.DropTable(
+                name: "ProductBrands");
 
             migrationBuilder.DropTable(
                 name: "Brands");

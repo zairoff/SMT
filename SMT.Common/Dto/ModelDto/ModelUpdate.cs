@@ -8,9 +8,7 @@ namespace SMT.Common.Dto.ModelDto
 {
     public class ModelUpdate
     {
-        public int BrandId { get; set; }
-
-        public int ProductId { get; set; }
+        public int ProductBrandId { get; set; }
 
         public string Name { get; set; }
     }

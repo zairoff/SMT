@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SMT.Common.Dto.PcbPositionDto;
+using SMT.Common.Dto.ProductBrandDto;
 
 namespace SMT.Services.Mapping
 {
@@ -22,6 +23,9 @@ namespace SMT.Services.Mapping
             CreateMap<Brand, BrandResponse>();
             CreateMap<Model, ModelResponse>();
             CreateMap<PcbPosition, PcbPositionResponse>();
+            CreateMap<ProductBrand, ProductBrandResponse>()
+                    .ForPath(dst => dst.Name, src => src.MapFrom(s => s.Brand.Name));
+                
         }
     }
 }

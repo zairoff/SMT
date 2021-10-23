@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SMT.Common.Dto.PcbPositionDto;
+using SMT.Common.Dto.ProductBrandDto;
 
 namespace SMT.Services.Mapping
 {
@@ -31,6 +32,9 @@ namespace SMT.Services.Mapping
 
             CreateMap<PcbPositionCreate, PcbPosition>();
             CreateMap<PcbPositionUpdate, PcbPosition>();
+
+            CreateMap<ProductBrandCreate, ProductBrand>();
+            CreateMap<ProductBrandUpdate, ProductBrand>();
         }
     }
 }
