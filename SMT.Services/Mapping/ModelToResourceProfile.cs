@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SMT.Common.Dto.PcbPositionDto;
 using SMT.Common.Dto.ProductBrandDto;
+using SMT.Common.Dto.DefectDto;
 
 namespace SMT.Services.Mapping
 {
@@ -25,7 +26,9 @@ namespace SMT.Services.Mapping
             CreateMap<PcbPosition, PcbPositionResponse>();
             CreateMap<ProductBrand, ProductBrandResponse>()
                     .ForPath(dst => dst.Name, src => src.MapFrom(s => s.Brand.Name));
-                
+
+            CreateMap<Defect, DefectResponse>();
+
         }
     }
 }

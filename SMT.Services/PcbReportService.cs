@@ -112,7 +112,7 @@ namespace SMT.Services
         public async Task<IEnumerable<PcbReportResponse>> GetByModelIdAsync(int modelId)
         {
             var reports = await _repository.GetAll()
-                                    .Where(r => r.ModelId == modelId)
+                                    .Where(r => r.ModelId == modelId && r.Date.Date == DateTime.Now.Date)
                                     .Include(r => r.Model)
                                     .ThenInclude(r => r.ProductBrand)
                                     .ThenInclude(r => r.Product)
