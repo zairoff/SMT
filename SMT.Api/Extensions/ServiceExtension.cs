@@ -18,9 +18,21 @@ namespace SMT.Api.Extensions
     {
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+            //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            //{
+                
+            //}
+            //else
+            //{
+            //    services.AddDbContext<AppDbContext>(options =>
+            //                options.UseSqlServer(configuration.GetConnectionString("DbConnectionDev")));
+            //}
+
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DatabaseConnection")));
+                            options.UseSqlServer(configuration.GetConnectionString("DbConnectionProd")));
+
+            //services.BuildServiceProvider().GetService<AppDbContext>().Database.Migrate();
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));            
 
             AddServices(services);
 

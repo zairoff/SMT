@@ -58,8 +58,6 @@ namespace SMT.Api
 
             app.UseCors(Configuration["AppSettings:CORS"]);
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseAuthorization();

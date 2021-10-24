@@ -40,7 +40,7 @@ namespace SMT.Access.Context
                     .AddJsonFile(@Directory.GetCurrentDirectory() + "/../SMT.Api/appsettings.json")
                     .Build();
                 var builder = new DbContextOptionsBuilder<AppDbContext>();
-                var connectionString = configuration.GetConnectionString("DatabaseConnection");
+                var connectionString = configuration.GetConnectionString("DbConnectionProd");
                 builder.UseSqlServer(connectionString);
                 return new AppDbContext(builder.Options);
             }
