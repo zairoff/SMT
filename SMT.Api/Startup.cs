@@ -33,7 +33,10 @@ namespace SMT.Api
             services.AddControllers();
             services.AddCors(options =>
             {
-                options.AddPolicy(Configuration["AppSettings:CORS"].ToString(), policy => policy.AllowAnyOrigin());
+                options.AddPolicy(Configuration["AppSettings:CORS"].ToString(), 
+                    policy => policy.AllowAnyOrigin()
+                                     .AllowAnyMethod()
+                                     .AllowAnyHeader());
             });
             services.AddSwaggerGen(c =>
             {

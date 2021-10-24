@@ -4,8 +4,6 @@ using SMT.Common.Dto.BrandDto;
 using SMT.Common.Exceptions;
 using SMT.Services.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SMT.Api.Controllers

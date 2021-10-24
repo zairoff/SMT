@@ -127,6 +127,24 @@ namespace SMT.Services
             return _mapper.Map<IEnumerable<PcbReport>, IEnumerable<PcbReportResponse>>(reports);
         }
 
+        public async Task<IEnumerable<PcbReportResponse>> GetByDateAndModelIdAsync(int modelId, DateTime date)
+        {
+            var reports = await _repository.GetAll()
+                                    .Where(r => r.ModelId == modelId && r.Date.Date == date.Date)
+                                    .Include(r => r.Model)
+                                    .ThenInclude(r => r.ProductBrand)
+                                    .ThenInclude(r => r.Product)
+                                    .Include(r => r.Model)
+                                    .ThenInclude(r => r.ProductBrand)
+                                    .ThenInclude(r => r.Brand)
+                                    .Include(r => r.Model)
+                                    .Include(r => r.Defect)
+                                    .Include(r => r.PcbPosition)
+                                    .ToListAsync();
+
+            return _mapper.Map<IEnumerable<PcbReport>, IEnumerable<PcbReportResponse>>(reports);
+        }
+
         public async Task<IEnumerable<PcbReportResponse>> GetByPositionIdAsync(int positionId)
         {
             var reports = await _repository.GetAll()
