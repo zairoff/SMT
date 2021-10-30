@@ -9,9 +9,7 @@ using System.Threading.Tasks;
 
 namespace SMT.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController : BaseController
     {
         private readonly IUserService _userService;
 

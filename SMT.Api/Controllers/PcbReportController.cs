@@ -10,9 +10,7 @@ using System.Threading.Tasks;
 
 namespace SMT.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PcbReportController : ControllerBase
+    public class PcbReportController : BaseController
     {
         private readonly IPcbReportService _service;
 

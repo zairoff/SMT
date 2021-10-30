@@ -10,9 +10,7 @@ using System.Threading.Tasks;
 
 namespace SMT.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class DefectController : ControllerBase
+    public class DefectController : BaseController
     {
         private readonly IDefectService _service;
 

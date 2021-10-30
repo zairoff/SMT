@@ -10,9 +10,7 @@ using System.Threading.Tasks;
 
 namespace SMT.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProductBrandController : ControllerBase
+    public class ProductBrandController : BaseController
     {
         private readonly IProductBrandService _service;
 

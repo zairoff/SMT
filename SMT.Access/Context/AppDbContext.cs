@@ -30,11 +30,25 @@ namespace SMT.Access.Context
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
+            
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile(@Directory.GetCurrentDirectory() + "/../SMT.Api/appsettings.json")
+                    .Build();
+            var connectionString = configuration.GetConnectionString("DbConnectionDev");
+            options.UseSqlServer(connectionString, conf =>
+            {
+                conf.UseHierarchyId();
+            });
         }
 
         public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
@@ -45,8 +59,9 @@ namespace SMT.Access.Context
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile(@Directory.GetCurrentDirectory() + "/../SMT.Api/appsettings.json")
                     .Build();
-                var builder = new DbContextOptionsBuilder<AppDbContext>();
                 var connectionString = configuration.GetConnectionString("DbConnectionDev");
+
+                var builder = new DbContextOptionsBuilder<AppDbContext>();
                 builder.UseSqlServer(connectionString);
                 return new AppDbContext(builder.Options);
             }

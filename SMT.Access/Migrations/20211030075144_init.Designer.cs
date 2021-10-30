@@ -10,7 +10,7 @@ using SMT.Access.Context;
 namespace SMT.Access.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20211029094736_init")]
+    [Migration("20211030075144_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -184,10 +184,8 @@ namespace SMT.Access.Migrations
 
             modelBuilder.Entity("SMT.Domain.Department", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<HierarchyId>("Id")
+                        .HasColumnType("hierarchyid");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -207,8 +205,8 @@ namespace SMT.Access.Migrations
                     b.Property<string>("Birthday")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int");
+                    b.Property<HierarchyId>("DepartmentId")
+                        .HasColumnType("hierarchyid");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
@@ -221,6 +219,9 @@ namespace SMT.Access.Migrations
 
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -550,9 +551,7 @@ namespace SMT.Access.Migrations
                 {
                     b.HasOne("SMT.Domain.Department", "Department")
                         .WithMany()
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DepartmentId");
 
                     b.Navigation("Department");
                 });

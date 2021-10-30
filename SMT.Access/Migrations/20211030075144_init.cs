@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SMT.Access.Migrations
@@ -77,8 +78,7 @@ namespace SMT.Access.Migrations
                 name: "Departments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<HierarchyId>(type: "hierarchyid", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -237,12 +237,13 @@ namespace SMT.Access.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DepartmentId = table.Column<int>(type: "int", nullable: false),
+                    DepartmentId = table.Column<HierarchyId>(type: "hierarchyid", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Birthday = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -252,7 +253,7 @@ namespace SMT.Access.Migrations
                         column: x => x.DepartmentId,
                         principalTable: "Departments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(

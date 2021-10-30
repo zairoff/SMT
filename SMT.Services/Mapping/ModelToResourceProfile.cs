@@ -13,6 +13,7 @@ using SMT.Common.Dto.PcbPositionDto;
 using SMT.Common.Dto.ProductBrandDto;
 using SMT.Common.Dto.DefectDto;
 using SMT.Common.Dto.UserDto;
+using SMT.Common.Dto.DepartmentDto;
 
 namespace SMT.Services.Mapping
 {
@@ -30,6 +31,7 @@ namespace SMT.Services.Mapping
 
             CreateMap<Defect, DefectResponse>();
             CreateMap<User, UserResponse>();
+            CreateMap<Department, DepartmentResponse>();
         }
     }
 }
