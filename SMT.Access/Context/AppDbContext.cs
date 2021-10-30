@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using SMT.Domain;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace SMT.Access.Context
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<User>
     {
         public DbSet<Brand> Brands { get; set; }
         public DbSet<ProductBrand> ProductBrands { get; set; }
@@ -31,6 +32,11 @@ namespace SMT.Access.Context
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
+
         public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
         {
             public AppDbContext CreateDbContext(string[] args)
@@ -40,7 +46,7 @@ namespace SMT.Access.Context
                     .AddJsonFile(@Directory.GetCurrentDirectory() + "/../SMT.Api/appsettings.json")
                     .Build();
                 var builder = new DbContextOptionsBuilder<AppDbContext>();
-                var connectionString = configuration.GetConnectionString("DbConnectionProd");
+                var connectionString = configuration.GetConnectionString("DbConnectionDev");
                 builder.UseSqlServer(connectionString);
                 return new AppDbContext(builder.Options);
             }

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SMT.Domain
 {
-    public class User : IdentityUser
+    public class AppSettings
     {
-        public string Telegram { get; set; }
+        public string Secret { get; set; }
     }
 }

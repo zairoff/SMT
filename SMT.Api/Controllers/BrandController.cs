@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SMT.Common.Dto.BrandDto;
 using SMT.Common.Exceptions;
+using SMT.Domain;
 using SMT.Services.Interfaces;
 using System;
 using System.Threading.Tasks;
