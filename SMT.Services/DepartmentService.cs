@@ -33,7 +33,7 @@ namespace SMT.Services
             if (department != null)
                 throw new ConflictException();
 
-            department = _mapper.Map<Department>(departmentCreate);
+            department = _mapper.Map<DepartmentCreate, Department>(departmentCreate);
 
             await _repository.AddAsync(department);
 

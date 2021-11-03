@@ -10,7 +10,7 @@ using SMT.Access.Context;
 namespace SMT.Access.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20211030075144_init")]
+    [Migration("20211102090451_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -184,7 +184,12 @@ namespace SMT.Access.Migrations
 
             modelBuilder.Entity("SMT.Domain.Department", b =>
                 {
-                    b.Property<HierarchyId>("Id")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<HierarchyId>("HierarchyId")
                         .HasColumnType("hierarchyid");
 
                     b.Property<string>("Name")
@@ -205,8 +210,8 @@ namespace SMT.Access.Migrations
                     b.Property<string>("Birthday")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<HierarchyId>("DepartmentId")
-                        .HasColumnType("hierarchyid");
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
@@ -551,7 +556,9 @@ namespace SMT.Access.Migrations
                 {
                     b.HasOne("SMT.Domain.Department", "Department")
                         .WithMany()
-                        .HasForeignKey("DepartmentId");
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Department");
                 });

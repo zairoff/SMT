@@ -8,7 +8,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using SMT.Api.Extensions;
-using SMT.Services.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;

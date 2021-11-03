@@ -14,8 +14,10 @@ using SMT.Common.Dto.ProductBrandDto;
 using SMT.Common.Dto.DefectDto;
 using SMT.Common.Dto.UserDto;
 using SMT.Common.Dto.DepartmentDto;
+using Microsoft.SqlServer.Types;
+using Microsoft.EntityFrameworkCore;
 
-namespace SMT.Services.Mapping
+namespace SMT.Common.Mapping
 {
     public class ResourceToModelProfile : Profile
     {
@@ -45,7 +47,8 @@ namespace SMT.Services.Mapping
             CreateMap<UserCreate, User>();
             CreateMap<UserUpdate, User>();
 
-            CreateMap<DepartmentCreate, Department>();
+            CreateMap<string, HierarchyId>().ConvertUsing(s => HierarchyId.Parse(s));
+            CreateMap<DepartmentCreate, Department>();                
             CreateMap<DepartmentUpdate, Department>();
         }
     }

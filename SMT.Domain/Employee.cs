@@ -7,7 +7,7 @@ namespace SMT.Domain
     {
         public int Id { get; set; }
 
-        public HierarchyId DepartmentId { get; set; }
+        public int DepartmentId { get; set; }
 
         public Department Department { get; set; }
 

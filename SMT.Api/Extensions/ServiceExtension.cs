@@ -5,16 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using SMT.Access;
 using SMT.Access.Context;
+using SMT.Common.Mapping;
 using SMT.Domain;
-using SMT.Services;
-using SMT.Services.Interfaces;
-using SMT.Services.Mapping;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace SMT.Api.Extensions
 {
@@ -48,7 +43,7 @@ namespace SMT.Api.Extensions
             });
 
             services.AddDbContext<AppDbContext>(options =>
-                            options.UseSqlServer(configuration.GetConnectionString("DbConnectionDev")));
+                            options.UseSqlServer(configuration.GetConnectionString("DbConnectionDev"), o => o.UseHierarchyId()));
 
             services.AddIdentity<User, IdentityRole>()
                         .AddEntityFrameworkStores<AppDbContext>()

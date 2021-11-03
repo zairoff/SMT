@@ -11,7 +11,7 @@ namespace SMT.Services.Interfaces
     {
         Task<IEnumerable<DepartmentResponse>> GetAllAsync();
 
-        Task<DepartmentResponse> GetAsync(string id);
+        Task<DepartmentResponse> GetAsync(int id);
 
         Task<DepartmentResponse> GetByNameAsync(string name);
 
