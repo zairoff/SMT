@@ -5,10 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SMT.Access\SMT.Access.csproj" />
-    <ProjectReference Include="..\SMT.Common\SMT.Common.csproj" />
+    <PackageReference Include="Telegram.Bot" Version="16.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SMT.Domain\SMT.Domain.csproj" />
-    <ProjectReference Include="..\SMT.Notification\SMT.Notification.csproj" />
   </ItemGroup>
 
 </Project>

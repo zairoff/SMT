@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Common", "SMT.Common\SM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Api", "SMT.Api\SMT.Api.csproj", "{DD1E8906-A476-4C2A-AA53-F217F83BDB78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMT.Security", "SMT.Security\SMT.Security.csproj", "{C95CA945-097B-4245-A544-1990E90D5098}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Security", "SMT.Security\SMT.Security.csproj", "{C95CA945-097B-4245-A544-1990E90D5098}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMT.Notification", "SMT.Notification\SMT.Notification.csproj", "{7241F000-7953-417C-90FB-798DDC3DD572}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{C95CA945-097B-4245-A544-1990E90D5098}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C95CA945-097B-4245-A544-1990E90D5098}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C95CA945-097B-4245-A544-1990E90D5098}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7241F000-7953-417C-90FB-798DDC3DD572}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7241F000-7953-417C-90FB-798DDC3DD572}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7241F000-7953-417C-90FB-798DDC3DD572}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7241F000-7953-417C-90FB-798DDC3DD572}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

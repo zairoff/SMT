@@ -10,8 +10,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SMT.Notification\SMT.Notification.csproj" />
     <ProjectReference Include="..\SMT.Security\SMT.Security.csproj" />
     <ProjectReference Include="..\SMT.Services\SMT.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

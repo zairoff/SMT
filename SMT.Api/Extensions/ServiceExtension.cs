@@ -7,9 +7,12 @@ using SMT.Access;
 using SMT.Access.Context;
 using SMT.Common.Mapping;
 using SMT.Domain;
+using SMT.Notification;
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using Telegram.Bot;
 
 namespace SMT.Api.Extensions
 {
@@ -27,14 +30,13 @@ namespace SMT.Api.Extensions
             //                options.UseSqlServer(configuration.GetConnectionString("DbConnectionDev")));
             //}
 
-            services.AddAutoMapper(typeof(ModelToResourceProfile), typeof(ResourceToModelProfile));
-            services.AddControllers();
+            
             services.AddCors(options =>
             {
-                options.AddPolicy(configuration["AppSettings:CORS"].ToString(),
+                options.AddDefaultPolicy(
                     policy => policy.AllowAnyOrigin()
-                                     .AllowAnyMethod()
-                                     .AllowAnyHeader());
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod());
             });
 
             services.AddSwaggerGen(c =>
@@ -43,14 +45,18 @@ namespace SMT.Api.Extensions
             });
 
             services.AddDbContext<AppDbContext>(options =>
-                            options.UseSqlServer(configuration.GetConnectionString("DbConnectionDev"), o => o.UseHierarchyId()));
+                            options.UseSqlServer(configuration.GetConnectionString("DbConnectionProd"), o => o.UseHierarchyId()));
 
             services.AddIdentity<User, IdentityRole>()
                         .AddEntityFrameworkStores<AppDbContext>()
                         .AddDefaultTokenProviders();
 
             //services.BuildServiceProvider().GetService<AppDbContext>().Database.Migrate();
-            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));            
+            services.AddControllers();
+            services.AddAutoMapper(typeof(ModelToResourceProfile), typeof(ResourceToModelProfile));
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<ITelegramBotClient>(conf => new TelegramBotClient(configuration.GetValue<string>("AppSettings:BotToken")));
+            services.AddScoped<INotificationService>(conf => new NotificationService(conf.GetRequiredService<ITelegramBotClient>(), Convert.ToInt64(configuration["AppSettings:TelegramChatId"])));
 
             AddServices(services);
 
@@ -60,7 +66,7 @@ namespace SMT.Api.Extensions
         private static void AddServices(IServiceCollection services)
         {
             var assemblyNames = (from t in Assembly.GetExecutingAssembly().GetReferencedAssemblies()
-                                 where t.Name.Contains("SMT.Services") || t.Name.Contains("SMT.Security")
+                                 where t.Name.Contains("SMT.Services") /*|| t.Name.Contains("SMT.Security")*/
                                  select t);
 
             foreach (var assemblyName in assemblyNames)
@@ -70,7 +76,7 @@ namespace SMT.Api.Extensions
                 var types = from t in assembly.GetTypes()
                             where t.IsClass &&                            
                             t.GetTypeInfo().GetCustomAttribute<CompilerGeneratedAttribute>() == null &&
-                            (t.Namespace == "SMT.Services" || t.Namespace == "SMT.Security")
+                            (t.Namespace == "SMT.Services" /*|| t.Namespace == "SMT.Security"*/)
                             select t;
                 foreach (var type in types)
                 {

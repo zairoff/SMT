@@ -4,6 +4,7 @@ using SMT.Access;
 using SMT.Common.Dto.PcbReportDto;
 using SMT.Common.Exceptions;
 using SMT.Domain;
+using SMT.Notification;
 using SMT.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -16,11 +17,13 @@ namespace SMT.Services
     public class PcbReportService : IPcbReportService
     {
         private readonly IRepository<PcbReport> _repository;
+        private readonly INotificationService _notificationService;
         private readonly IMapper _mapper;
 
-        public PcbReportService(IRepository<PcbReport> repository, IMapper mapper)
+        public PcbReportService(IRepository<PcbReport> repository, IMapper mapper, INotificationService notificationService)
         {
             _repository = repository;
+            _notificationService = notificationService;
             _mapper = mapper;
         }
 
@@ -29,6 +32,26 @@ namespace SMT.Services
             var report = _mapper.Map<PcbReportCreate, PcbReport>(reportCreate);
 
             await _repository.AddAsync(report);
+
+            var reports = await _repository.GetAll()
+                                            .Where(r => r.ModelId == reportCreate.ModelId && 
+                                            r.PcbPositionId == reportCreate.PcbPositionId &&
+                                            r.Date.Date == DateTime.Now.Date)
+                                            .Include(r => r.Model)
+                                            .ThenInclude(r => r.ProductBrand)
+                                            .ThenInclude(r => r.Product)
+                                            .Include(r => r.Model)
+                                            .ThenInclude(r => r.ProductBrand)
+                                            .ThenInclude(r => r.Brand)
+                                            .Include(r => r.Model)
+                                            .Include(r => r.Defect)
+                                            .Include(r => r.PcbPosition)
+                                            .ToListAsync();
+
+            var count = reports.Count;
+
+            if (count > 3)
+                await _notificationService.Notify(reports, count);
 
             return _mapper.Map<PcbReport, PcbReportResponse>(report);
         }

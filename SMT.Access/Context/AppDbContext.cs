@@ -42,9 +42,9 @@ namespace SMT.Access.Context
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile(@Directory.GetCurrentDirectory() + "/../SMT.Api/appsettings.json")
+                    .AddJsonFile("appsettings.json") //+ "/../SMT.Api/appsettings.json")
                     .Build();
-            var connectionString = configuration.GetConnectionString("DbConnectionDev");
+            var connectionString = configuration.GetConnectionString("DbConnectionProd");
             options.UseSqlServer(connectionString, conf =>
             {
                 conf.UseHierarchyId();
@@ -57,9 +57,9 @@ namespace SMT.Access.Context
             {
                 IConfigurationRoot configuration = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile(@Directory.GetCurrentDirectory() + "/../SMT.Api/appsettings.json")
+                    .AddJsonFile("appsettings.json") //+ "/../SMT.Api/appsettings.json")
                     .Build();
-                var connectionString = configuration.GetConnectionString("DbConnectionDev");
+                var connectionString = configuration.GetConnectionString("DbConnectionProd");
 
                 var builder = new DbContextOptionsBuilder<AppDbContext>();
                 builder.UseSqlServer(connectionString);
