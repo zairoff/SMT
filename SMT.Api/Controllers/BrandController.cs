@@ -69,20 +69,9 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateReport(int id, [FromBody] BrandUpdate brandUpdate)
         {
-            try
-            {
-                var result = await _service.UpdateAsync(id, brandUpdate);
+            var result = await _service.UpdateAsync(id, brandUpdate);
 
-                return Ok(result);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.ToString());
-            }
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
@@ -91,20 +80,9 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteReport(int id)
         {
-            try
-            {
-                var result = await _service.DeleteAsync(id);
+            var result = await _service.DeleteAsync(id);
 
-                return Ok(result);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.ToString());
-            }
+            return Ok(result);
         }
     }
 }

@@ -45,13 +45,13 @@ namespace SMT.Api.Extensions
             });
 
             services.AddDbContext<AppDbContext>(options =>
-                            options.UseSqlServer(configuration.GetConnectionString("DbConnectionProd"), o => o.UseHierarchyId()));
+                            options.UseSqlServer(configuration.GetConnectionString("DbConnectionDev"), o => o.UseHierarchyId()));
 
             services.AddIdentity<User, IdentityRole>()
                         .AddEntityFrameworkStores<AppDbContext>()
                         .AddDefaultTokenProviders();
 
-            //services.BuildServiceProvider().GetService<AppDbContext>().Database.Migrate();
+            services.BuildServiceProvider().GetService<AppDbContext>().Database.Migrate();
             services.AddControllers();
             services.AddAutoMapper(typeof(ModelToResourceProfile), typeof(ResourceToModelProfile));
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));

@@ -44,7 +44,7 @@ namespace SMT.Access.Context
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.json") //+ "/../SMT.Api/appsettings.json")
                     .Build();
-            var connectionString = configuration.GetConnectionString("DbConnectionProd");
+            var connectionString = configuration.GetConnectionString("DbConnectionDev");
             options.UseSqlServer(connectionString, conf =>
             {
                 conf.UseHierarchyId();
@@ -59,7 +59,7 @@ namespace SMT.Access.Context
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.json") //+ "/../SMT.Api/appsettings.json")
                     .Build();
-                var connectionString = configuration.GetConnectionString("DbConnectionProd");
+                var connectionString = configuration.GetConnectionString("DbConnectionDev");
 
                 var builder = new DbContextOptionsBuilder<AppDbContext>();
                 builder.UseSqlServer(connectionString);

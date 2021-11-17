@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using SMT.Api.ExceptionHandler;
 using SMT.Api.Extensions;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,7 @@ namespace SMT.Api
 
             app.UseRouting();
             app.UseCors();
+            app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
             //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
