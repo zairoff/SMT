@@ -30,7 +30,6 @@ namespace SMT.Api.Extensions
             //                options.UseSqlServer(configuration.GetConnectionString("DbConnectionDev")));
             //}
 
-            
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
@@ -66,7 +65,7 @@ namespace SMT.Api.Extensions
         private static void AddServices(IServiceCollection services)
         {
             var assemblyNames = (from t in Assembly.GetExecutingAssembly().GetReferencedAssemblies()
-                                 where t.Name.Contains("SMT.Services") /*|| t.Name.Contains("SMT.Security")*/
+                                 where t.Name.Contains("SMT.Services") || t.Name.Contains("SMT.Security")
                                  select t);
 
             foreach (var assemblyName in assemblyNames)
@@ -76,12 +75,17 @@ namespace SMT.Api.Extensions
                 var types = from t in assembly.GetTypes()
                             where t.IsClass &&                            
                             t.GetTypeInfo().GetCustomAttribute<CompilerGeneratedAttribute>() == null &&
-                            (t.Namespace == "SMT.Services" /*|| t.Namespace == "SMT.Security"*/)
+                            (t.Namespace == "SMT.Services" || t.Namespace == "SMT.Security")
                             select t;
+
                 foreach (var type in types)
                 {
-                    var serviceInterface = type.GetTypeInfo().GetInterfaces().First();
-                    services.AddScoped(serviceInterface, type);
+                    var serviceInterfaces = type.GetTypeInfo().GetInterfaces();
+
+                    if (serviceInterfaces.Length == 0)
+                        continue;
+
+                    services.AddScoped(serviceInterfaces.First(), type);
                 }
             }
         }
