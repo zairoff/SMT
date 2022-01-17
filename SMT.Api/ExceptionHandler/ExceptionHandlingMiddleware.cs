@@ -50,8 +50,7 @@ namespace SMT.Api.ExceptionHandler
                     break;
             }
 
-            var result = JsonConvert.SerializeObject(
-                new { code, message });
+            var result = JsonConvert.SerializeObject(new { code, message });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
             return context.Response.WriteAsync(result);
