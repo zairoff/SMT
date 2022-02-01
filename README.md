@@ -1,6 +1,6 @@
 # API for Mancufacturing company's production control & management
 
-### Project is developing with `Multi Layer` architecture, and under proccess
+### Project is developing with `N-Layer` architecture, and under proccess
 
 * Access - DataBase Layer
 * API - WebApi `ASP.NET Core`
@@ -8,3 +8,8 @@
 * Domain - Pure `POCO` classes
 * Service - Application business logics
 
+![architecture](docs/images/arch.png)
+
+## Database design
+
+![database](docs/images/database.png)

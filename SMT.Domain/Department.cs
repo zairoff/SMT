@@ -2,6 +2,7 @@
 using Microsoft.SqlServer.Types;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,8 @@ namespace SMT.Domain
     {
         public int Id { get; set; }
 
-        public HierarchyId HierarchyId { get; set; }
+        [Column(TypeName = "Ltree")]
+        public string Ltree { get; set; }
 
         public string Name { get; set; }
     }

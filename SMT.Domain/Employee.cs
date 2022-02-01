@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.SqlServer.Types;
+using System;
 
 namespace SMT.Domain
 {
     public class Employee
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public int DepartmentId { get; set; }
 
@@ -15,11 +16,13 @@ namespace SMT.Domain
 
         public string LastName { get; set; }
 
-        public string Image { get; set; }
+        public string ImagePath { get; set; }
 
         public string Birthday { get; set; }
 
         public string Phone { get; set; }
+
+        public string Address { get; set; }
 
         public bool Status { get; set; }
     }

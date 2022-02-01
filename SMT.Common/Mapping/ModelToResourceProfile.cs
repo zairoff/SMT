@@ -26,7 +26,6 @@ namespace SMT.Common.Mapping
                     .ForPath(dst => dst.Name, src => src.MapFrom(s => s.Brand.Name));
 
             CreateMap<Defect, DefectResponse>();
-            CreateMap<User, UserResponse>();
             CreateMap<Department, DepartmentResponse>();
             CreateMap<HierarchyId, string>().ConvertUsing(s => s.ToString());
         }

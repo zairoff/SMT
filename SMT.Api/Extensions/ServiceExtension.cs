@@ -4,7 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using SMT.Access;
-using SMT.Access.Context;
+using SMT.Access.Data;
+using SMT.Access.Identity;
 using SMT.Common.Mapping;
 using SMT.Domain;
 using SMT.Notification;
@@ -44,13 +45,17 @@ namespace SMT.Api.Extensions
             });
 
             services.AddDbContext<AppDbContext>(options =>
-                            options.UseSqlServer(configuration.GetConnectionString("DbConnectionDev"), o => o.UseHierarchyId()));
+                            options.UseSqlServer(configuration.GetConnectionString("DbConnectionDev")));
 
-            services.AddIdentity<User, IdentityRole>()
-                        .AddEntityFrameworkStores<AppDbContext>()
+            services.AddDbContext<IdentityDbContext>(options =>
+                            options.UseSqlServer(configuration.GetConnectionString("IdentityConnection")));
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                        .AddEntityFrameworkStores<IdentityDbContext>()
                         .AddDefaultTokenProviders();
 
             services.BuildServiceProvider().GetService<AppDbContext>().Database.Migrate();
+            services.BuildServiceProvider().GetService<IdentityDbContext>().Database.Migrate();
             services.AddControllers();
             services.AddAutoMapper(typeof(ModelToResourceProfile), typeof(ResourceToModelProfile));
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));

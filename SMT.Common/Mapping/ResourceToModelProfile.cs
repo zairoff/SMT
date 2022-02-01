@@ -7,7 +7,6 @@ using SMT.Domain;
 using SMT.Common.Dto.PcbPositionDto;
 using SMT.Common.Dto.ProductBrandDto;
 using SMT.Common.Dto.DefectDto;
-using SMT.Common.Dto.UserDto;
 using SMT.Common.Dto.DepartmentDto;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,9 +36,6 @@ namespace SMT.Common.Mapping
 
             CreateMap<DefectCreate, Defect>();
             CreateMap<DefectUpdate, Defect>();
-
-            CreateMap<UserCreate, User>();
-            CreateMap<UserUpdate, User>();
 
             CreateMap<string, HierarchyId>().ConvertUsing(s => HierarchyId.Parse(s));
             CreateMap<DepartmentCreate, Department>();                

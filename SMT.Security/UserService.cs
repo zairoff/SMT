@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using SMT.Access.Identity;
 using SMT.Common.Dto.UserDto;
 using SMT.Common.Exceptions;
-using SMT.Domain;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -17,15 +17,14 @@ namespace SMT.Security
     public class UserService : IUserService
     {
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
-        private readonly IMapper _mapper;
 
-        public UserService(IMapper mapper, RoleManager<IdentityRole> roleManager, UserManager<User> userManager, IConfiguration configuration)
+        public UserService(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager,
+                            IConfiguration configuration)
         {
             _userManager = userManager;
             _roleManager = roleManager;
-            _mapper = mapper;
             _configuration = configuration;
         }
 
@@ -35,8 +34,6 @@ namespace SMT.Security
 
             if (user != null)
                 throw new ConflictException();
-
-            user = _mapper.Map<UserCreate, User>(userCreate);
 
             var result = await _userManager.CreateAsync(user, userCreate.Password);
 
@@ -48,7 +45,7 @@ namespace SMT.Security
 
             await _userManager.AddToRoleAsync(user, userCreate.Role);
 
-            return _mapper.Map<User, UserResponse>(user);
+            return (UserResponse)user;
         }
 
         public async Task<string> Authenticate(string username, string password)
@@ -60,16 +57,21 @@ namespace SMT.Security
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("AppSettings:Secret"));
+            var roles = await _userManager.GetRolesAsync(user);
+            var claims = new List<Claim> { new Claim(ClaimTypes.Name, username) };
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, username),
-                    new Claim(ClaimTypes.Role, UserRoles.User)
-                }),
-                Expires = DateTime.UtcNow.AddMinutes(50),
+                Subject = new ClaimsIdentity(claims.ToArray()),
+                Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
+
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
