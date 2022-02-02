@@ -18,9 +18,14 @@ namespace SMT.Access.Data
         public DbSet<PcbPosition> PcbPositions { get; set; }
         public DbSet<PcbReport> PcbReports { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<Repair> Repairs { get; set; }
-        public DbSet<Repairer> Repairers { get; set; }
-        public DbSet<Report> Reports { get; set; }
+        public DbSet<Barcode> Barcodes { get; set; }
+        public DbSet<EmployeeCareer> EmployeeCareers { get; set; }
+        public DbSet<EmployeeHistory> EmployeeHistories { get; set; }
+        public DbSet<Vacation> Vacations { get; set; }
+        public DbSet<DefectReport> DefectReports { get; set; }
+        public DbSet<DefectRepair> DefectRepairs { get; set; }
+        public DbSet<Plan> Plans { get; set; }
+        public DbSet<PlanDetail> PlanDetails { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {

@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SMT.Common.Dto.BrandDto;
-using SMT.Common.Exceptions;
-using SMT.Domain;
 using SMT.Services.Interfaces;
-using System;
 using System.Threading.Tasks;
 
 namespace SMT.Api.Controllers
@@ -49,17 +45,9 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateReport([FromBody] BrandCreate brandCreate)
         {
-            try
-            {
-                var result = await _service.AddAsync(brandCreate);
+            var result = await _service.AddAsync(brandCreate);
 
-                return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.ToString());
-                //return StatusCode(500);
-            }
+            return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }
 
         [HttpPut("{id}")]

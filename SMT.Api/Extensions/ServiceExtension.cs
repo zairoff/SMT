@@ -7,7 +7,6 @@ using SMT.Access;
 using SMT.Access.Data;
 using SMT.Access.Identity;
 using SMT.Common.Mapping;
-using SMT.Domain;
 using SMT.Notification;
 using System;
 using System.Linq;

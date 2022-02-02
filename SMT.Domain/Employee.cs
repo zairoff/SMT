@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.SqlServer.Types;
-using System;
+﻿using System;
 
 namespace SMT.Domain
 {
@@ -10,11 +8,9 @@ namespace SMT.Domain
 
         public int DepartmentId { get; set; }
 
-        public Department Department { get; set; }
+        public virtual Department Department { get; set; }
 
-        public string FirstName { get; set; }
-
-        public string LastName { get; set; }
+        public string FullName { get; set; }
 
         public string ImagePath { get; set; }
 
@@ -23,6 +19,8 @@ namespace SMT.Domain
         public string Phone { get; set; }
 
         public string Address { get; set; }
+
+        public string Details { get; set; }
 
         public bool Status { get; set; }
     }

@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SMT.Common.Dto.ProductDto;
-using SMT.Common.Exceptions;
 using SMT.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SMT.Api.Controllers
@@ -50,17 +45,9 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateReport([FromBody] ProductCreate productCreate)
         {
-            try
-            {
-                var result = await _service.AddAsync(productCreate);
+            var result = await _service.AddAsync(productCreate);
 
-                return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.ToString());
-                //return StatusCode(500);
-            }
+            return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }
 
         [HttpPut("{id}")]
@@ -70,20 +57,9 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateReport(int id, [FromBody] ProductUpdate productUpdate)
         {
-            try
-            {
-                var result = await _service.UpdateAsync(id, productUpdate);
+            var result = await _service.UpdateAsync(id, productUpdate);
 
-                return Ok(result);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.ToString());
-            }
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
@@ -92,20 +68,9 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteReport(int id)
         {
-            try
-            {
-                var result = await _service.DeleteAsync(id);
+            var result = await _service.DeleteAsync(id);
 
-                return Ok(result);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.ToString());
-            }
+            return Ok(result);
         }
     }
 }

@@ -1,14 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SMT.Domain
 {
     public class PcbReport
     {
         public int Id { get; set; }
+
+        public Guid EmployeeId { get; set; }
+
+        public Employee Employee { get; set; }
+
+        public int LineId { get; set; }
+
+        public Line Line { get; set; }
 
         public int ModelId { get; set; }
 

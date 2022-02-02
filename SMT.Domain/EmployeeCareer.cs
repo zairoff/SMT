@@ -2,7 +2,7 @@
 
 namespace SMT.Domain
 {
-    public class EmployeeHistory
+    public class EmployeeCareer
     {
         public int Id { get; set; }
 
@@ -13,6 +13,5 @@ namespace SMT.Domain
         public string Details { get; set; }
 
         public DateTime Date { get; set; }
-
     }
 }

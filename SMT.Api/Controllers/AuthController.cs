@@ -4,8 +4,6 @@ using SMT.Common.Dto.LoginDto;
 using SMT.Common.Dto.UserDto;
 using SMT.Security;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SMT.Api.Controllers
