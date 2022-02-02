@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>SMT.ViewModel</AssemblyName>
+    <RootNamespace>SMT.ViewModel</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

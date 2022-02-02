@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SMT.Access\SMT.Access.csproj" />
-    <ProjectReference Include="..\SMT.Common\SMT.Common.csproj" />
+    <ProjectReference Include="..\SMT.Common\SMT.ViewModel.csproj" />
     <ProjectReference Include="..\SMT.Domain\SMT.Domain.csproj" />
     <ProjectReference Include="..\SMT.Notification\SMT.Notification.csproj" />
   </ItemGroup>

@@ -9,13 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Access", "SMT.Access\SM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Services", "SMT.Services\SMT.Services.csproj", "{ABE92835-36D2-4D16-897D-740B52167B18}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Common", "SMT.Common\SMT.Common.csproj", "{AB668EDA-0797-40E5-B5BB-B7813BA1A3C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.ViewModel", "SMT.Common\SMT.ViewModel.csproj", "{AB668EDA-0797-40E5-B5BB-B7813BA1A3C4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Api", "SMT.Api\SMT.Api.csproj", "{DD1E8906-A476-4C2A-AA53-F217F83BDB78}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Security", "SMT.Security\SMT.Security.csproj", "{C95CA945-097B-4245-A544-1990E90D5098}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMT.Notification", "SMT.Notification\SMT.Notification.csproj", "{7241F000-7953-417C-90FB-798DDC3DD572}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Notification", "SMT.Notification\SMT.Notification.csproj", "{7241F000-7953-417C-90FB-798DDC3DD572}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
