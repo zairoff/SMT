@@ -26,7 +26,7 @@ namespace SMT.Notification
                             reports[0].PcbPosition.Position + "\nSoni: " + count);
         }
 
-        private string GetDefects(List<PcbReport> reports)
+        private static string GetDefects(List<PcbReport> reports)
         {
             var defects = new HashSet<string>();
             foreach(var report in reports)

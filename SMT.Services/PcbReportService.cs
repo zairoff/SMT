@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using SMT.Access;
+using SMT.Access.Repository.Interfaces;
+using SMT.Access.UnitOfWork;
 using SMT.Common.Dto.PcbReportDto;
 using SMT.Common.Exceptions;
 using SMT.Domain;
@@ -15,15 +15,17 @@ namespace SMT.Services
 {
     public class PcbReportService : IPcbReportService
     {
-        private readonly IRepository<PcbReport> _repository;
+        private readonly IPcbReportRepository _repository;
         private readonly INotificationService _notificationService;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public PcbReportService(IRepository<PcbReport> repository, IMapper mapper, INotificationService notificationService)
+        public PcbReportService(IPcbReportRepository repository, IMapper mapper, INotificationService notificationService, IUnitOfWork unitOfWork)
         {
             _repository = repository;
             _notificationService = notificationService;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<PcbReportResponse> AddAsync(PcbReportCreate reportCreate)
@@ -31,83 +33,46 @@ namespace SMT.Services
             var report = _mapper.Map<PcbReportCreate, PcbReport>(reportCreate);
 
             await _repository.AddAsync(report);
+            await _unitOfWork.SaveAsync();
 
-            var reports = await _repository.GetAll()
-                                            .Where(r => r.ModelId == reportCreate.ModelId && 
-                                            r.PcbPositionId == reportCreate.PcbPositionId &&
-                                            r.Date.Date == DateTime.Now.Date)
-                                            .Include(r => r.Model)
-                                            .ThenInclude(r => r.ProductBrand)
-                                            .ThenInclude(r => r.Product)
-                                            .Include(r => r.Model)
-                                            .ThenInclude(r => r.ProductBrand)
-                                            .ThenInclude(r => r.Brand)
-                                            .Include(r => r.Model)
-                                            .Include(r => r.Defect)
-                                            .Include(r => r.PcbPosition)
-                                            .ToListAsync();
+            // TODO: Need to change the structure. Really bad designed
+            var reports = await _repository.GetByAsync(r => r.ModelId == reportCreate.ModelId &&
+                                            r.PositionId == reportCreate.PcbPositionId &&
+                                            r.Date.Date == DateTime.Now.Date);
 
-            var count = reports.Count;
+            var count = await _repository.CountAsync(r => r.ModelId == reportCreate.ModelId &&
+                                            r.PositionId == reportCreate.PcbPositionId &&
+                                            r.Date.Date == DateTime.Now.Date);
 
             if (count > 3)
-                await _notificationService.Notify(reports, count);
+                await _notificationService.Notify(reports.ToList(), count);
 
             return _mapper.Map<PcbReport, PcbReportResponse>(report);
         }
 
         public async Task<PcbReportResponse> DeleteAsync(int id)
         {
-            var report = await _repository.Get().Where(r => r.Id == id)
-                                            .Include(r => r.Model)
-                                            .ThenInclude(r => r.ProductBrand)
-                                            .ThenInclude(r => r.Product)
-                                            .Include(r => r.Model)
-                                            .ThenInclude(r => r.ProductBrand)
-                                            .ThenInclude(r => r.Brand)
-                                            .Include(r => r.Model)
-                                            .Include(r => r.Defect)
-                                            .Include(r => r.PcbPosition)
-                                            .FirstOrDefaultAsync();
+            var report = await _repository.FindAsync(r => r.Id == id);
 
             if (report == null)
                 throw new NotFoundException();
 
-            await _repository.DeleteAsync(report);
+            _repository.Delete(report);
+            await _unitOfWork.SaveAsync();
 
             return _mapper.Map<PcbReport, PcbReportResponse>(report);
         }
 
         public async Task<IEnumerable<PcbReportResponse>> GetAllAsync()
         {
-            var reports = await _repository.GetAll()
-                                    .Include(r => r.Model)
-                                    .ThenInclude(r => r.ProductBrand)
-                                    .ThenInclude(r => r.Product)
-                                    .Include(r => r.Model)
-                                    .ThenInclude(r => r.ProductBrand)
-                                    .ThenInclude(r => r.Brand)
-                                    .Include(r => r.Model)
-                                    .Include(r => r.Defect)
-                                    .Include(r => r.PcbPosition)
-                                    .ToListAsync();
+            var reports = await _repository.GetAllAsync();
 
             return _mapper.Map<IEnumerable<PcbReport>, IEnumerable<PcbReportResponse>>(reports);
         }
 
         public async Task<PcbReportResponse> GetAsync(int id)
         {
-            var report = await _repository.Get()
-                                    .Where(r => r.Id == id)
-                                    .Include(r => r.Model)
-                                    .ThenInclude(r => r.ProductBrand)
-                                    .ThenInclude(r => r.Product)
-                                    .Include(r => r.Model)
-                                    .ThenInclude(r => r.ProductBrand)
-                                    .ThenInclude(r => r.Brand)
-                                    .Include(r => r.Model)
-                                    .Include(r => r.Defect)
-                                    .Include(r => r.PcbPosition)
-                                    .FirstOrDefaultAsync();
+            var report = await _repository.FindAsync(r => r.Id == id);
 
             return _mapper.Map<PcbReport, PcbReportResponse>(report);
 
@@ -115,97 +80,44 @@ namespace SMT.Services
 
         public async Task<IEnumerable<PcbReportResponse>> GetByDefectIdAsync(int defectId)
         {
-            var reports = await _repository.GetAll()
-                                    .Where(r => r.DefectId == defectId)
-                                    .Include(r => r.Model)
-                                    .ThenInclude(r => r.ProductBrand)
-                                    .ThenInclude(r => r.Product)
-                                    .Include(r => r.Model)
-                                    .ThenInclude(r => r.ProductBrand)
-                                    .ThenInclude(r => r.Brand)
-                                    .Include(r => r.Model)
-                                    .Include(r => r.Defect)
-                                    .Include(r => r.PcbPosition)
-                                    .ToListAsync();
+            var reports = await _repository.GetByAsync(r => r.DefectId == defectId);
 
             return _mapper.Map<IEnumerable<PcbReport>, IEnumerable<PcbReportResponse>>(reports);
         }
 
         public async Task<IEnumerable<PcbReportResponse>> GetByModelIdAsync(int modelId)
         {
-            var reports = await _repository.GetAll()
-                                    .Where(r => r.ModelId == modelId && r.Date.Date == DateTime.Now.Date)
-                                    .Include(r => r.Model)
-                                    .ThenInclude(r => r.ProductBrand)
-                                    .ThenInclude(r => r.Product)
-                                    .Include(r => r.Model)
-                                    .ThenInclude(r => r.ProductBrand)
-                                    .ThenInclude(r => r.Brand)
-                                    .Include(r => r.Model)
-                                    .Include(r => r.Defect)
-                                    .Include(r => r.PcbPosition)
-                                    .ToListAsync();
+            var reports = await _repository.GetByAsync(r => r.ModelId == modelId && r.Date.Date == DateTime.Now.Date);
 
             return _mapper.Map<IEnumerable<PcbReport>, IEnumerable<PcbReportResponse>>(reports);
         }
 
         public async Task<IEnumerable<PcbReportResponse>> GetByDateAndModelIdAsync(int modelId, DateTime date)
         {
-            var reports = await _repository.GetAll()
-                                    .Where(r => r.ModelId == modelId && r.Date.Date == date.Date)
-                                    .Include(r => r.Model)
-                                    .ThenInclude(r => r.ProductBrand)
-                                    .ThenInclude(r => r.Product)
-                                    .Include(r => r.Model)
-                                    .ThenInclude(r => r.ProductBrand)
-                                    .ThenInclude(r => r.Brand)
-                                    .Include(r => r.Model)
-                                    .Include(r => r.Defect)
-                                    .Include(r => r.PcbPosition)
-                                    .ToListAsync();
+            var reports = await _repository.GetByAsync(r => r.ModelId == modelId && r.Date.Date == date.Date);
 
             return _mapper.Map<IEnumerable<PcbReport>, IEnumerable<PcbReportResponse>>(reports);
         }
 
         public async Task<IEnumerable<PcbReportResponse>> GetByPositionIdAsync(int positionId)
         {
-            var reports = await _repository.GetAll()
-                                    .Where(r => r.PcbPositionId == positionId)
-                                    .Include(r => r.Model)
-                                    .ThenInclude(r => r.ProductBrand)
-                                    .ThenInclude(r => r.Product)
-                                    .Include(r => r.Model)
-                                    .ThenInclude(r => r.ProductBrand)
-                                    .ThenInclude(r => r.Brand)
-                                    .Include(r => r.Model)
-                                    .Include(r => r.Defect)
-                                    .Include(r => r.PcbPosition)
-                                    .ToListAsync();
+            var reports = await _repository.GetByAsync(r => r.PositionId == positionId);
 
             return _mapper.Map<IEnumerable<PcbReport>, IEnumerable<PcbReportResponse>>(reports);
         }
 
         public async Task<PcbReportResponse> UpdateAsync(int id, PcbReportUpdate report)
         {
-            var existingReport = await _repository.Get().Where(r => r.Id == id)
-                                                    .Include(r => r.Model)
-                                                    .ThenInclude(r => r.ProductBrand)
-                                                    .ThenInclude(r => r.Product)
-                                                    .Include(r => r.Model)
-                                                    .ThenInclude(r => r.ProductBrand)
-                                                    .ThenInclude(r => r.Brand)
-                                                    .Include(r => r.Model)
-                                                    .Include(r => r.Defect)
-                                                    .Include(r => r.PcbPosition)
-                                                    .FirstOrDefaultAsync();
+            var existingReport = await _repository.FindAsync(r => r.Id == id);
 
             if (existingReport == null)
                 throw new NotFoundException();
 
             existingReport.DefectId = report.DefectId;
-            existingReport.PcbPositionId = report.PcbPositionId;
+            existingReport.PositionId = report.PcbPositionId;
 
-            await _repository.UpdateAsync(existingReport);
+            _repository.Update(existingReport);
+            await _unitOfWork.SaveAsync();
 
             return _mapper.Map<PcbReport, PcbReportResponse>(existingReport);
         }

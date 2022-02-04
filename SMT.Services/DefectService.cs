@@ -1,30 +1,31 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using SMT.Access;
+using SMT.Access.Repository.Base;
+using SMT.Access.UnitOfWork;
 using SMT.Common.Dto.DefectDto;
 using SMT.Common.Exceptions;
 using SMT.Domain;
 using SMT.Services.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SMT.Services
 {
     public class DefectService : IDefectService
     {
-        private readonly IRepository<Defect> _repository;
+        private readonly IBaseRepository<Defect> _repository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public DefectService(IRepository<Defect> repository, IMapper mapper)
+        public DefectService(IBaseRepository<Defect> repository, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _repository = repository;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<DefectResponse> AddAsync(DefectCreate defectCreate)
         {
-            var defect = await _repository.Get().Where(p => p.Name == defectCreate.Name).FirstOrDefaultAsync();
+            var defect = await _repository.FindAsync(p => p.Name == defectCreate.Name);
 
             if (defect != null)
                 throw new ConflictException();
@@ -32,53 +33,56 @@ namespace SMT.Services
             defect = _mapper.Map<DefectCreate, Defect>(defectCreate);
 
             await _repository.AddAsync(defect);
+            await _unitOfWork.SaveAsync();
 
             return _mapper.Map<Defect, DefectResponse>(defect);
         }
 
         public async Task<DefectResponse> DeleteAsync(int id)
         {
-            var defect = await _repository.Get().Where(p => p.Id == id).FirstOrDefaultAsync();
+            var defect = await _repository.FindAsync(p => p.Id == id);
 
             if (defect == null)
                 throw new NotFoundException();
 
-            await _repository.DeleteAsync(defect);
+            _repository.Delete(defect);
+            await _unitOfWork.SaveAsync();
 
             return _mapper.Map<Defect, DefectResponse>(defect);
         }
 
         public async Task<IEnumerable<DefectResponse>> GetAllAsync()
         {
-            var defect = await _repository.GetAll().ToListAsync();
+            var defect = await _repository.GetAllAsync();
 
             return _mapper.Map<IEnumerable<Defect>, IEnumerable<DefectResponse>>(defect);
         }
 
         public async Task<DefectResponse> GetAsync(int id)
         {
-            var defect = await _repository.Get().Where(p => p.Id == id).FirstOrDefaultAsync();
+            var defect = await _repository.FindAsync(p => p.Id == id);
 
             return _mapper.Map<Defect, DefectResponse>(defect);
         }
 
         public async Task<DefectResponse> GetByNameAsync(string name)
         {
-            var defect = await _repository.Get().Where(p => p.Name == name).FirstOrDefaultAsync();
+            var defect = await _repository.FindAsync(p => p.Name == name);
 
             return _mapper.Map<Defect, DefectResponse>(defect);
         }
 
         public async Task<DefectResponse> UpdateAsync(int id, DefectUpdate defectUpdate)
         {
-            var defect = await _repository.Get().Where(p => p.Id == id).FirstOrDefaultAsync();
+            var defect = await _repository.FindAsync(p => p.Id == id);
 
             if (defect == null)
                 throw new NotFoundException();
 
             defect.Name = defectUpdate.Name;
 
-            await _repository.UpdateAsync(defect);
+            _repository.Update(defect);
+            await _unitOfWork.SaveAsync();
 
             return _mapper.Map<Defect, DefectResponse>(defect);
         }

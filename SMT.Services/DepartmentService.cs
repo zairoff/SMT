@@ -1,32 +1,31 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using SMT.Access;
+using SMT.Access.Repository.Base;
+using SMT.Access.UnitOfWork;
 using SMT.Common.Dto.DepartmentDto;
 using SMT.Common.Exceptions;
 using SMT.Domain;
 using SMT.Services.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SMT.Services
 {
     public class DepartmentService : IDepartmentService
     {
-        private readonly IRepository<Department> _repository;
+        private readonly IBaseRepository<Department> _repository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public DepartmentService(IRepository<Department> repository, IMapper mapper)
+        public DepartmentService(IBaseRepository<Department> repository, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _repository = repository;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<DepartmentResponse> AddAsync(DepartmentCreate departmentCreate)
         {
-            var department = await _repository.Get()
-                                                .Where(d => d.Name == departmentCreate.Name)
-                                                .FirstOrDefaultAsync();
+            var department = await _repository.FindAsync(d => d.Name == departmentCreate.Name);                                                
 
             if (department != null)
                 throw new ConflictException();
@@ -34,61 +33,56 @@ namespace SMT.Services
             department = _mapper.Map<DepartmentCreate, Department>(departmentCreate);
 
             await _repository.AddAsync(department);
+            await _unitOfWork.SaveAsync();
 
             return _mapper.Map<DepartmentResponse>(department);
         }
 
         public async Task<DepartmentResponse> DeleteAsync(int id)
         {
-            var department = await _repository.Get()
-                                                .Where(d => d.Id == id)
-                                                .FirstOrDefaultAsync();
+            var department = await _repository.FindAsync(d => d.Id == id);
 
             if (department == null)
                 throw new NotFoundException();
 
-            await _repository.DeleteAsync(department);
+            _repository.Delete(department);
+            await _unitOfWork.SaveAsync();
 
             return _mapper.Map<DepartmentResponse>(department);
         }
 
         public async Task<IEnumerable<DepartmentResponse>> GetAllAsync()
         {
-            var departments = await _repository.GetAll().ToListAsync();
+            var departments = await _repository.GetAllAsync();
 
             return _mapper.Map<IEnumerable<DepartmentResponse>>(departments);
         }
 
         public async Task<DepartmentResponse> GetAsync(int id)
         {
-            var department = await _repository.Get()
-                                                .Where(d => d.Id == id)
-                                                .FirstOrDefaultAsync();
+            var department = await _repository.FindAsync(d => d.Id == id);
 
             return _mapper.Map<DepartmentResponse>(department);
         }
 
         public async Task<DepartmentResponse> GetByNameAsync(string name)
         {
-            var department = await _repository.Get()
-                                                .Where(d => d.Name == name)
-                                                .FirstOrDefaultAsync();
+            var department = await _repository.FindAsync(d => d.Name == name);
 
             return _mapper.Map<DepartmentResponse>(department);
         }
 
         public async Task<DepartmentResponse> UpdateAsync(int id, DepartmentUpdate departmentUpdate)
         {
-            var department = await _repository.Get()
-                                                .Where(d => d.Id == id)
-                                                .FirstOrDefaultAsync();
+            var department = await _repository.FindAsync(d => d.Id == id);
 
             if (department == null)
                 throw new NotFoundException();
 
             department.Name = departmentUpdate.Name;
 
-            await _repository.UpdateAsync(department);
+            _repository.Update(department);
+            await _unitOfWork.SaveAsync();
 
             return _mapper.Map<DepartmentResponse>(department);
         }

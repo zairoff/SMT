@@ -1,10 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SMT.Common.Models
 {
@@ -22,10 +17,14 @@ namespace SMT.Common.Models
         [JsonProperty(Order = -4)]
         public string Href { get; set; }
 
-        [JsonProperty(Order = -3, PropertyName = "rel", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty(Order = -3,
+                    PropertyName = "rel",
+                    NullValueHandling = NullValueHandling.Ignore)]
         public string[] Relations { get; set; }
 
-        [JsonProperty(Order = -2, DefaultValueHandling = DefaultValueHandling.Ignore, NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty(Order = -2,
+                    DefaultValueHandling = DefaultValueHandling.Ignore,
+                    NullValueHandling = NullValueHandling.Ignore)]
         [DefaultValue(GetMethod)]
         public string Method { get; set; }
 

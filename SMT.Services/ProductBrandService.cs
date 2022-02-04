@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using SMT.Access;
+using SMT.Access.Repository;
 using SMT.Common.Dto.ProductBrandDto;
 using SMT.Common.Exceptions;
 using SMT.Domain;
@@ -13,10 +13,10 @@ namespace SMT.Services
 {
     public class ProductBrandService : IProductBrandService
     {
-        private readonly IRepository<ProductBrand> _repository;
+        private readonly IBaseRepository<ProductBrand> _repository;
         private readonly IMapper _mapper;
 
-        public ProductBrandService(IRepository<ProductBrand> repository, IMapper mapper)
+        public ProductBrandService(IBaseRepository<ProductBrand> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

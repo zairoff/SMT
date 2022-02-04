@@ -22,9 +22,7 @@ namespace SMT.Domain
 
         public Defect Defect { get; set; }
 
-        public int PcbPositionId { get; set; }
-
-        public PcbPosition PcbPosition { get; set; }
+        public int PositionId { get; set; }
 
         public DateTime Date { get; set; } = DateTime.Now;
     }

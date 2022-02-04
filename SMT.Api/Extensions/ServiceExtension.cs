@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using SMT.Access;
 using SMT.Access.Data;
 using SMT.Access.Identity;
+using SMT.Api.Filters;
 using SMT.Common.Mapping;
 using SMT.Notification;
 using System;
@@ -29,6 +30,11 @@ namespace SMT.Api.Extensions
             //    services.AddDbContext<AppDbContext>(options =>
             //                options.UseSqlServer(configuration.GetConnectionString("DbConnectionDev")));
             //}
+
+            services.AddMvc(options =>
+                            {
+                                options.Filters.Add<LinkRewritingFilter>();
+                            });
 
             services.AddCors(options =>
             {
@@ -57,7 +63,7 @@ namespace SMT.Api.Extensions
             services.BuildServiceProvider().GetService<AppIdentityDbContext>().Database.Migrate();
             services.AddControllers();
             services.AddAutoMapper(typeof(ModelToResourceProfile), typeof(ResourceToModelProfile));
-            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+            services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<ITelegramBotClient>(conf => new TelegramBotClient(configuration.GetValue<string>("AppSettings:BotToken")));
             services.AddScoped<INotificationService>(conf => new NotificationService(conf.GetRequiredService<ITelegramBotClient>(), Convert.ToInt64(configuration["AppSettings:TelegramChatId"])));
 
