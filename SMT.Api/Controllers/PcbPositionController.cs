@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SMT.Common.Dto.PcbPositionDto;
+using SMT.ViewModel.Dto.PcbPositionDto;
 using SMT.Services.Interfaces;
 using System.Threading.Tasks;
 

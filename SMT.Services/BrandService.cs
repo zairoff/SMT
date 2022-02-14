@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using SMT.Access.Repository.Base;
+using SMT.Access.Repository.Interfaces;
 using SMT.Access.UnitOfWork;
-using SMT.Common.Dto.BrandDto;
 using SMT.Common.Exceptions;
 using SMT.Domain;
 using SMT.Services.Interfaces;
+using SMT.ViewModel.Dto.BrandDto;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,11 +12,11 @@ namespace SMT.Services
 {
     public class BrandService : IBrandService
     {
-        private readonly IBaseRepository<Brand> _repository;
+        private readonly IBrandRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public BrandService(IBaseRepository<Brand> repository, IMapper mapper, IUnitOfWork unitOfWork)
+        public BrandService(IBrandRepository repository, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _repository = repository;
             _mapper = mapper;
@@ -30,13 +30,12 @@ namespace SMT.Services
             if (brand != null)
                 throw new ConflictException();
 
-            brand = (Brand)brandCreate;
+            brand = _mapper.Map<BrandCreate, Brand>(brandCreate);
 
             await _repository.AddAsync(brand);
-
             await _unitOfWork.SaveAsync();
 
-            return (BrandResponse)brand;
+            return _mapper.Map<Brand, BrandResponse>(brand);
         }
 
         public async Task<BrandResponse> DeleteAsync(int id)

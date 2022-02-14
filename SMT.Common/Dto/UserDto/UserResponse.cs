@@ -1,11 +1,6 @@
 ﻿using SMT.Access.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SMT.Common.Dto.UserDto
+namespace SMT.ViewModel.Dto.UserDto
 {
     public class UserResponse
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SMT.Common.Dto.DepartmentDto;
+using SMT.ViewModel.Dto.DepartmentDto;
 using SMT.Services.Interfaces;
 using System.Threading.Tasks;
 

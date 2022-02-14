@@ -1,4 +1,4 @@
-﻿using SMT.Common.Dto.PcbReportDto;
+﻿using SMT.ViewModel.Dto.PcbReportDto;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

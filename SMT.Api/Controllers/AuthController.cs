@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SMT.Common.Dto.LoginDto;
-using SMT.Common.Dto.UserDto;
+using SMT.ViewModel.Dto.LoginDto;
+using SMT.ViewModel.Dto.UserDto;
 using SMT.Security;
 using System;
 using System.Threading.Tasks;

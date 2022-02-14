@@ -3,12 +3,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using SMT.Access;
 using SMT.Access.Data;
 using SMT.Access.Identity;
+using SMT.Access.Repository;
+using SMT.Access.Repository.Base;
+using SMT.Access.Repository.Interfaces;
+using SMT.Access.UnitOfWork;
 using SMT.Api.Filters;
-using SMT.Common.Mapping;
 using SMT.Notification;
+using SMT.Security;
+using SMT.Services;
+using SMT.Services.Interfaces;
+using SMT.Services.Mapping;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -63,11 +69,37 @@ namespace SMT.Api.Extensions
             services.BuildServiceProvider().GetService<AppIdentityDbContext>().Database.Migrate();
             services.AddControllers();
             services.AddAutoMapper(typeof(ModelToResourceProfile), typeof(ResourceToModelProfile));
-            services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<ITelegramBotClient>(conf => new TelegramBotClient(configuration.GetValue<string>("AppSettings:BotToken")));
             services.AddScoped<INotificationService>(conf => new NotificationService(conf.GetRequiredService<ITelegramBotClient>(), Convert.ToInt64(configuration["AppSettings:TelegramChatId"])));
 
-            AddServices(services);
+
+            /*************   Repository  ************/
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IBrandRepository, BrandRepository>();
+            services.AddScoped<IDefectRepository, DefectRepository>();
+            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            services.AddScoped<IModelRepository, ModelRepository>();
+            services.AddScoped<IPcbReportRepository, PcbReportRepository>();
+            services.AddScoped<IProductBrandRepository, ProductBrandRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+
+            /*************   Services  ************/
+
+            services.AddScoped<IBrandService, BrandService>();
+            services.AddScoped<IDefectService, DefectService>();
+            services.AddScoped<IDepartmentService, DepartmentService>();
+            services.AddScoped<IModelService, ModelService>();
+            services.AddScoped<IPcbReportService, PcbReportService>();
+            services.AddScoped<IProductBrandService, ProductBrandService>();
+            services.AddScoped<IProductService, ProductService>();
+
+            /*************   Security  ************/
+
+            services.AddScoped<IUserService, UserService>();
+
+            //AddServices(services);
 
             return services;
         }

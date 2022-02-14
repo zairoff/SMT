@@ -1,4 +1,4 @@
-﻿using SMT.Common.Dto.DefectDto;
+﻿using SMT.ViewModel.Dto.DefectDto;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

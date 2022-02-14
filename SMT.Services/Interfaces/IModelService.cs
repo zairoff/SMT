@@ -1,4 +1,4 @@
-﻿using SMT.Common.Dto.ModelDto;
+﻿using SMT.ViewModel.Dto.ModelDto;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SMT.Common.Dto.PcbReportDto;
+using SMT.ViewModel.Dto.PcbReportDto;
 using SMT.Services.Interfaces;
 using System;
 using System.Threading.Tasks;

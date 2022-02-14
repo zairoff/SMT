@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel;
 
-namespace SMT.Common.Models
+namespace SMT.ViewModel.Models
 {
     public class Link
     {

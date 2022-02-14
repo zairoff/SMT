@@ -1,11 +1,6 @@
 ﻿using SMT.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SMT.Common.Dto.BrandDto
+namespace SMT.ViewModel.Dto.BrandDto
 {
     public class BrandCreate
     {

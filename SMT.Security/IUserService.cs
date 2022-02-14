@@ -1,4 +1,4 @@
-﻿using SMT.Common.Dto.UserDto;
+﻿using SMT.ViewModel.Dto.UserDto;
 using System.Threading.Tasks;
 
 namespace SMT.Security

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SMT.Common.Dto.BrandDto;
+using SMT.ViewModel.Dto.BrandDto;
 using SMT.Services.Interfaces;
 using System.Threading.Tasks;
 

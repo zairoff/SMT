@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SMT.Common.Dto.DefectDto;
+using SMT.ViewModel.Dto.DefectDto;
 using SMT.Services.Interfaces;
 using System.Threading.Tasks;
 

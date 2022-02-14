@@ -1,4 +1,4 @@
-﻿using SMT.Common.Dto.DepartmentDto;
+﻿using SMT.ViewModel.Dto.DepartmentDto;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SMT.Access.UnitOfWork;
-using SMT.Common.Dto.ModelDto;
+using SMT.ViewModel.Dto.ModelDto;
 using SMT.Common.Exceptions;
 using SMT.Domain;
 using SMT.Services.Interfaces;

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Routing;
 using SMT.Api.Infrastructure;
-using SMT.Common.Models;
+using SMT.ViewModel.Models;
 using SMT.ViewModel.Models;
 using System;
 using System.Collections.Generic;

@@ -1,13 +1,6 @@
-﻿using SMT.Common.Dto.BrandDto;
-using SMT.Common.Dto.ProductBrandDto;
-using SMT.Common.Dto.ProductDto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SMT.ViewModel.Dto.ProductBrandDto;
 
-namespace SMT.Common.Dto.ModelDto
+namespace SMT.ViewModel.Dto.ModelDto
 {
     public class ModelResponse
     {

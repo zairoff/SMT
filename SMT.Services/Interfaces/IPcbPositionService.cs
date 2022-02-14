@@ -1,4 +1,4 @@
-﻿using SMT.Common.Dto.PcbPositionDto;
+﻿using SMT.ViewModel.Dto.PcbPositionDto;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using SMT.Access.Repository.Base;
+using SMT.Access.Repository.Interfaces;
 using SMT.Access.UnitOfWork;
-using SMT.Common.Dto.DefectDto;
+using SMT.ViewModel.Dto.DefectDto;
 using SMT.Common.Exceptions;
 using SMT.Domain;
 using SMT.Services.Interfaces;
@@ -12,11 +13,11 @@ namespace SMT.Services
 {
     public class DefectService : IDefectService
     {
-        private readonly IBaseRepository<Defect> _repository;
+        private readonly IDefectRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public DefectService(IBaseRepository<Defect> repository, IMapper mapper, IUnitOfWork unitOfWork)
+        public DefectService(IDefectRepository repository, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _repository = repository;
             _mapper = mapper;

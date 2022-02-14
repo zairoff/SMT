@@ -1,5 +1,4 @@
-﻿using SMT.Common.Models;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace SMT.ViewModel.Models
 {

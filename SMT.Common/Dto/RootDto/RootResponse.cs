@@ -1,5 +1,4 @@
-﻿using SMT.Common.Models;
-using SMT.ViewModel.Models;
+﻿using SMT.ViewModel.Models;
 
 namespace SMT.ViewModel.Dto.RootDto
 {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SMT.Common.Models;
+using SMT.ViewModel.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

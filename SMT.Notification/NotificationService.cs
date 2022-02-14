@@ -23,7 +23,7 @@ namespace SMT.Notification
                             text: "Diqqat!!!\nXudud: PCBA-1\nModel: " + 
                             reports[0].Model.Name + "\nNuqson: " +
                             GetDefects(reports) + "\nYig'uvchi: " + 
-                            reports[0].PcbPosition.Position + "\nSoni: " + count);
+                            reports[0].PositionId + "\nSoni: " + count);
         }
 
         private static string GetDefects(List<PcbReport> reports)

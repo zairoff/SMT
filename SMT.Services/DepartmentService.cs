@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using SMT.Access.Repository.Base;
+using SMT.Access.Repository.Interfaces;
 using SMT.Access.UnitOfWork;
-using SMT.Common.Dto.DepartmentDto;
+using SMT.ViewModel.Dto.DepartmentDto;
 using SMT.Common.Exceptions;
 using SMT.Domain;
 using SMT.Services.Interfaces;
@@ -12,11 +13,11 @@ namespace SMT.Services
 {
     public class DepartmentService : IDepartmentService
     {
-        private readonly IBaseRepository<Department> _repository;
+        private readonly IDepartmentRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public DepartmentService(IBaseRepository<Department> repository, IMapper mapper, IUnitOfWork unitOfWork)
+        public DepartmentService(IDepartmentRepository repository, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _repository = repository;
             _mapper = mapper;

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SMT.Common.Models;
+using SMT.ViewModel.Models;
 using SMT.ViewModel.Dto.RootDto;
 using System.Threading.Tasks;
 

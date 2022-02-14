@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using SMT.Access.Identity;
-using SMT.Common.Dto.UserDto;
+using SMT.ViewModel.Dto.UserDto;
 using SMT.Common.Exceptions;
 using System;
 using System.Collections.Generic;

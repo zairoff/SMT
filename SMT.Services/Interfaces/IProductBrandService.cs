@@ -1,4 +1,4 @@
-﻿using SMT.Common.Dto.ProductBrandDto;
+﻿using SMT.ViewModel.Dto.ProductBrandDto;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

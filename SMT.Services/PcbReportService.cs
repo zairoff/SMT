@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using SMT.Access.Repository.Interfaces;
 using SMT.Access.UnitOfWork;
-using SMT.Common.Dto.PcbReportDto;
+using SMT.ViewModel.Dto.PcbReportDto;
 using SMT.Common.Exceptions;
 using SMT.Domain;
 using SMT.Notification;
