@@ -3,19 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Domain", "SMT.Domain\SMT.Domain.csproj", "{4A908C40-7C0D-4FEC-8BA3-42F26EC17295}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Domain", "src\SMT.Domain\SMT.Domain.csproj", "{4A908C40-7C0D-4FEC-8BA3-42F26EC17295}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Access", "SMT.Access\SMT.Access.csproj", "{92B0E393-5133-4E5E-B6EF-5E0CAB4D08A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Access", "src\SMT.Access\SMT.Access.csproj", "{92B0E393-5133-4E5E-B6EF-5E0CAB4D08A8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Services", "SMT.Services\SMT.Services.csproj", "{ABE92835-36D2-4D16-897D-740B52167B18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Services", "src\SMT.Services\SMT.Services.csproj", "{ABE92835-36D2-4D16-897D-740B52167B18}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.ViewModel", "SMT.Common\SMT.ViewModel.csproj", "{AB668EDA-0797-40E5-B5BB-B7813BA1A3C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.ViewModel", "src\SMT.ViewModel\SMT.ViewModel.csproj", "{AB668EDA-0797-40E5-B5BB-B7813BA1A3C4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Api", "SMT.Api\SMT.Api.csproj", "{DD1E8906-A476-4C2A-AA53-F217F83BDB78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Api", "src\SMT.Api\SMT.Api.csproj", "{DD1E8906-A476-4C2A-AA53-F217F83BDB78}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Security", "SMT.Security\SMT.Security.csproj", "{C95CA945-097B-4245-A544-1990E90D5098}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Security", "src\SMT.Security\SMT.Security.csproj", "{C95CA945-097B-4245-A544-1990E90D5098}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Notification", "SMT.Notification\SMT.Notification.csproj", "{7241F000-7953-417C-90FB-798DDC3DD572}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Notification", "src\SMT.Notification\SMT.Notification.csproj", "{7241F000-7953-417C-90FB-798DDC3DD572}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMT.Access.Test", "tests\SMT.Access.Test\SMT.Access.Test.csproj", "{5337B07D-0A09-4A4A-A9D7-7DB6535625C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{7241F000-7953-417C-90FB-798DDC3DD572}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7241F000-7953-417C-90FB-798DDC3DD572}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7241F000-7953-417C-90FB-798DDC3DD572}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5337B07D-0A09-4A4A-A9D7-7DB6535625C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5337B07D-0A09-4A4A-A9D7-7DB6535625C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5337B07D-0A09-4A4A-A9D7-7DB6535625C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5337B07D-0A09-4A4A-A9D7-7DB6535625C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
