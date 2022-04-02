@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SMT.ViewModel.Exceptions;
 using System;
@@ -10,10 +11,12 @@ namespace SMT.Api.ExceptionHandler
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next)
+        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext httpContext)
@@ -24,6 +27,7 @@ namespace SMT.Api.ExceptionHandler
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString(), ex);
                 await HandleExceptionAsync(httpContext, ex);
             }
         }
@@ -41,6 +45,10 @@ namespace SMT.Api.ExceptionHandler
 
                 case ConflictException:
                     code = HttpStatusCode.Conflict;
+                    break;
+
+                case InvalidOperationException:
+                    code = HttpStatusCode.BadRequest;
                     break;
 
                 default:

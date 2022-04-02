@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SMT.Access.Data;
 using SMT.Access.Identity;
@@ -9,7 +11,6 @@ using SMT.Access.Repository;
 using SMT.Access.Repository.Base;
 using SMT.Access.Repository.Interfaces;
 using SMT.Access.Unit;
-using SMT.Api.Filters;
 using SMT.Notification;
 using SMT.Security;
 using SMT.Services;
@@ -19,6 +20,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 using Telegram.Bot;
 
 namespace SMT.Api.Extensions
@@ -37,17 +39,19 @@ namespace SMT.Api.Extensions
             //                options.UseSqlServer(configuration.GetConnectionString("DbConnectionDev")));
             //}
 
-            services.AddMvc(options =>
-                            {
-                                options.Filters.Add<LinkRewritingFilter>();
-                            });
+            //services.AddMvc(/*options =>
+            //                {
+            //                    options.Filters.Add<LinkRewritingFilter>();
+            //                }*/);
+
+            
 
             services.AddCors(options =>
             {
-                options.AddDefaultPolicy(
-                    policy => policy.AllowAnyOrigin()
-                                    .AllowAnyHeader()
-                                    .AllowAnyMethod());
+                    options.AddPolicy(options.DefaultPolicyName,
+                                                            policy => policy.AllowAnyOrigin()
+                                                                    .AllowAnyHeader()
+                                                                    .AllowAnyMethod());
             });
 
             services.AddSwaggerGen(c =>
@@ -64,6 +68,25 @@ namespace SMT.Api.Extensions
             services.AddIdentity<ApplicationUser, IdentityRole>()
                         .AddEntityFrameworkStores<AppIdentityDbContext>()
                         .AddDefaultTokenProviders();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            })
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AppSettings:Secret"]))
+                };
+            });
 
             services.BuildServiceProvider().GetService<AppDbContext>().Database.Migrate();
             services.BuildServiceProvider().GetService<AppIdentityDbContext>().Database.Migrate();

@@ -16,7 +16,7 @@ namespace SMT.Api.Controllers
             var response = new RootResponse
             {
                 Self = Link.To(nameof(GetRoot)),
-                Products = Link.To(nameof(ProductController.GetAll)),
+                Products = Link.To(nameof(ProductController.Get)),
             };
 
             return Ok(response);

@@ -20,14 +20,17 @@ namespace SMT.Access.Identity
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-                    //.SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "../SMT.Api/appsettings.json")))
-                    .Build();
+            //IConfigurationRoot configuration = new ConfigurationBuilder()
+            //        //.SetBasePath(Directory.GetCurrentDirectory())
+            //        .AddJsonFile(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "../SMT.Api/appsettings.json")))
+            //        .Build();
 
-            //options.UseNpgsql("Server=localhost;Port=5432;Database=smtDB;User Id=postgres;Password=postgres;");
+            ////options.UseNpgsql("Server=localhost;Port=5432;Database=smtDB;User Id=postgres;Password=postgres;");
 
-            var connectionString = configuration.GetConnectionString("IdentityConnection");
+            //var connectionString = configuration.GetConnectionString("IdentityConnection");
+            //options.UseNpgsql(connectionString);
+
+            var connectionString = "Server=localhost;Port=5432;Database=smtIdentityDB;User Id=postgres;Password=postgres;";
             options.UseNpgsql(connectionString);
         }
 
@@ -35,11 +38,13 @@ namespace SMT.Access.Identity
         {
             public AppIdentityDbContext CreateDbContext(string[] args)
             {
-                IConfigurationRoot configuration = new ConfigurationBuilder()
-                    //.SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "../SMT.Api/appsettings.json")))
-                    .Build();
-                var connectionString = configuration.GetConnectionString("IdentityConnection");
+                //IConfigurationRoot configuration = new ConfigurationBuilder()
+                //    //.SetBasePath(Directory.GetCurrentDirectory())
+                //    .AddJsonFile(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "../SMT.Api/appsettings.json")))
+                //    .Build();
+                //var connectionString = configuration.GetConnectionString("IdentityConnection");
+
+                var connectionString = "Server=localhost;Port=5432;Database=smtIdentityDB;User Id=postgres;Password=postgres;";
 
                 var builder = new DbContextOptionsBuilder<AppIdentityDbContext>();
                 builder.UseNpgsql(connectionString);

@@ -9,6 +9,7 @@ using SMT.ViewModel.Dto.PcbReportDto;
 using SMT.ViewModel.Dto.ProductBrandDto;
 using SMT.ViewModel.Dto.ProductDto;
 using SMT.Domain;
+using SMT.ViewModel.Dto.UserDto;
 
 namespace SMT.Services.Mapping
 {

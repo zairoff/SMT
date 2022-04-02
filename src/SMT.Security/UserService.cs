@@ -4,12 +4,13 @@ using Microsoft.IdentityModel.Tokens;
 using SMT.Access.Identity;
 using SMT.ViewModel.Dto.UserDto;
 using SMT.ViewModel.Exceptions;
-using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Text;
+using System;
 
 namespace SMT.Security
 {
@@ -27,67 +28,81 @@ namespace SMT.Security
             _configuration = configuration;
         }
 
-        public async Task<UserResponse> Create(UserCreate userCreate)
+        public async Task<UserResponse> Create(UserCreate userCreate, string role)
         {
             var user = await _userManager.FindByNameAsync(userCreate.Username);
 
             if (user != null)
-                throw new ConflictException();
+                throw new ConflictException($"{userCreate.Username} already registered");
 
-            var result = await _userManager.CreateAsync(user, userCreate.Password);
+            var applicationUser = new ApplicationUser()
+            {
+                UserName = userCreate.Username,
+                Telegram = userCreate.Telegram
+            };
+
+            var result = await _userManager.CreateAsync(applicationUser, userCreate.Password);
+            var errors = new StringBuilder();
+            result.Errors.ToList().ForEach(e => errors.Append(e.Description));
 
             if (!result.Succeeded)
-                throw new InvalidOperationException();
+                throw new InvalidOperationException(errors.ToString());
 
-            if (!await _roleManager.RoleExistsAsync(userCreate.Role))
-                await _roleManager.CreateAsync(new IdentityRole(userCreate.Role));
+            if (!await _roleManager.RoleExistsAsync(role))
+                await _roleManager.CreateAsync(new IdentityRole(role));
 
-            await _userManager.AddToRoleAsync(user, userCreate.Role);
+            await _userManager.AddToRoleAsync(applicationUser, role);
 
-            return (UserResponse)user;
+            return (UserResponse)applicationUser;
         }
 
-        public async Task<string> Authenticate(string username, string password)
+        public async Task<UserResponse> GetUserByUsername(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+                throw new NotFoundException($"{username} user not found");
+
+            var userResponse = new UserResponse()
+            {
+                Username = username
+            };
+
+            return userResponse;
+        }
+
+        public async Task<UserResponse> Authenticate(string username, string password)
         {
             var user = await _userManager.FindByNameAsync(username);
 
             if (user == null || !await _userManager.CheckPasswordAsync(user, password))
-                throw new NotFoundException();
+                throw new InvalidOperationException($"username or password is incorrect");
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("AppSettings:Secret"));
+            var key = Encoding.UTF8.GetBytes(_configuration.GetValue<string>("AppSettings:Secret"));
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new List<Claim> { new Claim(ClaimTypes.Name, username) };
 
             foreach (var role in roles)
             {
-                claims.Add(new Claim(ClaimTypes.Role, role));
+                claims.Add(new Claim("role", role));
             }
 
-            var tokenDescriptor = new SecurityTokenDescriptor
+            claims.Add(new Claim("id", user.Id));
+            claims.Add(new Claim("username", user.UserName));
+
+            var token = new JwtSecurityToken(
+                expires: DateTime.Now.AddSeconds(10),
+                claims: claims,
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+                );
+
+            var userResponse = new UserResponse()
             {
-                Subject = new ClaimsIdentity(claims.ToArray()),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                Username = username,
+                Token = new JwtSecurityTokenHandler().WriteToken(token)
             };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
-        }
-
-        public async Task<UserResponse> Update(int id, UserUpdate userUpdate)
-        {
-            //var user = await _repository.Get()
-            //                            .Where(u => u.Id == id)
-            //                            .FirstOrDefaultAsync();
-
-            //if (user == null)
-            //    throw new NotFoundException();
-
-            //user.Password = userUpdate.Password;
-            //user.Role = userUpdate.Role;
-            //user.Username = userUpdate.Username;
-            return null;
+            return userResponse;
         }
 
         public Task Delete(int id)

@@ -34,18 +34,20 @@ namespace SMT.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SMT.Api v1"));
             }
-            //Seed(app);
-
+            app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
             loggerFactory.AddFile(Configuration["AppSettings:LogFolder"]);
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SMT.Api v1"));
+            //Seed(app);
 
+            app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors();
-            app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
-            //app.UseAuthorization();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\SMT.Access\SMT.Access.csproj" />
+    <ProjectReference Include="..\..\..\src\SMT.Access\SMT.Access.csproj" />
   </ItemGroup>
 
 </Project>

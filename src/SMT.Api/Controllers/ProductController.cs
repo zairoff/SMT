@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using SMT.ViewModel.Dto.ProductDto;
 using SMT.Services.Interfaces;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SMT.Api.Controllers
 {
@@ -16,7 +18,7 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> Get()
         {
             var result = await _service.GetAllAsync();
 
@@ -62,7 +64,8 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
