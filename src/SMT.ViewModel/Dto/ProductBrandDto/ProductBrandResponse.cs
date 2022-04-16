@@ -7,8 +7,6 @@ namespace SMT.ViewModel.Dto.ProductBrandDto
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
-
         public ProductResponse Product { get; set; }
 
         public BrandResponse Brand { get; set; }
