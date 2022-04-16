@@ -11,6 +11,7 @@ using SMT.ViewModel.Dto.ProductDto;
 using SMT.Domain;
 using SMT.ViewModel.Dto.UserDto;
 using SMT.ViewModel.Dto.LineDto;
+using SMT.ViewModel.Dto.LineDefectDto;
 
 namespace SMT.Services.Mapping
 {
@@ -31,6 +32,7 @@ namespace SMT.Services.Mapping
             CreateMap<HierarchyId, string>().ConvertUsing(s => s.ToString());
 
             CreateMap<Line, LineResponse>();
+            CreateMap<LineDefect, LineDefectResponse>();
         }
     }
 }
