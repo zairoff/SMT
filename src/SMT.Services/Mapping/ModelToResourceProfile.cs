@@ -22,8 +22,7 @@ namespace SMT.Services.Mapping
             CreateMap<Brand, BrandResponse>();
             CreateMap<Model, ModelResponse>();
             CreateMap<PcbPosition, PcbPositionResponse>();
-            CreateMap<ProductBrand, ProductBrandResponse>()
-                    .ForPath(dst => dst.Name, src => src.MapFrom(s => s.Brand.Name));
+            CreateMap<ProductBrand, ProductBrandResponse>();
 
             CreateMap<Defect, DefectResponse>();
             //CreateMap<User, UserResponse>();

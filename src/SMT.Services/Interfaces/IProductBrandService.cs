@@ -12,6 +12,8 @@ namespace SMT.Services.Interfaces
 
         Task<IEnumerable<ProductBrandResponse>> GetByProductIdAsync(int productId);
 
+        Task<ProductBrandResponse> GetByProductAndBrandIdAsync(int productId, int brandId);
+
         Task<ProductBrandResponse> AddAsync(ProductBrandCreate productBrandCreate);
 
         Task<ProductBrandResponse> UpdateAsync(int id, ProductBrandUpdate productBrandUpdate);

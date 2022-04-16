@@ -28,7 +28,7 @@ namespace SMT.Services
             var brand = await _repository.FindAsync(p => p.Name == brandCreate.Name);
 
             if (brand != null)
-                throw new ConflictException();
+                throw new ConflictException($"{brandCreate.Name} already exists");
 
             brand = _mapper.Map<BrandCreate, Brand>(brandCreate);
 
@@ -43,7 +43,7 @@ namespace SMT.Services
             var brand = await _repository.FindAsync(p => p.Id == id);
 
             if (brand == null)
-                throw new NotFoundException();
+                throw new NotFoundException("Not found");
 
             _repository.Delete(brand);
             await _unitOfWork.SaveAsync();
@@ -77,7 +77,7 @@ namespace SMT.Services
             var brand = await _repository.FindAsync(p => p.Id == id);
 
             if (brand == null)
-                throw new NotFoundException();
+                throw new NotFoundException("Not found");
 
             brand.Name = brandUpdate.Name;
 

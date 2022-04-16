@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using SMT.Access.Repository;
 using SMT.Access.Repository.Interfaces;
 using SMT.Access.Unit;
 using SMT.ViewModel.Dto.ProductBrandDto;
@@ -8,7 +6,6 @@ using SMT.ViewModel.Exceptions;
 using SMT.Domain;
 using SMT.Services.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SMT.Services
@@ -33,12 +30,15 @@ namespace SMT.Services
                             p.BrandId == productBrandCreate.BrandId);
 
             if (productBrand != null)
-                throw new ConflictException();
+                throw new ConflictException($"{productBrand.Brand.Name} under {productBrand.Product.Name} already exist");
 
             productBrand = _mapper.Map<ProductBrandCreate, ProductBrand>(productBrandCreate);
 
             await _repository.AddAsync(productBrand);
             await _unitOfWork.SaveAsync();
+
+            var id = productBrand.Id;
+            productBrand = await _repository.FindAsync(p => p.Id == id);
 
             return _mapper.Map<ProductBrand, ProductBrandResponse>(productBrand);
         }
@@ -48,7 +48,7 @@ namespace SMT.Services
             var productBrand = await _repository.FindAsync(p => p.Id == id);
 
             if (productBrand == null)
-                throw new NotFoundException();
+                throw new NotFoundException("Not found");
 
             _repository.Delete(productBrand);
             await _unitOfWork.SaveAsync();
@@ -70,6 +70,13 @@ namespace SMT.Services
             return _mapper.Map<ProductBrand, ProductBrandResponse>(productBrand);
         }
 
+        public async Task<ProductBrandResponse> GetByProductAndBrandIdAsync(int productId, int brandId)
+        {
+            var productBrand = await _repository.FindAsync(p => p.ProductId == productId && p.BrandId == brandId);
+
+            return _mapper.Map<ProductBrand, ProductBrandResponse>(productBrand);
+        }
+
         public async Task<IEnumerable<ProductBrandResponse>> GetByProductIdAsync(int productId)
         {
             var productBrands = await _repository.GetByAsync(p => p.ProductId == productId);
@@ -82,7 +89,7 @@ namespace SMT.Services
             var productBrand = await _repository.FindAsync(p => p.Id == id);
 
             if (productBrand == null)
-                throw new NotFoundException();
+                throw new NotFoundException("Not found");
 
             productBrand.ProductId = productBrandUpdate.ProductId;
             productBrand.BrandId = productBrandUpdate.BrandId;
