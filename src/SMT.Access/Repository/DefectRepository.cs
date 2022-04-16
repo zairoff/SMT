@@ -16,15 +16,5 @@ namespace SMT.Access.Repository
         public DefectRepository(AppDbContext context) : base(context)
         {
         }
-
-        public async override Task<Defect> FindAsync(Expression<Func<Defect, bool>> expression)
-        {
-            return await DbSet.Where(expression).Include(d => d.Line).FirstOrDefaultAsync();
-        }
-
-        public async override Task<IEnumerable<Defect>> GetAllAsync()
-        {
-            return await DbSet.Include(d => d.Line).ToListAsync();
-        }
     }
 }
