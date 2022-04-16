@@ -10,6 +10,7 @@ using SMT.ViewModel.Dto.UserDto;
 using SMT.Domain;
 using Microsoft.EntityFrameworkCore;
 using SMT.ViewModel.Dto.DepartmentDto;
+using SMT.ViewModel.Dto.LineDto;
 
 namespace SMT.Services.Mapping
 {
@@ -44,6 +45,9 @@ namespace SMT.Services.Mapping
             CreateMap<string, HierarchyId>().ConvertUsing(s => HierarchyId.Parse(s));
             CreateMap<DepartmentCreate, Department>();
             CreateMap<DepartmentUpdate, Department>();
+
+            CreateMap<LineCreate, Line>();
+            CreateMap<LineUpdate, Line>();
         }
     }
 }

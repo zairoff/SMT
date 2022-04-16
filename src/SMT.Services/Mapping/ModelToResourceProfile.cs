@@ -10,6 +10,7 @@ using SMT.ViewModel.Dto.ProductBrandDto;
 using SMT.ViewModel.Dto.ProductDto;
 using SMT.Domain;
 using SMT.ViewModel.Dto.UserDto;
+using SMT.ViewModel.Dto.LineDto;
 
 namespace SMT.Services.Mapping
 {
@@ -28,6 +29,8 @@ namespace SMT.Services.Mapping
             //CreateMap<User, UserResponse>();
             CreateMap<Department, DepartmentResponse>();
             CreateMap<HierarchyId, string>().ConvertUsing(s => s.ToString());
+
+            CreateMap<Line, LineResponse>();
         }
     }
 }
