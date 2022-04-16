@@ -42,5 +42,15 @@ namespace SMT.Access.Repository
                             .ThenInclude(m => m.Brand)
                             .ToListAsync();
         }
+        
+        //public async Task<IEnumerable<Model>> GetByAsync1(Expression<Func<Model, bool>> expression)
+        //{
+        //    return await DbSet.Join(_context.ProductBrands, c => c.ProductBrandId, p => p. Where(expression)
+        //                    .Include(m => m.ProductBrand)
+        //                    .ThenInclude(m => m.Product)
+        //                    .Include(m => m.ProductBrand)
+        //                    .ThenInclude(m => m.Brand)
+        //                    .ToListAsync();
+        //}
     }
 }
