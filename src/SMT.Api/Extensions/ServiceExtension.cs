@@ -108,6 +108,7 @@ namespace SMT.Api.Extensions
             services.AddScoped<IProductBrandRepository, ProductBrandRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ILineRepository, LineRepository>();
+            services.AddScoped<ILineDefectRepository, LineDefectRepository>();
 
             /*************   Services  ************/
 
@@ -119,6 +120,7 @@ namespace SMT.Api.Extensions
             services.AddScoped<IProductBrandService, ProductBrandService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ILineService, LineService>();
+            services.AddScoped<ILineDefectService, LineDefectService>();
 
             /*************   Security  ************/
 
