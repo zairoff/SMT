@@ -1,6 +1,9 @@
-﻿namespace SMT.Access.Repository.Interfaces
+﻿using SMT.Access.Repository.Base;
+using SMT.Domain;
+
+namespace SMT.Access.Repository.Interfaces
 {
-    public interface IDefectRepository
+    public interface IDefectRepository : IBaseRepository<Defect>
     {
 
     }
