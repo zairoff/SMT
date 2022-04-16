@@ -32,10 +32,19 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
-        [Route("GetByProductIdAsync")]
+        [Route("GetByProductId")]
         public async Task<IActionResult> GetByProductIdAsync(int productId)
         {
             var result = await _service.GetByProductIdAsync(productId);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("GetByProductAndBrandId")]
+        public async Task<IActionResult> GetByProductAndBrandIdAsync(int productId, int brandId)
+        {
+            var result = await _service.GetByProductAndBrandIdAsync(productId, brandId);
 
             return Ok(result);
         }
