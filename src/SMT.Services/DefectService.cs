@@ -28,7 +28,7 @@ namespace SMT.Services
             var defect = await _repository.FindAsync(p => p.Name == defectCreate.Name);
 
             if (defect != null)
-                throw new ConflictException();
+                throw new ConflictException($"Defect {defectCreate.Name} already exists");
 
             defect = _mapper.Map<DefectCreate, Defect>(defectCreate);
 
@@ -43,7 +43,7 @@ namespace SMT.Services
             var defect = await _repository.FindAsync(p => p.Id == id);
 
             if (defect == null)
-                throw new NotFoundException();
+                throw new NotFoundException("Not found");
 
             _repository.Delete(defect);
             await _unitOfWork.SaveAsync();
@@ -77,7 +77,7 @@ namespace SMT.Services
             var defect = await _repository.FindAsync(p => p.Id == id);
 
             if (defect == null)
-                throw new NotFoundException();
+                throw new NotFoundException("Not found");
 
             defect.Name = defectUpdate.Name;
 
