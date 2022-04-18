@@ -24,6 +24,7 @@ namespace SMT.Access.Data
         public DbSet<DefectRepair> DefectRepairs { get; set; }
         public DbSet<Plan> Plans { get; set; }
         public DbSet<PlanDetail> PlanDetails { get; set; }
+        public DbSet<LineDefect> LineDefects { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -32,7 +33,6 @@ namespace SMT.Access.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasPostgresExtension("ltree");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
@@ -46,8 +46,8 @@ namespace SMT.Access.Data
 
             //var connectionString = configuration.GetConnectionString("DbConnectionDev");
 
-            var connectionString = "Server=localhost;Port=5432;Database=smtDB;User Id=postgres;Password=postgres;";
-            options.UseNpgsql(connectionString);
+            var connectionString = "Server=(localdb)\\mssqllocaldb;Database=smtDB;Trusted_Connection=True;MultipleActiveResultSets=true";
+            options.UseSqlServer(connectionString, db => db.UseHierarchyId());
         }
 
         public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
@@ -60,10 +60,10 @@ namespace SMT.Access.Data
                 //    .Build();
                 //var connectionString = configuration.GetConnectionString("DbConnectionDev");
 
-                var connectionString = "Server=localhost;Port=5432;Database=smtDB;User Id=postgres;Password=postgres;";
+                var connectionString = "Server=(localdb)\\mssqllocaldb;Database=smtDB;Trusted_Connection=True;MultipleActiveResultSets=true";
 
                 var builder = new DbContextOptionsBuilder<AppDbContext>();
-                builder.UseNpgsql(connectionString);
+                builder.UseSqlServer(connectionString);
                 return new AppDbContext(builder.Options);
             }
         }
