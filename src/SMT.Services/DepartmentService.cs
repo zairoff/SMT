@@ -8,6 +8,7 @@ using SMT.Services.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SMT.ViewModel.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace SMT.Services
 {
@@ -64,6 +65,13 @@ namespace SMT.Services
             var department = await _repository.FindAsync(d => d.Id == id);
 
             return _mapper.Map<DepartmentResponse>(department);
+        }
+
+        public async Task<IEnumerable<DepartmentResponse>> GetByHierarchyIdAsync(string hierarchyId)
+        {
+            var departments = await _repository.GetByHierarchyIdsync(d => d.HierarchyId == HierarchyId.Parse(hierarchyId));
+
+            return _mapper.Map<IEnumerable<DepartmentResponse>>(departments);
         }
 
         public async Task<DepartmentResponse> GetByNameAsync(string name)

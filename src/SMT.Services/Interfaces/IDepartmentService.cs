@@ -12,6 +12,8 @@ namespace SMT.Services.Interfaces
 
         Task<DepartmentResponse> GetByNameAsync(string name);
 
+        Task<IEnumerable<DepartmentResponse>> GetByHierarchyIdAsync(string hierarchyId);
+
         Task<DepartmentResponse> AddAsync(DepartmentCreate departmentCreate);
 
         Task<DepartmentResponse> UpdateAsync(int id, DepartmentUpdate departmentUpdate);

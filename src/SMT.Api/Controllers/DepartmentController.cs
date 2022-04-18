@@ -23,6 +23,15 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("GetByHierarchyId")]
+        public async Task<IActionResult> GetByHierarchyId(string hierarchyId)
+        {
+            var result = await _service.GetByHierarchyIdAsync(hierarchyId);
+
+            return Ok(result);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -43,7 +52,7 @@ namespace SMT.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateReport([FromBody] DepartmentCreate departmentCreate)
+        public async Task<IActionResult> CreateDepartment([FromBody] DepartmentCreate departmentCreate)
         {
             var result = await _service.AddAsync(departmentCreate);
 
@@ -55,7 +64,7 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateReport(int id, [FromBody] DepartmentUpdate departmentUpdate)
+        public async Task<IActionResult> UpdateDepartment(int id, [FromBody] DepartmentUpdate departmentUpdate)
         {
             var result = await _service.UpdateAsync(id, departmentUpdate);
 
@@ -66,7 +75,7 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeleteReport(int id)
+        public async Task<IActionResult> DeleteDepartment(int id)
         {
             var result = await _service.DeleteAsync(id);
 
