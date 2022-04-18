@@ -28,7 +28,9 @@ namespace SMT.Services.Mapping
 
             CreateMap<Defect, DefectResponse>();
             //CreateMap<User, UserResponse>();
-            CreateMap<Department, DepartmentResponse>();
+            //CreateMap<Department, DepartmentResponse>()
+            //    .ForMember(s => s.HierarchyId, o => o.MapFrom(s => s.Ltree));
+
             CreateMap<HierarchyId, string>().ConvertUsing(s => s.ToString());
 
             CreateMap<Line, LineResponse>();
