@@ -21,8 +21,8 @@ namespace SMT.Services
         public DepartmentService(IDepartmentRepository repository, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _repository = repository;
-            _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<DepartmentResponse> AddAsync(DepartmentCreate departmentCreate)
@@ -67,9 +67,10 @@ namespace SMT.Services
             return _mapper.Map<DepartmentResponse>(department);
         }
 
-        public async Task<IEnumerable<DepartmentResponse>> GetByLtree(string ltree)
+        public async Task<IEnumerable<DepartmentResponse>> GetByHierarchyId(string hierarchyId)
         {
-            var departments = await _repository.GetByHierarchyIdsync(d => d.Ltree == ltree);
+            var departments = await _repository.GetByHierarchyIdsync(
+                d => d.HierarchyId.IsDescendantOf(HierarchyId.Parse(hierarchyId)));
 
             return _mapper.Map<IEnumerable<DepartmentResponse>>(departments);
         }

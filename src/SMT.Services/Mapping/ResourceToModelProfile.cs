@@ -46,7 +46,7 @@ namespace SMT.Services.Mapping
             CreateMap<string, HierarchyId>().ConvertUsing(s => HierarchyId.Parse(s));
             CreateMap<DepartmentUpdate, Department>();
             CreateMap<DepartmentCreate, Department>()
-                .ForMember(o => o.Ltree, s => s.MapFrom(o => o.DepartmentId));
+                .ForMember(o => o.HierarchyId, s => s.MapFrom(o => o.DepartmentId));
 
             CreateMap<LineCreate, Line>();
             CreateMap<LineUpdate, Line>();

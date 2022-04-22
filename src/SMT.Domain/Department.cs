@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace SMT.Domain
 {
@@ -6,8 +6,7 @@ namespace SMT.Domain
     {
         public int Id { get; set; }
 
-        [Column(TypeName = "Ltree")]
-        public string Ltree { get; set; }
+        public HierarchyId HierarchyId { get; set; }
 
         public string Name { get; set; }
     }
