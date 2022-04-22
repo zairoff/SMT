@@ -30,7 +30,7 @@ namespace SMT.Services
             var department = await _repository.FindAsync(d => d.Name == departmentCreate.Name);                                                
 
             if (department != null)
-                throw new ConflictException();
+                throw new ConflictException($"{departmentCreate.Name} already exists");
 
             department = _mapper.Map<DepartmentCreate, Department>(departmentCreate);
 
@@ -67,9 +67,9 @@ namespace SMT.Services
             return _mapper.Map<DepartmentResponse>(department);
         }
 
-        public async Task<IEnumerable<DepartmentResponse>> GetByHierarchyIdAsync(string hierarchyId)
+        public async Task<IEnumerable<DepartmentResponse>> GetByLtree(string ltree)
         {
-            var departments = await _repository.GetByHierarchyIdsync(d => d.HierarchyId == HierarchyId.Parse(hierarchyId));
+            var departments = await _repository.GetByHierarchyIdsync(d => d.Ltree == ltree);
 
             return _mapper.Map<IEnumerable<DepartmentResponse>>(departments);
         }

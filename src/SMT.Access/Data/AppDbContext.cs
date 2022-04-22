@@ -33,6 +33,7 @@ namespace SMT.Access.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasPostgresExtension("ltree");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
@@ -46,8 +47,8 @@ namespace SMT.Access.Data
 
             //var connectionString = configuration.GetConnectionString("DbConnectionDev");
 
-            var connectionString = "Server=(localdb)\\mssqllocaldb;Database=smtDB;Trusted_Connection=True;MultipleActiveResultSets=true";
-            options.UseSqlServer(connectionString, db => db.UseHierarchyId());
+            var connectionString = "Server=localhost;Port=5432;Database=smtDB;User Id=postgres;Password=postgres;";
+            options.UseNpgsql(connectionString);
         }
 
         public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
@@ -60,10 +61,10 @@ namespace SMT.Access.Data
                 //    .Build();
                 //var connectionString = configuration.GetConnectionString("DbConnectionDev");
 
-                var connectionString = "Server=(localdb)\\mssqllocaldb;Database=smtDB;Trusted_Connection=True;MultipleActiveResultSets=true";
+                var connectionString = "Server=localhost;Port=5432;Database=smtDB;User Id=postgres;Password=postgres;";
 
                 var builder = new DbContextOptionsBuilder<AppDbContext>();
-                builder.UseSqlServer(connectionString);
+                builder.UseNpgsql(connectionString);
                 return new AppDbContext(builder.Options);
             }
         }

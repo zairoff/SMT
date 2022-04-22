@@ -60,11 +60,10 @@ namespace SMT.Api.Extensions
             });
 
             services.AddDbContext<AppDbContext>(options =>
-                            options.UseSqlServer(configuration.GetConnectionString("DbConnectionDev"),
-                            db => db.UseHierarchyId()));
+                            options.UseNpgsql(configuration.GetConnectionString("DbConnectionDev")));
 
             services.AddDbContext<AppIdentityDbContext>(options =>
-                            options.UseSqlServer(configuration.GetConnectionString("IdentityConnection")));
+                            options.UseNpgsql(configuration.GetConnectionString("IdentityConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                         .AddEntityFrameworkStores<AppIdentityDbContext>()

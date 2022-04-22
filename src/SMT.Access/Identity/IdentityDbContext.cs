@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
-using System.IO;
 
 namespace SMT.Access.Identity
 {
@@ -30,8 +28,8 @@ namespace SMT.Access.Identity
             //var connectionString = configuration.GetConnectionString("IdentityConnection");
             //options.UseNpgsql(connectionString);
 
-            var connectionString = "Server=(localdb)\\mssqllocaldb;Database=Identity;Trusted_Connection=True;MultipleActiveResultSets=true";
-            options.UseSqlServer(connectionString);
+            var connectionString = "Server=localhost;Port=5432;Database=smtDB;User Id=postgres;Password=postgres;";
+            options.UseNpgsql(connectionString);
         }
 
         public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppIdentityDbContext>
@@ -44,10 +42,10 @@ namespace SMT.Access.Identity
                 //    .Build();
                 //var connectionString = configuration.GetConnectionString("IdentityConnection");
 
-                var connectionString = "Server=(localdb)\\mssqllocaldb;Database=Identity;Trusted_Connection=True;MultipleActiveResultSets=true";
+                var connectionString = "Server=localhost;Port=5432;Database=smtDB;User Id=postgres;Password=postgres;";
 
                 var builder = new DbContextOptionsBuilder<AppIdentityDbContext>();
-                builder.UseSqlServer(connectionString);
+                builder.UseNpgsql(connectionString);
                 return new AppIdentityDbContext(builder.Options);
             }
         }
