@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using SMT.Domain;
+using System;
 
 namespace SMT.Access.Data
 {
@@ -25,6 +26,14 @@ namespace SMT.Access.Data
         public DbSet<Plan> Plans { get; set; }
         public DbSet<PlanDetail> PlanDetails { get; set; }
         public DbSet<LineDefect> LineDefects { get; set; }
+        public DbSet<Report> Reports { get; set; }
+
+
+        [DbFunction("GetDepartmentAsJson", "dbo")]
+        public static string GetDepartmentAsJson(string departmentId, int level)
+        {
+            throw new NotImplementedException();
+        }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -33,7 +42,7 @@ namespace SMT.Access.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasPostgresExtension("ltree");
+            //modelBuilder.HasPostgresExtension("ltree");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)

@@ -3,18 +3,21 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMT.Access.Data;
 
 namespace SMT.Access.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220422071425_TriggerForDepartment")]
+    partial class TriggerForDepartment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasAnnotation("Npgsql:PostgresExtension:ltree", ",,")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -432,33 +435,6 @@ namespace SMT.Access.Migrations
                     b.ToTable("ProductBrands");
                 });
 
-            modelBuilder.Entity("SMT.Domain.Report", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("DefectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LineId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ModelId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DefectId");
-
-                    b.HasIndex("LineId");
-
-                    b.HasIndex("ModelId");
-
-                    b.ToTable("Reports");
-                });
-
             modelBuilder.Entity("SMT.Domain.Vacation", b =>
                 {
                     b.Property<int>("Id")
@@ -687,33 +663,6 @@ namespace SMT.Access.Migrations
                     b.Navigation("Brand");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("SMT.Domain.Report", b =>
-                {
-                    b.HasOne("SMT.Domain.Defect", "Defect")
-                        .WithMany()
-                        .HasForeignKey("DefectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SMT.Domain.Line", "Line")
-                        .WithMany()
-                        .HasForeignKey("LineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SMT.Domain.Model", "Model")
-                        .WithMany()
-                        .HasForeignKey("ModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Defect");
-
-                    b.Navigation("Line");
-
-                    b.Navigation("Model");
                 });
 
             modelBuilder.Entity("SMT.Domain.Vacation", b =>

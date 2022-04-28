@@ -28,8 +28,8 @@ namespace SMT.Access.Identity
             //var connectionString = configuration.GetConnectionString("IdentityConnection");
             //options.UseNpgsql(connectionString);
 
-            var connectionString = "Server=localhost;Port=5432;Database=smtDB;User Id=postgres;Password=postgres;";
-            options.UseNpgsql(connectionString);
+            var connectionString = "Server=(localdb)\\mssqllocaldb;Database=smtDB;Trusted_Connection=True;MultipleActiveResultSets=true";
+            options.UseSqlServer(connectionString);
         }
 
         public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppIdentityDbContext>
@@ -42,10 +42,10 @@ namespace SMT.Access.Identity
                 //    .Build();
                 //var connectionString = configuration.GetConnectionString("IdentityConnection");
 
-                var connectionString = "Server=localhost;Port=5432;Database=smtDB;User Id=postgres;Password=postgres;";
+                var connectionString = "Server=(localdb)\\mssqllocaldb;Database=smtDB;Trusted_Connection=True;MultipleActiveResultSets=true";
 
                 var builder = new DbContextOptionsBuilder<AppIdentityDbContext>();
-                builder.UseNpgsql(connectionString);
+                builder.UseSqlServer(connectionString);
                 return new AppIdentityDbContext(builder.Options);
             }
         }

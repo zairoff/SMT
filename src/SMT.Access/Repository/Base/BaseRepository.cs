@@ -26,7 +26,7 @@ namespace SMT.Access.Repository.Base
             await DbSet.AddAsync(entity);
         }
 
-        public void Delete(T entity)
+        public virtual void Delete(T entity)
         {
             DbSet.Remove(entity);
         }
