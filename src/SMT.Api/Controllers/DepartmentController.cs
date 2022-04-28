@@ -25,9 +25,9 @@ namespace SMT.Api.Controllers
 
         [HttpGet]
         [Route("GetByHierarchyId")]
-        public async Task<IActionResult> GetByHierarchyId(string hierarchyId)
+        public async Task<IActionResult> GetByHierarchyId(string hierarchyId, int level)
         {
-            var result = await _service.GetByHierarchyId(hierarchyId);
+            var result = await _service.GetByHierarchyId(hierarchyId, level);
 
             return Ok(result);
         }
