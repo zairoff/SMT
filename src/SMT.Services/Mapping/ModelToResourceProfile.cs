@@ -12,6 +12,7 @@ using SMT.Domain;
 using SMT.ViewModel.Dto.UserDto;
 using SMT.ViewModel.Dto.LineDto;
 using SMT.ViewModel.Dto.LineDefectDto;
+using SMT.ViewModel.Dto.ReportDto;
 
 namespace SMT.Services.Mapping
 {
@@ -35,6 +36,8 @@ namespace SMT.Services.Mapping
 
             CreateMap<Line, LineResponse>();
             CreateMap<LineDefect, LineDefectResponse>();
+
+            CreateMap<Report, ReportResponse>();
         }
     }
 }

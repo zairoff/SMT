@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using SMT.ViewModel.Dto.DepartmentDto;
 using SMT.ViewModel.Dto.LineDto;
 using SMT.ViewModel.Dto.LineDefectDto;
+using SMT.ViewModel.Dto.ReportDto;
 
 namespace SMT.Services.Mapping
 {
@@ -53,6 +54,9 @@ namespace SMT.Services.Mapping
 
             CreateMap<LineDefectUpdate, LineDefect>();
             CreateMap<LineDefectCreate, LineDefect>();
+            
+            CreateMap<ReportUpdate, Report>();
+            CreateMap<ReportCreate, Report>();
         }
     }
 }

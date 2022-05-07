@@ -1,4 +1,6 @@
-﻿namespace SMT.Domain
+﻿using System;
+
+namespace SMT.Domain
 {
     public class Report
     {
@@ -15,5 +17,11 @@
         public int ModelId { get; set; }
 
         public Model Model { get; set; }
+
+        public bool Status { get; set; }
+
+        public string Barcode { get; set; }
+
+        public DateTime Date { get; set; } = DateTime.Now;
     }
 }
