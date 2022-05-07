@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMT.Access.Data;
 
 namespace SMT.Access.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220501034824_UpdateOnReportTableMakedNullableUpdateDate")]
+    partial class UpdateOnReportTableMakedNullableUpdateDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -439,14 +441,23 @@ namespace SMT.Access.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Barcode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("Creaeted")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("DefectId")
                         .HasColumnType("int");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("EmployeeId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("LineId")
                         .HasColumnType("int");
@@ -457,9 +468,14 @@ namespace SMT.Access.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DefectId");
+
+                    b.HasIndex("EmployeeId1");
 
                     b.HasIndex("LineId");
 
@@ -706,6 +722,10 @@ namespace SMT.Access.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SMT.Domain.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId1");
+
                     b.HasOne("SMT.Domain.Line", "Line")
                         .WithMany()
                         .HasForeignKey("LineId")
@@ -719,6 +739,8 @@ namespace SMT.Access.Migrations
                         .IsRequired();
 
                     b.Navigation("Defect");
+
+                    b.Navigation("Employee");
 
                     b.Navigation("Line");
 
