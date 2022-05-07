@@ -5,6 +5,7 @@ using SMT.Domain;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace SMT.Access.Repository
 {
@@ -22,6 +23,7 @@ namespace SMT.Access.Repository
             cmd.ExecuteNonQuery();
         }
 
+        // this method is obsolate
         public async Task<string> GetByHierarchyIdsync(string departmentId, int level)
         {
             var result = string.Empty;
@@ -29,16 +31,37 @@ namespace SMT.Access.Repository
             {
                 cmd.CommandText = $"SELECT dbo.GetDepartmentAsJson('{departmentId}',{level})";
                 if (cmd.Connection.State != System.Data.ConnectionState.Open) await cmd.Connection.OpenAsync();
-                using(var reader = await cmd.ExecuteReaderAsync())
+                using var reader = await cmd.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
                 {
-                    while(await reader.ReadAsync())
-                    {
-                        result = reader[0].ToString();
-                    }
+                    result = reader[0].ToString();
                 }
             }
 
             return result;
         }
+
+        public async Task<IEnumerable<Department>> GetByHierarchyIdsync(string departmentId)
+        {
+            return await DbSet.Where(d => d.HierarchyId.IsDescendantOf(HierarchyId.Parse(departmentId))).ToListAsync();
+        }
+
+        // this object is department response
+        /*public async Task<IEnumerable<DepartmentResponse>> GetByHierarchyIdsync(string departmentId)
+        {
+            var departments = await DbSet.Where(d => d.HierarchyId.IsDescendantOf(HierarchyId.Parse(departmentId)))
+                                    .Select(d => new
+                                    {
+                                        Id = d.Id,
+                                        Name = d.Name,
+                                        HierarchyId = d.HierarchyId.ToString(),
+                                        ParentHierarchyId = d.HierarchyId.GetAncestor(1),
+                                        ParentName = DbSet.Where(sub => sub.HierarchyId == d.HierarchyId.GetAncestor(1))
+                                                    .Select(sub => sub.Name)
+                                                    .FirstOrDefault()
+                                    }).ToListAsync();
+
+            return departments;
+        }*/
     }
 }

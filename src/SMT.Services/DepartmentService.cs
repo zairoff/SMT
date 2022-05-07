@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using SMT.Access.Repository.Base;
 using SMT.Access.Repository.Interfaces;
 using SMT.Access.Unit;
 using SMT.ViewModel.Dto.DepartmentDto;
@@ -9,6 +8,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SMT.ViewModel.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace SMT.Services
 {
@@ -27,17 +27,36 @@ namespace SMT.Services
 
         public async Task<DepartmentResponse> AddAsync(DepartmentCreate departmentCreate)
         {
-            var department = await _repository.FindAsync(d => d.Name == departmentCreate.Name);                                                
+            var department = await _repository.FindAsync(d =>
+                                    d.HierarchyId.ToString().Contains(departmentCreate.DepartmentId)
+                                    && d.Name == departmentCreate.Name);                                                
 
             if (department != null)
                 throw new ConflictException($"{departmentCreate.Name} already exists");
 
-            department = _mapper.Map<DepartmentCreate, Department>(departmentCreate);
+            if (string.IsNullOrEmpty(departmentCreate.DepartmentId))
+            {
+                department = new Department 
+                {
+                    Name = departmentCreate.Name
+                };
+            }
+            else
+            {
+                department = _mapper.Map<DepartmentCreate, Department>(departmentCreate);
+            }
 
             await _repository.AddAsync(department);
             await _unitOfWork.SaveAsync();
 
-            return _mapper.Map<DepartmentResponse>(department);
+            if (string.IsNullOrEmpty(departmentCreate.DepartmentId))
+                return new DepartmentResponse
+                {
+                    DepartmentId = "/",
+                    Name = departmentCreate.Name
+                };
+
+            return _mapper.Map<DepartmentResponse>(department);            
         }
 
         public async Task<DepartmentResponse> DeleteAsync(int id)
@@ -45,7 +64,7 @@ namespace SMT.Services
             var department = await _repository.FindAsync(d => d.Id == id);
 
             if (department == null)
-                throw new NotFoundException();
+                throw new NotFoundException("Not found");
 
             _repository.Delete(department);
             await _unitOfWork.SaveAsync();
@@ -69,10 +88,9 @@ namespace SMT.Services
 
         public async Task<IEnumerable<DepartmentResponse>> GetByHierarchyId(string hierarchyId)
         {
-            var departments = await _repository.GetByHierarchyIdsync(
-                d => d.HierarchyId.IsDescendantOf(HierarchyId.Parse(hierarchyId)));
+            var departments = await _repository.GetByHierarchyIdsync(hierarchyId);
 
-            return _mapper.Map<IEnumerable<DepartmentResponse>>(departments);
+           return _mapper.Map<IEnumerable<DepartmentResponse>>(departments);
         }
 
         public async Task<DepartmentResponse> GetByNameAsync(string name)
