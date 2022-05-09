@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using SMT.Access.Identity;
 using SMT.ViewModel.Dto.UserDto;
-using SMT.ViewModel.Exceptions;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,6 +10,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Text;
 using System;
+using SMT.Services.Exceptions;
 
 namespace SMT.Security
 {

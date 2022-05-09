@@ -7,7 +7,7 @@ namespace SMT.Access.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql(@"
-                CREATE OR ALTER TRIGGER departments_update_Trigger ON Departments
+                CREATE TRIGGER departments_update_Trigger ON DBO.Departments
                 AFTER INSERT
                 AS
                 Begin
@@ -21,13 +21,13 @@ namespace SMT.Access.Migrations
                     else
                     Begin
                         update Departments set HierarchyId = @Hieararchy.ToString() +
-		                CONVERT(varchar(7), @Id) + '/' where Id = @Id;
+		                CONVERT(nvarchar(7), @Id) + '/' where Id = @Id;
                     End
                 End
                 ");
 
             migrationBuilder.Sql(@"
-                CREATE  OR ALTER FUNCTION dbo.GetDepartmentAsJson(@departmentId hierarchyid, @level int)
+                CREATE OR ALTER FUNCTION dbo.GetDepartmentAsJson(@departmentId hierarchyid, @level int)
                 RETURNS nvarchar(max)
                 AS
                 BEGIN
@@ -80,7 +80,7 @@ namespace SMT.Access.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-
+            migrationBuilder.Sql("DROP TRIGGER departments_update_Trigger");
         }
     }
 }

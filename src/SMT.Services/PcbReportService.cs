@@ -2,7 +2,6 @@
 using SMT.Access.Repository.Interfaces;
 using SMT.Access.Unit;
 using SMT.ViewModel.Dto.PcbReportDto;
-using SMT.ViewModel.Exceptions;
 using SMT.Domain;
 using SMT.Notification;
 using SMT.Services.Interfaces;
@@ -10,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SMT.Services.Exceptions;
 
 namespace SMT.Services
 {
@@ -55,7 +55,7 @@ namespace SMT.Services
             var report = await _repository.FindAsync(r => r.Id == id);
 
             if (report == null)
-                throw new NotFoundException();
+                throw new NotFoundException("Not found");
 
             _repository.Delete(report);
             await _unitOfWork.SaveAsync();
@@ -111,7 +111,7 @@ namespace SMT.Services
             var existingReport = await _repository.FindAsync(r => r.Id == id);
 
             if (existingReport == null)
-                throw new NotFoundException();
+                throw new NotFoundException("Not found");
 
             existingReport.DefectId = report.DefectId;
             existingReport.PositionId = report.PcbPositionId;

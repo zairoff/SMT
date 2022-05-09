@@ -6,7 +6,7 @@ using SMT.Domain;
 using SMT.Services.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SMT.ViewModel.Exceptions;
+using SMT.Services.Exceptions;
 
 namespace SMT.Services
 {

@@ -2,9 +2,9 @@
 using SMT.Access.Repository.Interfaces;
 using SMT.Access.Unit;
 using SMT.Domain;
+using SMT.Services.Exceptions;
 using SMT.Services.Interfaces;
 using SMT.ViewModel.Dto.LineDefectDto;
-using SMT.ViewModel.Exceptions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

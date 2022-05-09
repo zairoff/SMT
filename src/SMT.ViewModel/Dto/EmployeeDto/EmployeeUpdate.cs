@@ -1,18 +1,14 @@
 ﻿using System;
 
-namespace SMT.Domain
+namespace SMT.ViewModel.Dto.EmployeeDto
 {
-    public class Employee
+    public class EmployeeUpdate
     {
-        public Guid Id { get; set; }
-
         public int DepartmentId { get; set; }
-
-        public virtual Department Department { get; set; }
 
         public string FullName { get; set; }
 
-        public string ImagePath { get; set; }
+        public string ImgBase64 { get; set; }
 
         public DateTime Birthday { get; set; }
 

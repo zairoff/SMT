@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using SMT.Access.Unit;
 using SMT.ViewModel.Dto.ModelDto;
-using SMT.ViewModel.Exceptions;
 using SMT.Domain;
 using SMT.Services.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SMT.Access.Repository.Interfaces;
+using SMT.Services.Exceptions;
 
 namespace SMT.Services
 {
@@ -46,7 +46,7 @@ namespace SMT.Services
             var model = await _repository.FindAsync(p => p.Id == id);
 
             if (model == null)
-                throw new NotFoundException();
+                throw new NotFoundException("Model not found");
 
             _repository.Delete(model);
             await _unitOfWork.SaveAsync();
@@ -88,7 +88,7 @@ namespace SMT.Services
 
 
             if (model == null)
-                throw new NotFoundException();
+                throw new NotFoundException("Not found");
 
             model.Name = modelUpdate.Name;
 

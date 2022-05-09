@@ -6,9 +6,7 @@ using SMT.Domain;
 using SMT.Services.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SMT.ViewModel.Exceptions;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
+using SMT.Services.Exceptions;
 
 namespace SMT.Services
 {
@@ -105,7 +103,7 @@ namespace SMT.Services
             var department = await _repository.FindAsync(d => d.Id == id);
 
             if (department == null)
-                throw new NotFoundException();
+                throw new NotFoundException("Not found");
 
             department.Name = departmentUpdate.Name;
 

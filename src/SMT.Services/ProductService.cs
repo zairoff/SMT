@@ -2,11 +2,11 @@
 using SMT.Access.Repository.Interfaces;
 using SMT.Access.Unit;
 using SMT.ViewModel.Dto.ProductDto;
-using SMT.ViewModel.Exceptions;
 using SMT.Domain;
 using SMT.Services.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SMT.Services.Exceptions;
 
 namespace SMT.Services
 {

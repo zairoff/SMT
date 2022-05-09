@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SMT.Access\SMT.Access.csproj" />
+    <ProjectReference Include="..\SMT.Services\SMT.Services.csproj" />
     <ProjectReference Include="..\SMT.ViewModel\SMT.ViewModel.csproj" />
   </ItemGroup>
 

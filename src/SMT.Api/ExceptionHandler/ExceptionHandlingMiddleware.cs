@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using SMT.ViewModel.Exceptions;
+using SMT.Services.Exceptions;
 using System;
 using System.Net;
 using System.Threading.Tasks;

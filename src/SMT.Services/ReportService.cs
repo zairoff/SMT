@@ -4,10 +4,10 @@ using SMT.Access.Unit;
 using SMT.Domain;
 using SMT.Services.Interfaces;
 using SMT.ViewModel.Dto.ReportDto;
-using SMT.ViewModel.Exceptions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using SMT.Services.Exceptions;
 
 namespace SMT.Services
 {

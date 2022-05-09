@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using SMT.Access.Repository.Interfaces;
 using SMT.Access.Unit;
-using SMT.ViewModel.Exceptions;
 using SMT.Domain;
+using SMT.Services.Exceptions;
 using SMT.Services.Interfaces;
 using SMT.ViewModel.Dto.BrandDto;
 using System.Collections.Generic;
