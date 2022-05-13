@@ -27,6 +27,7 @@ namespace SMT.Access.Data
         public DbSet<PlanDetail> PlanDetails { get; set; }
         public DbSet<LineDefect> LineDefects { get; set; }
         public DbSet<Report> Reports { get; set; }
+        public DbSet<Repairer> Repairers { get; set; }
 
 
         [DbFunction("GetDepartmentAsJson", "dbo")]

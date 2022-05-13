@@ -14,6 +14,7 @@ using SMT.ViewModel.Dto.LineDto;
 using SMT.ViewModel.Dto.LineDefectDto;
 using SMT.ViewModel.Dto.ReportDto;
 using SMT.ViewModel.Dto.EmployeeDto;
+using SMT.ViewModel.Dto.RepairerDto;
 
 namespace SMT.Services.Mapping
 {
@@ -63,6 +64,8 @@ namespace SMT.Services.Mapping
                 .ForMember(e => e.ImagePath, o => o.Ignore());
             CreateMap<EmployeeCreate, Employee>()
                 .ForMember(e => e.ImagePath, o => o.Ignore());
+
+            CreateMap<RepairerCreate, Repairer>();
         }
     }
 }
