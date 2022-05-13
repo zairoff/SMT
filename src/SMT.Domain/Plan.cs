@@ -16,8 +16,8 @@ namespace SMT.Domain
 
         public DateTime Date { get; set; }
 
-        public Line Line { get; set; }
+        public virtual Line Line { get; set; }
 
-        public Model Model { get; set; }
+        public virtual Model Model { get; set; }
     }
 }

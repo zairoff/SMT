@@ -8,6 +8,6 @@
 
         public string Details { get; set; }
 
-        public Plan Plan { get; set; }
+        public virtual Plan Plan { get; set; }
     }
 }

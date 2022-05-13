@@ -16,10 +16,10 @@ namespace SMT.Domain
 
         public DateTime Date { get; set; } = DateTime.Now;
 
-        public Line Line { get; set; }
+        public virtual Line Line { get; set; }
 
-        public Model Model { get; set; }
+        public virtual Model Model { get; set; }
 
-        public Defect Defect { get; set; }
+        public virtual Defect Defect { get; set; }
     }
 }

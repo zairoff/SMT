@@ -37,8 +37,8 @@ namespace SMT.Services
             await _repository.AddAsync(productBrand);
             await _unitOfWork.SaveAsync();
 
-            var id = productBrand.Id;
-            productBrand = await _repository.FindAsync(p => p.Id == id);
+            //var id = productBrand.Id;
+            //productBrand = await _repository.FindAsync(p => p.Id == id);
 
             return _mapper.Map<ProductBrand, ProductBrandResponse>(productBrand);
         }

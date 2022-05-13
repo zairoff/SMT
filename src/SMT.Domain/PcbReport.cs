@@ -8,19 +8,19 @@ namespace SMT.Domain
 
         public Guid EmployeeId { get; set; }
 
-        public Employee Employee { get; set; }
+        public virtual Employee Employee { get; set; }
 
         public int LineId { get; set; }
 
-        public Line Line { get; set; }
+        public virtual Line Line { get; set; }
 
         public int ModelId { get; set; }
 
-        public Model Model { get; set; }
+        public virtual Model Model { get; set; }
 
         public int DefectId { get; set; }
 
-        public Defect Defect { get; set; }
+        public virtual Defect Defect { get; set; }
 
         public int PositionId { get; set; }
 

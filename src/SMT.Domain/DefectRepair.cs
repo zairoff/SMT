@@ -8,11 +8,11 @@ namespace SMT.Domain
 
         public int DefectReportId { get; set; }
 
-        public DefectReport DefectReport { get; set; }
+        public virtual DefectReport DefectReport { get; set; }
 
         public Guid EmployeeId { get; set; }
 
-        public Employee Employee { get; set; }
+        public virtual Employee Employee { get; set; }
 
         public string Details { get; set; }
 

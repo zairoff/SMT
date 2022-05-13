@@ -6,7 +6,7 @@
 
         public int ProductBrandId { get; set; }
 
-        public ProductBrand ProductBrand { get; set; }
+        public virtual ProductBrand ProductBrand { get; set; }
 
         public string Name { get; set; }
     }

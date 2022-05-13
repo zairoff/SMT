@@ -10,8 +10,8 @@ using SMT.Access.Data;
 namespace SMT.Access.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220510062854_AddEmployee")]
-    partial class AddEmployee
+    [Migration("20220513102044_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -453,6 +453,23 @@ namespace SMT.Access.Migrations
                     b.ToTable("ProductBrands");
                 });
 
+            modelBuilder.Entity("SMT.Domain.Repairer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("Repairers");
+                });
+
             modelBuilder.Entity("SMT.Domain.Report", b =>
                 {
                     b.Property<int>("Id")
@@ -712,6 +729,17 @@ namespace SMT.Access.Migrations
                     b.Navigation("Brand");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Repairer", b =>
+                {
+                    b.HasOne("SMT.Domain.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("SMT.Domain.Report", b =>
