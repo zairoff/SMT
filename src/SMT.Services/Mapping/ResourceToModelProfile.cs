@@ -13,6 +13,7 @@ using SMT.ViewModel.Dto.DepartmentDto;
 using SMT.ViewModel.Dto.LineDto;
 using SMT.ViewModel.Dto.LineDefectDto;
 using SMT.ViewModel.Dto.ReportDto;
+using SMT.ViewModel.Dto.EmployeeDto;
 
 namespace SMT.Services.Mapping
 {
@@ -57,6 +58,11 @@ namespace SMT.Services.Mapping
             
             CreateMap<ReportUpdate, Report>();
             CreateMap<ReportCreate, Report>();
+
+            CreateMap<EmployeeUpdate, Employee>()
+                .ForMember(e => e.ImagePath, o => o.Ignore());
+            CreateMap<EmployeeCreate, Employee>()
+                .ForMember(e => e.ImagePath, o => o.Ignore());
         }
     }
 }

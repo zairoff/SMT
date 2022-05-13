@@ -31,5 +31,38 @@ namespace SMT.Access.Repository
         {
             return await DbSet.Where(expression).Include(e => e.Department).ToListAsync();
         }
+
+        public async Task<IEnumerable<Employee>> GetByDepartmentAsync(string departmentId)
+        {
+            // Query method but preffered LINQ
+            /*var employees = await _context.Departments.Join(_context.Employees,
+                department => department.Id,
+                employee => employee.DepartmentId,
+                (department, employee) => new Employee
+                {
+                    Id = employee.Id,
+                    DepartmentId = department.Id,
+                    Department = department,
+                    Address = employee.Address,
+                    Birthday = employee.Birthday,
+                    DepartmentName = employee.DepartmentName,
+                    Details = employee.Details,
+                    FullName = employee.FullName,
+                    ImagePath = employee.ImagePath,
+                    Passport = employee.Passport,
+                    Phone = employee.Phone,
+                    Position = employee.Position
+                }).Where(d => d.Department.HierarchyId.IsDescendantOf(HierarchyId.Parse(departmentId))).ToListAsync();*/
+
+            var query = from employee in _context.Employees
+                        join department in _context.Departments
+                        on employee.DepartmentId equals department.Id
+                        where department.HierarchyId.IsDescendantOf(HierarchyId.Parse(departmentId))
+                        select employee;
+
+            var employees = await query.Include(e => e.Department).ToListAsync();
+
+            return employees;
+        }
     }
 }

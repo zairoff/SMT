@@ -88,24 +88,27 @@ namespace SMT.Access.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Employees",
+                name: "Employee",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Passport = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Position = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DepartmentName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DepartmentId = table.Column<int>(type: "int", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Birthday = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Birthday = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Details = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<bool>(type: "bit", nullable: false)
+                    Details = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Employees", x => x.Id);
+                    table.PrimaryKey("PK_Employee", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Employees_Departments_DepartmentId",
+                        name: "FK_Employee_Departments_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "Departments",
                         principalColumn: "Id",
@@ -171,6 +174,7 @@ namespace SMT.Access.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EmployeeId1 = table.Column<int>(type: "int", nullable: true),
                     Details = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -178,11 +182,11 @@ namespace SMT.Access.Migrations
                 {
                     table.PrimaryKey("PK_EmployeeCareers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EmployeeCareers_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
+                        name: "FK_EmployeeCareers_Employee_EmployeeId1",
+                        column: x => x.EmployeeId1,
+                        principalTable: "Employee",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,6 +196,7 @@ namespace SMT.Access.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EmployeeId1 = table.Column<int>(type: "int", nullable: true),
                     Details = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -199,11 +204,11 @@ namespace SMT.Access.Migrations
                 {
                     table.PrimaryKey("PK_EmployeeHistories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EmployeeHistories_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
+                        name: "FK_EmployeeHistories_Employee_EmployeeId1",
+                        column: x => x.EmployeeId1,
+                        principalTable: "Employee",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -213,6 +218,7 @@ namespace SMT.Access.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EmployeeId1 = table.Column<int>(type: "int", nullable: true),
                     Details = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     From = table.Column<DateTime>(type: "datetime2", nullable: false),
                     To = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -221,11 +227,11 @@ namespace SMT.Access.Migrations
                 {
                     table.PrimaryKey("PK_Vacations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Vacations_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
+                        name: "FK_Vacations_Employee_EmployeeId1",
+                        column: x => x.EmployeeId1,
+                        principalTable: "Employee",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -310,6 +316,7 @@ namespace SMT.Access.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EmployeeId1 = table.Column<int>(type: "int", nullable: true),
                     LineId = table.Column<int>(type: "int", nullable: false),
                     ModelId = table.Column<int>(type: "int", nullable: false),
                     DefectId = table.Column<int>(type: "int", nullable: false),
@@ -326,11 +333,11 @@ namespace SMT.Access.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PcbReports_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
+                        name: "FK_PcbReports_Employee_EmployeeId1",
+                        column: x => x.EmployeeId1,
+                        principalTable: "Employee",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PcbReports_Lines_LineId",
                         column: x => x.LineId,
@@ -375,6 +382,42 @@ namespace SMT.Access.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Reports",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LineId = table.Column<int>(type: "int", nullable: false),
+                    DefectId = table.Column<int>(type: "int", nullable: false),
+                    ModelId = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    Barcode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reports", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reports_Defects_DefectId",
+                        column: x => x.DefectId,
+                        principalTable: "Defects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reports_Lines_LineId",
+                        column: x => x.LineId,
+                        principalTable: "Lines",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reports_Models_ModelId",
+                        column: x => x.ModelId,
+                        principalTable: "Models",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DefectRepairs",
                 columns: table => new
                 {
@@ -382,6 +425,7 @@ namespace SMT.Access.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DefectReportId = table.Column<int>(type: "int", nullable: false),
                     EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EmployeeId1 = table.Column<int>(type: "int", nullable: true),
                     Details = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -396,11 +440,11 @@ namespace SMT.Access.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DefectRepairs_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
+                        name: "FK_DefectRepairs_Employee_EmployeeId1",
+                        column: x => x.EmployeeId1,
+                        principalTable: "Employee",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -434,9 +478,9 @@ namespace SMT.Access.Migrations
                 column: "DefectReportId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DefectRepairs_EmployeeId",
+                name: "IX_DefectRepairs_EmployeeId1",
                 table: "DefectRepairs",
-                column: "EmployeeId");
+                column: "EmployeeId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DefectReports_DefectId",
@@ -454,19 +498,19 @@ namespace SMT.Access.Migrations
                 column: "ModelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmployeeCareers_EmployeeId",
-                table: "EmployeeCareers",
-                column: "EmployeeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EmployeeHistories_EmployeeId",
-                table: "EmployeeHistories",
-                column: "EmployeeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Employees_DepartmentId",
-                table: "Employees",
+                name: "IX_Employee_DepartmentId",
+                table: "Employee",
                 column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmployeeCareers_EmployeeId1",
+                table: "EmployeeCareers",
+                column: "EmployeeId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmployeeHistories_EmployeeId1",
+                table: "EmployeeHistories",
+                column: "EmployeeId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LineDefects_DefectId",
@@ -489,9 +533,9 @@ namespace SMT.Access.Migrations
                 column: "DefectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PcbReports_EmployeeId",
+                name: "IX_PcbReports_EmployeeId1",
                 table: "PcbReports",
-                column: "EmployeeId");
+                column: "EmployeeId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PcbReports_LineId",
@@ -529,9 +573,44 @@ namespace SMT.Access.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vacations_EmployeeId",
+                name: "IX_Reports_DefectId",
+                table: "Reports",
+                column: "DefectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reports_LineId",
+                table: "Reports",
+                column: "LineId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reports_ModelId",
+                table: "Reports",
+                column: "ModelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vacations_EmployeeId1",
                 table: "Vacations",
-                column: "EmployeeId");
+                column: "EmployeeId1");
+
+            migrationBuilder.Sql(@"
+                CREATE TRIGGER departments_update_Trigger ON DBO.Departments
+                AFTER INSERT
+                AS
+                Begin
+	                Declare @Id int, @Hieararchy Hierarchyid;
+
+	                Select @Id = i.Id, @Hieararchy = i.HierarchyId from inserted i;
+	                if(@Hieararchy is null)
+	                Begin
+		                update Departments set HierarchyId = '/' where Id = @Id;
+	                End
+                    else
+                    Begin
+                        update Departments set HierarchyId = @Hieararchy.ToString() +
+		                CONVERT(nvarchar(7), @Id) + '/' where Id = @Id;
+                    End
+                End
+                ");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -561,6 +640,9 @@ namespace SMT.Access.Migrations
                 name: "PlanDetails");
 
             migrationBuilder.DropTable(
+                name: "Reports");
+
+            migrationBuilder.DropTable(
                 name: "Vacations");
 
             migrationBuilder.DropTable(
@@ -570,7 +652,7 @@ namespace SMT.Access.Migrations
                 name: "Plans");
 
             migrationBuilder.DropTable(
-                name: "Employees");
+                name: "Employee");
 
             migrationBuilder.DropTable(
                 name: "Defects");
@@ -592,6 +674,8 @@ namespace SMT.Access.Migrations
 
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.Sql("DROP TRIGGER departments_update_Trigger");
         }
     }
 }

@@ -10,12 +10,12 @@ namespace SMT.Services.Interfaces
 
         Task<EmployeeResponse> GetAsync(int id);
 
-        Task<EmployeeResponse> GetByNameAsync(string name);
-
         Task<EmployeeResponse> AddAsync(EmployeeCreate employeeCreate);
 
         Task<EmployeeResponse> UpdateAsync(int id, EmployeeUpdate employeeUpdate);
 
         Task<EmployeeResponse> DeleteAsync(int id);
+
+        Task<IEnumerable<EmployeeResponse>> GetByDepartmentAsync(string departmentId);
     }
 }

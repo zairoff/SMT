@@ -5,13 +5,19 @@ namespace SMT.ViewModel.Dto.EmployeeDto
 {
     public class EmployeeResponse
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
+
+        public string Passport { get; set; }
+
+        public string DepartmentName { get; set; }
+
+        public string Position { get; set; }
 
         public DepartmentResponse Department { get; set; }
 
         public string FullName { get; set; }
 
-        public string ImgBase64 { get; set; }
+        public string ImageUrl { get; set; }
 
         public DateTime Birthday { get; set; }
 

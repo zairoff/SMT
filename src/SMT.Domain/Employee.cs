@@ -4,7 +4,13 @@ namespace SMT.Domain
 {
     public class Employee
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
+
+        public string Passport { get; set; }
+
+        public string Position { get; set; }
+
+        public string DepartmentName { get; set; }
 
         public int DepartmentId { get; set; }
 

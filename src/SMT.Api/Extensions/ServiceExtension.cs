@@ -15,6 +15,7 @@ using SMT.Notification;
 using SMT.Security;
 using SMT.Services;
 using SMT.Services.Interfaces;
+using SMT.Services.Interfaces.FileSystem;
 using SMT.Services.Mapping;
 using System;
 using System.Linq;
@@ -95,7 +96,8 @@ namespace SMT.Api.Extensions
             services.AddAutoMapper(typeof(ModelToResourceProfile), typeof(ResourceToModelProfile));
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<ITelegramBotClient>(conf => new TelegramBotClient(configuration.GetValue<string>("AppSettings:BotToken")));
-            services.AddScoped<INotificationService>(conf => new NotificationService(conf.GetRequiredService<ITelegramBotClient>(), Convert.ToInt64(configuration["AppSettings:TelegramChatId"])));
+            services.AddScoped<INotificationService>(conf => new NotificationService(conf.GetRequiredService<ITelegramBotClient>(),
+                Convert.ToInt64(configuration["AppSettings:TelegramChatId"])));
 
 
             /*************   Repository  ************/
@@ -111,6 +113,7 @@ namespace SMT.Api.Extensions
             services.AddScoped<ILineRepository, LineRepository>();
             services.AddScoped<ILineDefectRepository, LineDefectRepository>();
             services.AddScoped<IReportRepository, ReportRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             /*************   Services  ************/
 
@@ -124,10 +127,16 @@ namespace SMT.Api.Extensions
             services.AddScoped<ILineService, LineService>();
             services.AddScoped<ILineDefectService, LineDefectService>();
             services.AddScoped<IReportService, ReportService>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
 
             /*************   Security  ************/
 
             services.AddScoped<IUserService, UserService>();
+
+
+            /*************  Other  **************/
+            services.AddScoped<IImageService, ImageService>();
+            services.AddSingleton<IFileSystem, FileSystem>();
 
             //AddServices(services);
 
