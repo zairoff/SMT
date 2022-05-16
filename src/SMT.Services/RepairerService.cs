@@ -35,6 +35,9 @@ namespace SMT.Services
             await _repository.AddAsync(repairer);
             await _unitOfWork.SaveAsync();
 
+            // need to find other way
+            repairer = await _repository.FindAsync(r => r.Id == repairer.Id);
+
             return _mapper.Map<Repairer, RepairerResponse>(repairer);
         }
 

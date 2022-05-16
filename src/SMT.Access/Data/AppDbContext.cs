@@ -28,6 +28,8 @@ namespace SMT.Access.Data
         public DbSet<LineDefect> LineDefects { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<Repairer> Repairers { get; set; }
+        public DbSet<Repair> Repairs { get; set; }
+        public DbSet<Machine> Machines { get; set; }
 
 
         [DbFunction("GetDepartmentAsJson", "dbo")]
