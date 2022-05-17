@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMT.Access.Data;
 
 namespace SMT.Access.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220516093214_AddMachineRepair")]
+    partial class AddMachineRepair
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -324,7 +326,7 @@ namespace SMT.Access.Migrations
                     b.Property<int>("MachineId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("NotificationDate")
+                    b.Property<DateTime>("NotificationDay")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -334,23 +336,6 @@ namespace SMT.Access.Migrations
                     b.HasIndex("MachineId");
 
                     b.ToTable("MachineRepairs");
-                });
-
-            modelBuilder.Entity("SMT.Domain.MachineRepairer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("MachineRepairers");
                 });
 
             modelBuilder.Entity("SMT.Domain.Model", b =>
@@ -386,23 +371,6 @@ namespace SMT.Access.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PcbPositions");
-                });
-
-            modelBuilder.Entity("SMT.Domain.PcbRepairer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("PcbRepairers");
                 });
 
             modelBuilder.Entity("SMT.Domain.PcbReport", b =>
@@ -563,6 +531,23 @@ namespace SMT.Access.Migrations
                     b.HasIndex("ReportId");
 
                     b.ToTable("Repairs");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Repairer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("Repairers");
                 });
 
             modelBuilder.Entity("SMT.Domain.Report", b =>
@@ -752,17 +737,6 @@ namespace SMT.Access.Migrations
                     b.Navigation("Machine");
                 });
 
-            modelBuilder.Entity("SMT.Domain.MachineRepairer", b =>
-                {
-                    b.HasOne("SMT.Domain.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-                });
-
             modelBuilder.Entity("SMT.Domain.Model", b =>
                 {
                     b.HasOne("SMT.Domain.ProductBrand", "ProductBrand")
@@ -772,17 +746,6 @@ namespace SMT.Access.Migrations
                         .IsRequired();
 
                     b.Navigation("ProductBrand");
-                });
-
-            modelBuilder.Entity("SMT.Domain.PcbRepairer", b =>
-                {
-                    b.HasOne("SMT.Domain.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("SMT.Domain.PcbReport", b =>
@@ -884,6 +847,17 @@ namespace SMT.Access.Migrations
                     b.Navigation("Employee");
 
                     b.Navigation("Report");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Repairer", b =>
+                {
+                    b.HasOne("SMT.Domain.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("SMT.Domain.Report", b =>
