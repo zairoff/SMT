@@ -17,6 +17,8 @@ using SMT.ViewModel.Dto.EmployeeDto;
 using SMT.ViewModel.Dto.RepairerDto;
 using SMT.ViewModel.Dto.RepairDto;
 using SMT.ViewModel.Dto.MachineDto;
+using SMT.ViewModel.Dto.MachineRepairDto;
+using SMT.ViewModel.Dto.MachineRepairerDto;
 
 namespace SMT.Services.Mapping
 {
@@ -46,11 +48,18 @@ namespace SMT.Services.Mapping
             CreateMap<Employee, EmployeeResponse>()
                 .ForMember(e => e.ImageUrl, o => o.MapFrom(s => s.ImagePath));
 
-            CreateMap<Repairer, RepairerResponse>();
+            CreateMap<PcbRepairer, RepairerResponse>();
 
             CreateMap<Repair, RepairResponse>();
 
             CreateMap<Machine, MachineResponse>();
+
+            CreateMap<MachineRepair, MachineRepairResponse>()
+                .ForMember(m => m.CreatedDate, s => s.MapFrom(s => s.Date.ToString("yyyy-MM-dd HH:mm")))
+                .ForMember(m => m.NotificationDate, s => s.MapFrom(s => s.NotificationDate.HasValue ?
+                                                s.NotificationDate.Value.ToString("yyyy-MM-dd HH:mm") : ""));
+
+            CreateMap<MachineRepairer, MachineRepairerResponse>();
         }
     }
 }
