@@ -54,8 +54,8 @@ namespace SMT.Api
 
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine($"{env.WebRootPath}/", Configuration["AppSettings:EmployeeImagesFolder"])),
-                RequestPath = Configuration["AppSettings:EmployeeImagesPathString"]
+                FileProvider = new PhysicalFileProvider(Path.Combine($"{env.WebRootPath}/", Configuration["AppSettings:ImagesFolder"])),
+                RequestPath = Configuration["AppSettings:RequestPath"]
             });
 
             app.UseEndpoints(endpoints =>

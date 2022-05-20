@@ -74,7 +74,8 @@ namespace SMT.Services.Mapping
 
             CreateMap<RepairCreate, Repair>();
 
-            CreateMap<MachineCreate, Machine>();
+            CreateMap<MachineCreate, Machine>()
+                .ForMember(m => m.ImageUrl, s => s.Ignore());
 
             CreateMap<MachineRepairCreate, MachineRepair>()
                 .ForMember(m => m.NotificationDate, s => s.MapFrom(s => string.IsNullOrEmpty(s.NotificationDate) ? (DateTime?)null : DateTime.Parse(s.NotificationDate)))

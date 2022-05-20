@@ -36,7 +36,7 @@ namespace SMT.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateReport([FromBody] MachineCreate machineCreate)
+        public async Task<IActionResult> CreateReport([FromForm] MachineCreate machineCreate)
         {
             var result = await _service.AddAsync(machineCreate);
 
