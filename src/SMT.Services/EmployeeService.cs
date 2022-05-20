@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using SMT.Access.Repository.Interfaces;
 using SMT.Access.Unit;
 using SMT.Domain;
@@ -14,17 +15,23 @@ namespace SMT.Services
     public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _repository;
+        private readonly IConfiguration _configuration;
         private readonly IImageService _imageService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly string _imagesFolder;
+        private readonly string _requestPath;
 
         public EmployeeService(IEmployeeRepository repository, IUnitOfWork unitOfWork, IMapper mapper,
-                                IImageService imageService)
+                                IImageService imageService, IConfiguration configuration)
         {
             _imageService = imageService;
             _repository = repository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _configuration = configuration;
+            _imagesFolder = _configuration["AppSettings:EmployeeImagesFolder"];
+            _requestPath = _configuration["AppSettings:EmployeeRequestpath"];
         }
 
         public async Task<EmployeeResponse> AddAsync(EmployeeCreate employeeCreate)
@@ -36,7 +43,7 @@ namespace SMT.Services
 
             employee = _mapper.Map<EmployeeCreate, Employee>(employeeCreate);
 
-            var fileName = await _imageService.SaveAsync(employeeCreate.File);
+            var fileName = await _imageService.SaveAsync(employeeCreate.File, _imagesFolder);
             employee.ImagePath = fileName;
 
             await _repository.AddAsync(employee);
@@ -107,8 +114,8 @@ namespace SMT.Services
 
             employee = _mapper.Map<EmployeeUpdate, Employee>(employeeUpdate);
 
-            var fileName = await _imageService.SaveAsync(employeeUpdate.File);
-            var imagePath = _imageService.LoadUrl(fileName);
+            var fileName = await _imageService.SaveAsync(employeeUpdate.File, _imagesFolder);
+            var imagePath = _imageService.LoadUrl(_requestPath, fileName);
 
             employee.ImagePath = imagePath;
 
@@ -122,7 +129,7 @@ namespace SMT.Services
 
         private Employee UpdateEmployeeImageUrl(Employee employee)
         {
-            var url = _imageService.LoadUrl(employee.ImagePath);
+            var url = _imageService.LoadUrl(_requestPath, employee.ImagePath);
             employee.ImagePath = url;
             return employee;
         }
@@ -131,7 +138,7 @@ namespace SMT.Services
         {
             foreach(var employee in employees)
             {
-                var url = _imageService.LoadUrl(employee.ImagePath);
+                var url = _imageService.LoadUrl(_requestPath, employee.ImagePath);
                 employee.ImagePath = url;
             }
 

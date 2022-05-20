@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -10,22 +9,20 @@ namespace SMT.Services.Interfaces.FileSystem
     public class ImageService : IImageService
     {
         private readonly IHostingEnvironment _environment;
-        private readonly IConfiguration _configuration;
         private readonly IFileSystem _fileSystem;
 
-        public ImageService(IHostingEnvironment environment, IFileSystem fileSystem, IConfiguration configuration)
+        public ImageService(IHostingEnvironment environment, IFileSystem fileSystem)
         {
             _environment = environment;
             _fileSystem = fileSystem;
-            _configuration = configuration;
         }
 
-        public string LoadUrl(string fileName)
+        public string LoadUrl(string requestpath, string fileName)
         {
-            return $"{_configuration["AppSettings:EmployeeImagesPathString"]}/{fileName}";
+            return $"{requestpath}/{fileName}";
         }
 
-        public async Task<string> SaveAsync(IFormFile file)
+        public async Task<string> SaveAsync(IFormFile file, string folderToSave)
         {
             if (file == null)
                 throw new NullReferenceException();
@@ -33,7 +30,7 @@ namespace SMT.Services.Interfaces.FileSystem
             if (file.Length < 1)
                 throw new InvalidDataException();
 
-            var folder = _fileSystem.Combine(_environment.WebRootPath, _configuration["AppSettings:EmployeeImagesFolder"]);
+            var folder = _fileSystem.Combine(_environment.WebRootPath, folderToSave); 
             _fileSystem.CreateFolder(folder);
             var fileExtension = _fileSystem.GetFileExtension(file.FileName);
             var fileName = GenerateUniqueFileName(fileExtension);
