@@ -31,5 +31,13 @@ namespace SMT.Access.Repository
                             .Include(m => m.Machine)
                             .ToListAsync();
         }
+
+        public async Task<IEnumerable<MachineRepair>> GetByAsync(Expression<Func<MachineRepair, bool>> expression)
+        {
+            return await DbSet.Where(expression)
+                                        .Include(m => m.Employee)
+                                        .Include(m => m.Machine)
+                                        .ToListAsync();
+        }
     }
 }

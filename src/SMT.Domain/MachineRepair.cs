@@ -18,6 +18,8 @@ namespace SMT.Domain
 
         public string Action { get; set; }
 
+        public bool IsActive { get; set; }
+
         public DateTime? NotificationDate { get; set; }
 
         public DateTime Date { get; set; } = DateTime.Now;
