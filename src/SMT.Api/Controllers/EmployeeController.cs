@@ -34,9 +34,18 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet("GetByDeparment")]
-        public async Task<IActionResult> GetByDeparment(string departmentId)
+        public async Task<IActionResult> GetByDeparment(string departmentId, bool isActive)
         {
-            var result = await _service.GetByDepartmentAsync(departmentId);
+            var result = await _service.GetByDepartmentAsync(departmentId, isActive);
+
+            return Ok(result);
+        }
+
+
+        [HttpGet("GetByStatus")]
+        public async Task<IActionResult> GetByStatusAsync(bool isActive)
+        {
+            var result = await _service.GetByStatusAsync(isActive);
 
             return Ok(result);
         }
@@ -44,7 +53,7 @@ namespace SMT.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateEmployee([FromForm] EmployeeCreate employeeCreate)
+        public async Task<IActionResult> CreateEmployee([FromBody] EmployeeCreate employeeCreate)
         {
             var result = await _service.AddAsync(employeeCreate);
 
@@ -59,6 +68,18 @@ namespace SMT.Api.Controllers
         public async Task<IActionResult> UpdateEmployee(int id, [FromBody] EmployeeUpdate employeeUpdate)
         {
             var result = await _service.UpdateAsync(id, employeeUpdate);
+
+            return Ok(result);
+        }
+
+        [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeactivateEmployee(int id, bool isActive)
+        {
+            var result = await _service.DeactivateAsync(id, isActive);
 
             return Ok(result);
         }

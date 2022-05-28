@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMT.Access.Data;
 
 namespace SMT.Access.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220523040051_AddIsActiveRMPositionAndDpName")]
+    partial class AddIsActiveRMPositionAndDpName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -421,7 +423,10 @@ namespace SMT.Access.Migrations
                     b.Property<int>("DefectId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EmployeeId")
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("EmployeeId1")
                         .HasColumnType("int");
 
                     b.Property<int>("LineId")
@@ -437,7 +442,7 @@ namespace SMT.Access.Migrations
 
                     b.HasIndex("DefectId");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("EmployeeId1");
 
                     b.HasIndex("LineId");
 
@@ -795,9 +800,7 @@ namespace SMT.Access.Migrations
 
                     b.HasOne("SMT.Domain.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EmployeeId1");
 
                     b.HasOne("SMT.Domain.Line", "Line")
                         .WithMany()
