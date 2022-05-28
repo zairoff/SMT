@@ -8,10 +8,6 @@ namespace SMT.Domain
 
         public string Passport { get; set; }
 
-        public string Position { get; set; }
-
-        public string DepartmentName { get; set; }
-
         public int DepartmentId { get; set; }
 
         public virtual Department Department { get; set; }
@@ -27,5 +23,7 @@ namespace SMT.Domain
         public string Address { get; set; }
 
         public string Details { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

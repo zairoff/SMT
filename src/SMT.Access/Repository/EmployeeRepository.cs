@@ -32,7 +32,7 @@ namespace SMT.Access.Repository
             return await DbSet.Where(expression).Include(e => e.Department).ToListAsync();
         }
 
-        public async Task<IEnumerable<Employee>> GetByDepartmentAsync(string departmentId)
+        public async Task<IEnumerable<Employee>> GetByDepartmentAsync(string departmentId, bool isActive)
         {
             // Query method but preffered LINQ
             /*var employees = await _context.Departments.Join(_context.Employees,
@@ -57,7 +57,7 @@ namespace SMT.Access.Repository
             var query = from employee in _context.Employees
                         join department in _context.Departments
                         on employee.DepartmentId equals department.Id
-                        where department.HierarchyId.IsDescendantOf(HierarchyId.Parse(departmentId))
+                        where department.HierarchyId.IsDescendantOf(HierarchyId.Parse(departmentId)) && employee.IsActive == isActive
                         select employee;
 
             var employees = await query.Include(e => e.Department).ToListAsync();

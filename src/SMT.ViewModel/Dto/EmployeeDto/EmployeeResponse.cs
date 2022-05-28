@@ -9,10 +9,6 @@ namespace SMT.ViewModel.Dto.EmployeeDto
 
         public string Passport { get; set; }
 
-        public string DepartmentName { get; set; }
-
-        public string Position { get; set; }
-
         public DepartmentResponse Department { get; set; }
 
         public string FullName { get; set; }
@@ -26,5 +22,7 @@ namespace SMT.ViewModel.Dto.EmployeeDto
         public string Address { get; set; }
 
         public string Details { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

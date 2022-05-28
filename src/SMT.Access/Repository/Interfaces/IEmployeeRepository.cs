@@ -11,6 +11,6 @@ namespace SMT.Access.Repository.Interfaces
     {
         Task<IEnumerable<Employee>> GetByAsync(Expression<Func<Employee, bool>> expression);
 
-        Task<IEnumerable<Employee>> GetByDepartmentAsync(string departmentId);
+        Task<IEnumerable<Employee>> GetByDepartmentAsync(string departmentId, bool isActive);
     }
 }

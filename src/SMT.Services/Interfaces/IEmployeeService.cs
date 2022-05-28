@@ -14,8 +14,12 @@ namespace SMT.Services.Interfaces
 
         Task<EmployeeResponse> UpdateAsync(int id, EmployeeUpdate employeeUpdate);
 
+        Task<EmployeeResponse> DeactivateAsync(int id, bool isActive);
+
         Task<EmployeeResponse> DeleteAsync(int id);
 
-        Task<IEnumerable<EmployeeResponse>> GetByDepartmentAsync(string departmentId);
+        Task<IEnumerable<EmployeeResponse>> GetByDepartmentAsync(string departmentId, bool isActive);
+
+        Task<IEnumerable<EmployeeResponse>> GetByStatusAsync(bool isActive);
     }
 }
