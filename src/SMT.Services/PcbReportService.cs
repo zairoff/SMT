@@ -37,13 +37,14 @@ namespace SMT.Services
 
             // TODO: Need to change the structure. Really bad designed
             var reports = await _repository.GetByAsync(r => r.ModelId == reportCreate.ModelId &&
-                                            r.PositionId == reportCreate.PcbPositionId &&
+                                            r.LineId == reportCreate.LineId &&
+                                            r.EmployeeId == reportCreate.EmployeeId &&
                                             r.Date.Date == DateTime.Now.Date);
 
-            var count = await _repository.CountAsync(r => r.ModelId == reportCreate.ModelId &&
+            /*var count = await _repository.CountAsync(r => r.ModelId == reportCreate.ModelId &&
                                             r.PositionId == reportCreate.PcbPositionId &&
-                                            r.Date.Date == DateTime.Now.Date);
-
+                                            r.Date.Date == DateTime.Now.Date);*/
+            var count = reports.Count();
             if (count > 3)
                 await _notificationService.Notify(reports.ToList(), count);
 
@@ -120,6 +121,13 @@ namespace SMT.Services
             await _unitOfWork.SaveAsync();
 
             return _mapper.Map<PcbReport, PcbReportResponse>(existingReport);
+        }
+
+        public async Task<IEnumerable<PcbReportResponse>> GetByModelLineAndDateAsync(int modelId, int lineId, DateTime date)
+        {
+            var reports = await _repository.GetByAsync(r => r.ModelId == modelId && r.LineId == lineId && r.Date.Date == date.Date);
+
+            return _mapper.Map<IEnumerable<PcbReport>, IEnumerable<PcbReportResponse>>(reports);
         }
     }
 }

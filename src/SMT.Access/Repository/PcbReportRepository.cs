@@ -24,7 +24,9 @@ namespace SMT.Access.Repository
 
         public async override Task<PcbReport> FindAsync(Expression<Func<PcbReport, bool>> expression)
         {
-            return await DbSet.Where(expression).Include(r => r.Model)
+            return await DbSet.Where(expression)
+                                    .Include(r => r.Employee)
+                                    .Include(r => r.Model)
                                     .ThenInclude(r => r.ProductBrand)
                                     .ThenInclude(r => r.Product)
                                     .Include(r => r.Model)
@@ -32,12 +34,13 @@ namespace SMT.Access.Repository
                                     .ThenInclude(r => r.Brand)
                                     .Include(r => r.Model)
                                     .Include(r => r.Defect)
+                                    .Include(r => r.Line)
                                     .FirstOrDefaultAsync();
         }
 
         public async override Task<IEnumerable<PcbReport>> GetAllAsync()
         {
-            return await DbSet.Include(r => r.Model)
+            return await DbSet.Include(r => r.Employee).Include(r => r.Model)
                                     .ThenInclude(r => r.ProductBrand)
                                     .ThenInclude(r => r.Product)
                                     .Include(r => r.Model)
@@ -45,12 +48,14 @@ namespace SMT.Access.Repository
                                     .ThenInclude(r => r.Brand)
                                     .Include(r => r.Model)
                                     .Include(r => r.Defect)
+                                    .Include(r => r.Line)
                                     .ToListAsync();
         }
 
         public async Task<IEnumerable<PcbReport>> GetByAsync(Expression<Func<PcbReport, bool>> expression)
         {
             return await DbSet.Where(expression)
+                                    .Include(r => r.Employee)
                                     .Include(r => r.Model)
                                     .ThenInclude(r => r.ProductBrand)
                                     .ThenInclude(r => r.Product)
@@ -59,6 +64,7 @@ namespace SMT.Access.Repository
                                     .ThenInclude(r => r.Brand)
                                     .Include(r => r.Model)
                                     .Include(r => r.Defect)
+                                    .Include(r => r.Line)
                                     .ToListAsync();
         }
     }

@@ -51,6 +51,15 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
+        [Route("ByModelLineAndDate")]
+        public async Task<IActionResult> GetByModelLineAndDateAsync(int modelId, int lineId, DateTime date)
+        {
+            var result = await _service.GetByModelLineAndDateAsync(modelId, lineId, date);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
         [Route("GetByPcbPositionId")]
         public async Task<IActionResult> GetByPcbPositionId(int pcdPositionId)
         {

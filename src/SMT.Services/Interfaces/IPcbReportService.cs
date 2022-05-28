@@ -15,6 +15,8 @@ namespace SMT.Services.Interfaces
 
         Task<IEnumerable<PcbReportResponse>> GetByDateAndModelIdAsync(int modelId, DateTime date);
 
+        Task<IEnumerable<PcbReportResponse>> GetByModelLineAndDateAsync(int modelId, int lineId, DateTime date);
+
         Task<IEnumerable<PcbReportResponse>> GetByPositionIdAsync(int positionId);
 
         Task<IEnumerable<PcbReportResponse>> GetByDefectIdAsync(int defectId);
