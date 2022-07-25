@@ -10,6 +10,7 @@ using SMT.Access.Identity;
 using SMT.Access.Repository;
 using SMT.Access.Repository.Base;
 using SMT.Access.Repository.Interfaces;
+using SMT.Access.Repository.Statics;
 using SMT.Access.Unit;
 using SMT.Notification;
 using SMT.Security;
@@ -45,14 +46,14 @@ namespace SMT.Api.Extensions
             //                    options.Filters.Add<LinkRewritingFilter>();
             //                }*/);
 
-            
+
 
             services.AddCors(options =>
             {
-                    options.AddPolicy(options.DefaultPolicyName,
-                                                            policy => policy.AllowAnyOrigin()
-                                                                    .AllowAnyHeader()
-                                                                    .AllowAnyMethod());
+                options.AddPolicy(options.DefaultPolicyName,
+                                                        policy => policy.AllowAnyOrigin()
+                                                                .AllowAnyHeader()
+                                                                .AllowAnyMethod());
             });
 
             services.AddSwaggerGen(c =>
@@ -61,7 +62,7 @@ namespace SMT.Api.Extensions
             });
 
             services.AddDbContext<AppDbContext>(options =>
-                            options.UseSqlServer(configuration.GetConnectionString("DbConnectionDev"),
+                            options.UseSqlServer(configuration.GetConnectionString("DbConnection"),
                             s => s.UseHierarchyId()));
 
             services.AddDbContext<AppIdentityDbContext>(options =>
@@ -76,7 +77,6 @@ namespace SMT.Api.Extensions
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-
             })
             .AddJwtBearer(options =>
             {
@@ -90,14 +90,17 @@ namespace SMT.Api.Extensions
                 };
             });
 
-            services.BuildServiceProvider().GetService<AppDbContext>().Database.Migrate();
-            services.BuildServiceProvider().GetService<AppIdentityDbContext>().Database.Migrate();
+            //services.BuildServiceProvider().GetService<AppDbContext>().Database.Migrate();
+            //services.BuildServiceProvider().GetService<AppIdentityDbContext>().Database.Migrate();
+
+
             services.AddControllers();
             services.AddAutoMapper(typeof(ModelToResourceProfile), typeof(ResourceToModelProfile));
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<ITelegramBotClient>(conf => new TelegramBotClient(configuration.GetValue<string>("AppSettings:BotToken")));
             services.AddScoped<INotificationService>(conf => new NotificationService(conf.GetRequiredService<ITelegramBotClient>(),
-                Convert.ToInt64(configuration["AppSettings:TelegramChatId"])));
+                Convert.ToInt64(configuration["AppSettings:QCChatId"]),
+                Convert.ToInt64(configuration["AppSettings:ReapirChatID"])));
 
 
             /*************   Repository  ************/
@@ -119,6 +122,7 @@ namespace SMT.Api.Extensions
             services.AddScoped<IMachineRepository, MachineRepository>();
             services.AddScoped<IMachineRepairRepository, MachineRepairRepository>();
             services.AddScoped<IMachineRepairerRepository, MachineRepairerRepository>();
+            services.AddScoped<IStaticsRepository, StaticsRepository>();
 
             /*************   Services  ************/
 

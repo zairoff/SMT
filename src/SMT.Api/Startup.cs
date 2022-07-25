@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SMT.Access.Data;
 using SMT.Access.Identity;
 using SMT.Api.ExceptionHandler;
 using SMT.Api.Extensions;
@@ -32,14 +34,14 @@ namespace SMT.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SMT.Api v1"));
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SMT.Api v1"));
             app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
             loggerFactory.AddFile(Configuration["AppSettings:LogFolder"]);
 
@@ -62,21 +64,29 @@ namespace SMT.Api
             {
                 endpoints.MapControllers();
             });
+
+            await Seed(app, loggerFactory.CreateLogger<Startup>());
         }
 
-        private async Task Seed(IApplicationBuilder app)
+        private static async Task Seed(IApplicationBuilder app, ILogger<Startup> logger)
         {
             using var scope = app.ApplicationServices.CreateScope();
             var scopedProvider = scope.ServiceProvider;
             try
             {
+                var appContext = scopedProvider.GetRequiredService<AppDbContext>();
+                var identityContext = scopedProvider.GetRequiredService<AppIdentityDbContext>();
+
+                appContext.Database.Migrate();
+                identityContext.Database.Migrate();
+
                 var userManager = scopedProvider.GetRequiredService<UserManager<ApplicationUser>>();
                 var roleManager = scopedProvider.GetRequiredService<RoleManager<IdentityRole>>();
                 await IdentityDbContextSeed.SeedAsync(userManager, roleManager);
             }
             catch (Exception ex)
             {
-                //app.Logger.LogError(ex, "An error occurred seeding the DB.");
+                logger.LogError(ex, "An error occurred seeding the DB.");
             }
         }
     }

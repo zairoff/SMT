@@ -6,16 +6,16 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["src/SMT.Api/SMT.Api.csproj", "src/SMT.Api/"]
-COPY ["src/SMT.Services/SMT.Services.csproj", "src/SMT.Services/"]
-COPY ["src/SMT.Access/SMT.Access.csproj", "src/SMT.Access/"]
-COPY ["src/SMT.Domain/SMT.Domain.csproj", "src/SMT.Domain/"]
-COPY ["src/SMT.ViewModel/SMT.ViewModel.csproj", "src/SMT.ViewModel/"]
-COPY ["src/SMT.Notification/SMT.Notification.csproj", "src/SMT.Notification/"]
-COPY ["src/SMT.Security/SMT.Security.csproj", "src/SMT.Security/"]
-RUN dotnet restore "src/SMT.Api/SMT.Api.csproj"
+COPY ["SMT.Api/SMT.Api.csproj", "SMT.Api/"]
+COPY ["SMT.Services/SMT.Services.csproj", "SMT.Services/"]
+COPY ["SMT.Access/SMT.Access.csproj", "SMT.Access/"]
+COPY ["SMT.Domain/SMT.Domain.csproj", "SMT.Domain/"]
+COPY ["SMT.ViewModel/SMT.ViewModel.csproj", "SMT.ViewModel/"]
+COPY ["SMT.Notification/SMT.Notification.csproj", "SMT.Notification/"]
+COPY ["SMT.Security/SMT.Security.csproj", "SMT.Security/"]
+RUN dotnet restore "SMT.Api/SMT.Api.csproj"
 COPY . .
-WORKDIR "/src/src/SMT.Api"
+WORKDIR "/src/SMT.Api"
 RUN dotnet build "SMT.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish

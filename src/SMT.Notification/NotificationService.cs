@@ -9,21 +9,23 @@ namespace SMT.Notification
     {
         private readonly ITelegramBotClient _botClient;
         private readonly long _chatId;
+        private readonly long _repairChatId;
 
-        public NotificationService(ITelegramBotClient botClient, long chatId)
+        public NotificationService(ITelegramBotClient botClient, long chatId, long repairChatId)
         {
             _botClient = botClient;
             _chatId = chatId;
+            _repairChatId = repairChatId;
         }
 
-        public async Task Notify(List<PcbReport> reports, int count)
+        public async Task NotifyPcbAsync(List<PcbReport> reports)
         {
             
             await _botClient.SendTextMessageAsync(chatId: _chatId,
                             text: "Diqqat!!!\nXudud: PCBA-1\nModel: " + 
                             reports[0].Model.Name + "\nNuqson: " +
                             GetDefects(reports) + "\nYig'uvchi: " + 
-                            reports[0].Employee.FullName + "\nSoni: " + count);
+                            reports[0].Employee.FullName + "\nSoni: " + reports.Count);
         }
 
         private static string GetDefects(List<PcbReport> reports)
@@ -33,6 +35,17 @@ namespace SMT.Notification
                 defects.Add(report.Defect.Name);
 
             return string.Join(", ", defects);
+        }
+
+        public async Task NotifyRepairAsync(MachineRepair repair)
+        {
+            await _botClient.SendTextMessageAsync(chatId: _repairChatId,
+                                text: $"Diqqat!!!\nUskuna:" +
+                                $" {repair.Machine.Name}\nSabab:" +
+                                $" {repair.Issue}\nBajarildi:" +
+                                $" {repair.Action}\nBajardi:" +
+                                $" {repair.Employee.FullName}\nGacha amal qiladi: " +
+                                $"{repair.NotificationDate}");
         }
     }
 }

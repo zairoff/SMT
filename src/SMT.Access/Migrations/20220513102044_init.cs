@@ -186,7 +186,7 @@ namespace SMT.Access.Migrations
                         column: x => x.EmployeeId1,
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -208,7 +208,7 @@ namespace SMT.Access.Migrations
                         column: x => x.EmployeeId1,
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -250,7 +250,7 @@ namespace SMT.Access.Migrations
                         column: x => x.EmployeeId1,
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -356,7 +356,7 @@ namespace SMT.Access.Migrations
                         column: x => x.EmployeeId1,
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PcbReports_Lines_LineId",
                         column: x => x.LineId,
@@ -463,7 +463,7 @@ namespace SMT.Access.Migrations
                         column: x => x.EmployeeId1,
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

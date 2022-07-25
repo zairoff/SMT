@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using SMT.Services.Exceptions;
+using SMT.Services.Utils;
+using static SMT.Access.Repository.ReportRepository;
 
 namespace SMT.Services
 {
@@ -73,13 +75,6 @@ namespace SMT.Services
             return _mapper.Map<Report, ReportResponse>(report);
         }
 
-        public async Task<IEnumerable<ReportResponse>> GetByModelAndLineIdAsync(int modelId, int lineId, DateTime date)
-        {
-            var reports = await _repository.GetByAsync(r => r.ModelId == modelId && r.LineId == lineId && r.Date.Date == date.Date);
-
-            return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
-        }
-
         public async Task<ReportResponse> UpdateAsync(int id, ReportUpdate reportUpdate)
         {
             var report = await _repository.FindAsync(p => p.Id == id);
@@ -92,5 +87,52 @@ namespace SMT.Services
 
             return _mapper.Map<Report, ReportResponse>(report);
         }
+
+        public async Task<IEnumerable<ReportResponse>> GetByModelAndLineIdAsync(int modelId, int lineId, DateTime date)
+        {
+            var reports = await _repository.GetByAsync(r => r.ModelId == modelId && r.LineId == lineId && r.Date.Date == date.Date);
+
+            return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
+        }
+
+        public async Task<IEnumerable<ReportResponse>> GetByAsync(int? productId,
+                                                                int? brandId,
+                                                                int? modelId,
+                                                                int? lineId,
+                                                                DateTime from,
+                                                                DateTime to)
+        {
+            var predicate = PredicateBuilder.True<Report>();
+
+            if (productId.HasValue && productId.Value > 0)
+            {
+                predicate = predicate.And(p => p.Model.ProductBrand.ProductId == productId);
+            }
+
+            if (brandId.HasValue && brandId.Value > 0)
+            {
+                predicate = predicate.And(p => p.Model.ProductBrand.BrandId == brandId);
+            }
+
+            if (modelId.HasValue && modelId.Value > 0)
+            {
+                predicate = predicate.And(p => p.ModelId == modelId);
+            }
+
+            if (lineId.HasValue && lineId.Value > 0)
+            {
+                predicate = predicate.And(p => p.LineId == lineId);
+            }
+
+            predicate = predicate.And(p => p.Date.Date >= from);
+
+            predicate = predicate.And(p => p.Date.Date <= to);
+
+
+            var reports = await _repository.GetByAsync(predicate);
+
+            return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
+        }
+
     }
 }

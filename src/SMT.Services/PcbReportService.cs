@@ -46,7 +46,7 @@ namespace SMT.Services
                                             r.Date.Date == DateTime.Now.Date);*/
             var count = reports.Count();
             if (count > 3)
-                await _notificationService.Notify(reports.ToList(), count);
+                await _notificationService.NotifyPcbAsync(reports.ToList());
 
             return _mapper.Map<PcbReport, PcbReportResponse>(report);
         }

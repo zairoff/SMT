@@ -6,6 +6,7 @@ namespace SMT.Notification
 {
     public interface INotificationService
     {
-        Task Notify(List<PcbReport> reports, int count);
+        Task NotifyPcbAsync(List<PcbReport> reports);
+        Task NotifyRepairAsync(MachineRepair repair);
     }
 }

@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  smt.api:
+    image: ${DOCKER_REGISTRY-}smtapi
+    build:
+      context: .
+      dockerfile: src/SMT.Api/Dockerfile

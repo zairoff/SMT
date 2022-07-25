@@ -50,6 +50,15 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("GetBy")]
+        public async Task<IActionResult> GetBy(int? productId, int? brandId, int? modelId, int? lineId, DateTime from, DateTime to)
+        {
+            var result = await _service.GetByAsync(productId, brandId, modelId, lineId, from, to);
+
+            return Ok(result);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

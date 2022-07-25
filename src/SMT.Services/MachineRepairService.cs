@@ -2,6 +2,7 @@
 using SMT.Access.Repository.Interfaces;
 using SMT.Access.Unit;
 using SMT.Domain;
+using SMT.Notification;
 using SMT.Services.Exceptions;
 using SMT.Services.Interfaces;
 using SMT.ViewModel.Dto.MachineRepairDto;
@@ -14,14 +15,16 @@ namespace SMT.Services
     public class MachineRepairService : IMachineRepairService
     {
         private readonly IMachineRepairRepository _repository;
+        private readonly INotificationService _notificationService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public MachineRepairService(IMachineRepairRepository repository, IMapper mapper, IUnitOfWork unitOfWork)
+        public MachineRepairService(IMachineRepairRepository repository, IMapper mapper, IUnitOfWork unitOfWork, INotificationService notificationService)
         {
             _repository = repository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _notificationService = notificationService;
         }
 
         public async Task<MachineRepairResponse> AddAsync(MachineRepairCreate machinerRepairCreate)
@@ -32,6 +35,8 @@ namespace SMT.Services
             await _unitOfWork.SaveAsync();
 
             machineRepair = await _repository.FindAsync(r => r.Id == machineRepair.Id);
+
+            await _notificationService.NotifyRepairAsync(machineRepair);
 
             return _mapper.Map<MachineRepair, MachineRepairResponse>(machineRepair);
         }
