@@ -6,8 +6,6 @@ namespace SMT.Domain
     {
         public int Id { get; set; }
 
-        public string Passport { get; set; }
-
         public int DepartmentId { get; set; }
 
         public virtual Department Department { get; set; }
@@ -16,11 +14,7 @@ namespace SMT.Domain
 
         public string ImagePath { get; set; }
 
-        public DateTime Birthday { get; set; }
-
         public string Phone { get; set; }
-
-        public string Address { get; set; }
 
         public string Details { get; set; }
 

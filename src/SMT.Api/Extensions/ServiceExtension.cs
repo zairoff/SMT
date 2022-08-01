@@ -90,8 +90,8 @@ namespace SMT.Api.Extensions
                 };
             });
 
-            //services.BuildServiceProvider().GetService<AppDbContext>().Database.Migrate();
-            //services.BuildServiceProvider().GetService<AppIdentityDbContext>().Database.Migrate();
+            services.BuildServiceProvider().GetService<AppDbContext>().Database.Migrate();
+            services.BuildServiceProvider().GetService<AppIdentityDbContext>().Database.Migrate();
 
 
             services.AddControllers();

@@ -10,8 +10,8 @@ using SMT.Access.Data;
 namespace SMT.Access.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220526131710_RemovedPcbReport")]
-    partial class RemovedPcbReport
+    [Migration("20220727121438_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -71,73 +71,6 @@ namespace SMT.Access.Migrations
                     b.ToTable("Defects");
                 });
 
-            modelBuilder.Entity("SMT.Domain.DefectRepair", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DefectReportId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Details")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("EmployeeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("EmployeeId1")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DefectReportId");
-
-                    b.HasIndex("EmployeeId1");
-
-                    b.ToTable("DefectRepairs");
-                });
-
-            modelBuilder.Entity("SMT.Domain.DefectReport", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Barcode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DefectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LineId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ModelId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DefectId");
-
-                    b.HasIndex("LineId");
-
-                    b.HasIndex("ModelId");
-
-                    b.ToTable("DefectReports");
-                });
-
             modelBuilder.Entity("SMT.Domain.Department", b =>
                 {
                     b.Property<int>("Id")
@@ -163,12 +96,6 @@ namespace SMT.Access.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Birthday")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
@@ -183,9 +110,6 @@ namespace SMT.Access.Migrations
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Passport")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
@@ -410,6 +334,44 @@ namespace SMT.Access.Migrations
                     b.ToTable("PcbRepairers");
                 });
 
+            modelBuilder.Entity("SMT.Domain.PcbReport", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DefectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LineId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ModelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PositionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DefectId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("LineId");
+
+                    b.HasIndex("ModelId");
+
+                    b.ToTable("PcbReports");
+                });
+
             modelBuilder.Entity("SMT.Domain.Plan", b =>
                 {
                     b.Property<int>("Id")
@@ -542,13 +504,13 @@ namespace SMT.Access.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DefectId")
+                    b.Property<int?>("DefectId")
                         .HasColumnType("int");
 
-                    b.Property<int>("LineId")
+                    b.Property<int?>("LineId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ModelId")
+                    b.Property<int?>("ModelId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Status")
@@ -601,50 +563,6 @@ namespace SMT.Access.Migrations
                         .HasForeignKey("ModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Model");
-                });
-
-            modelBuilder.Entity("SMT.Domain.DefectRepair", b =>
-                {
-                    b.HasOne("SMT.Domain.DefectReport", "DefectReport")
-                        .WithMany()
-                        .HasForeignKey("DefectReportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SMT.Domain.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId1");
-
-                    b.Navigation("DefectReport");
-
-                    b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("SMT.Domain.DefectReport", b =>
-                {
-                    b.HasOne("SMT.Domain.Defect", "Defect")
-                        .WithMany()
-                        .HasForeignKey("DefectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SMT.Domain.Line", "Line")
-                        .WithMany()
-                        .HasForeignKey("LineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SMT.Domain.Model", "Model")
-                        .WithMany()
-                        .HasForeignKey("ModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Defect");
-
-                    b.Navigation("Line");
 
                     b.Navigation("Model");
                 });
@@ -749,6 +667,41 @@ namespace SMT.Access.Migrations
                     b.Navigation("Employee");
                 });
 
+            modelBuilder.Entity("SMT.Domain.PcbReport", b =>
+                {
+                    b.HasOne("SMT.Domain.Defect", "Defect")
+                        .WithMany()
+                        .HasForeignKey("DefectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SMT.Domain.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SMT.Domain.Line", "Line")
+                        .WithMany()
+                        .HasForeignKey("LineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SMT.Domain.Model", "Model")
+                        .WithMany()
+                        .HasForeignKey("ModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Defect");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Line");
+
+                    b.Navigation("Model");
+                });
+
             modelBuilder.Entity("SMT.Domain.Plan", b =>
                 {
                     b.HasOne("SMT.Domain.Line", "Line")
@@ -821,21 +774,15 @@ namespace SMT.Access.Migrations
                 {
                     b.HasOne("SMT.Domain.Defect", "Defect")
                         .WithMany()
-                        .HasForeignKey("DefectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DefectId");
 
                     b.HasOne("SMT.Domain.Line", "Line")
                         .WithMany()
-                        .HasForeignKey("LineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LineId");
 
                     b.HasOne("SMT.Domain.Model", "Model")
                         .WithMany()
-                        .HasForeignKey("ModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ModelId");
 
                     b.Navigation("Defect");
 

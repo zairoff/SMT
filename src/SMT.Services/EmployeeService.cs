@@ -25,12 +25,7 @@ namespace SMT.Services
 
         public async Task<EmployeeResponse> AddAsync(EmployeeCreate employeeCreate)
         {
-            var employee = await _repository.FindAsync(p => p.Passport == employeeCreate.Passport && p.IsActive == true);
-
-            if (employee != null)
-                throw new ConflictException($"{employeeCreate.Passport} already exists");
-
-            employee = _mapper.Map<EmployeeCreate, Employee>(employeeCreate);
+            var employee = _mapper.Map<EmployeeCreate, Employee>(employeeCreate);
 
             await _repository.AddAsync(employee);
             await _unitOfWork.SaveAsync();
