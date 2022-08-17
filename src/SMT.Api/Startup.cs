@@ -65,7 +65,7 @@ namespace SMT.Api
                 endpoints.MapControllers();
             });
 
-            await Seed(app, loggerFactory.CreateLogger<Startup>());
+            //await Seed(app, loggerFactory.CreateLogger<Startup>());
         }
 
         private static async Task Seed(IApplicationBuilder app, ILogger<Startup> logger)

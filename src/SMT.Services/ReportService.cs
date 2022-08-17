@@ -90,7 +90,7 @@ namespace SMT.Services
 
         public async Task<IEnumerable<ReportResponse>> GetByModelAndLineIdAsync(int modelId, int lineId, DateTime date)
         {
-            var reports = await _repository.GetByAsync(r => r.ModelId == modelId && r.LineId == lineId && r.Date.Date == date.Date);
+            var reports = await _repository.GetByOrderAsync(r => r.ModelId == modelId && r.LineId == lineId && r.Date.Date == date.Date);
 
             return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
         }

@@ -10,7 +10,7 @@ using SMT.Access.Data;
 namespace SMT.Access.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220727121438_init")]
+    [Migration("20220801112149_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

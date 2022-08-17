@@ -56,5 +56,20 @@ namespace SMT.Access.Repository
                             .ThenInclude(m => m.Brand)
                             .ToListAsync();
         }
+
+        public async Task<IEnumerable<Report>> GetByOrderAsync(Expression<Func<Report, bool>> expression)
+        {
+            return await DbSet.Where(expression)
+                            .Include(m => m.Defect)
+                            .Include(m => m.Line)
+                            .Include(m => m.Model)
+                            .ThenInclude(m => m.ProductBrand)
+                            .ThenInclude(m => m.Product)
+                            .Include(m => m.Model)
+                            .ThenInclude(m => m.ProductBrand)
+                            .ThenInclude(m => m.Brand)
+                            .OrderByDescending(m => m.Id)
+                            .ToListAsync();
+        }
     }
 }

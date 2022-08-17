@@ -56,22 +56,22 @@ namespace SMT.Access.Data
         //    options.UseSqlServer(connectionString, s => s.UseHierarchyId());
         //}
 
-        public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
-        {
-            public AppDbContext CreateDbContext(string[] args)
-            {
-                //IConfigurationRoot configuration = new ConfigurationBuilder()
-                //    //.SetBasePath(Directory.GetCurrentDirectory())
-                //    .AddJsonFile(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "../SMT.Api/appsettings.json")))
-                //    .Build();
-                //var connectionString = configuration.GetConnectionString("DbConnectionDev");
+        //public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+        //{
+        //    public AppDbContext CreateDbContext(string[] args)
+        //    {
+        //        //IConfigurationRoot configuration = new ConfigurationBuilder()
+        //        //    //.SetBasePath(Directory.GetCurrentDirectory())
+        //        //    .AddJsonFile(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "../SMT.Api/appsettings.json")))
+        //        //    .Build();
+        //        //var connectionString = configuration.GetConnectionString("DbConnectionDev");
 
-                var connectionString = "Server=(localdb)\\mssqllocaldb;Database=smtDB;Trusted_Connection=True;MultipleActiveResultSets=true";
+        //        var connectionString = "Server=(localdb)\\mssqllocaldb;Database=smt;Trusted_Connection=True;MultipleActiveResultSets=true";
 
-                var builder = new DbContextOptionsBuilder<AppDbContext>();
-                builder.UseSqlServer(connectionString, s => s.UseHierarchyId());
-                return new AppDbContext(builder.Options);
-            }
-        }
+        //        var builder = new DbContextOptionsBuilder<AppDbContext>();
+        //        builder.UseSqlServer(connectionString, s => s.UseHierarchyId());
+        //        return new AppDbContext(builder.Options);
+        //    }
+        //}
     }
 }
