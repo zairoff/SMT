@@ -19,7 +19,7 @@ namespace SMT.Access.Repository.Statics
 
         public async Task<IEnumerable<StaticsModel>> GroupByBrandAsync(DateTime from, DateTime to)
         {
-            return await _context.Reports.Where(r => r.Date >= from && r.Date <= to)
+            return await _context.Reports.Where(r => r.CreatedDate >= from && r.CreatedDate <= to)
                                        .Select(r => r.Model.ProductBrand.Brand)
                                            .GroupBy(g => g.Name)
                                            .Select(g => new StaticsModel
@@ -33,7 +33,7 @@ namespace SMT.Access.Repository.Statics
 
         public async Task<IEnumerable<StaticsModel>> GroupByLineAsync(DateTime from, DateTime to)
         {
-            return await _context.Reports.Where(r => r.Date >= from && r.Date <= to)
+            return await _context.Reports.Where(r => r.CreatedDate >= from && r.CreatedDate <= to)
                                        .Select(r => r.Line)
                                            .GroupBy(g => g.Name)
                                            .Select(g => new StaticsModel
@@ -54,7 +54,7 @@ namespace SMT.Access.Repository.Statics
             //                                            Count = g.Count()
             //                                        }).ToListAsync();
 
-           return await _context.Reports.Where(r => r.Date >= from && r.Date <= to)
+           return await _context.Reports.Where(r => r.CreatedDate >= from && r.CreatedDate <= to)
                                         .Select(r => r.Model)
                                             .GroupBy(g => g.Name)
                                             .Select(g => new StaticsModel
@@ -68,7 +68,7 @@ namespace SMT.Access.Repository.Statics
 
         public async Task<IEnumerable<StaticsModel>> GroupByProductAsync(DateTime from, DateTime to)
         {
-            return await _context.Reports.Where(r => r.Date >= from && r.Date <= to)
+            return await _context.Reports.Where(r => r.CreatedDate >= from && r.CreatedDate <= to)
                                        .Select(r => r.Model.ProductBrand.Product)
                                            .GroupBy(g => g.Name)
                                            .Select(g => new StaticsModel
@@ -82,7 +82,7 @@ namespace SMT.Access.Repository.Statics
 
         public async Task<IEnumerable<StaticsModel>> GroupByDefectAsync(DateTime from, DateTime to)
         {
-            return await _context.Reports.Where(r => r.Date >= from && r.Date <= to)
+            return await _context.Reports.Where(r => r.CreatedDate >= from && r.CreatedDate <= to)
                                        .Select(r => r.Defect)
                                            .GroupBy(g => g.Name)
                                            .Select(g => new StaticsModel

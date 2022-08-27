@@ -103,7 +103,12 @@ namespace SMT.Services
             if (employee == null)
                 throw new NotFoundException("Not found");
 
-            employee = _mapper.Map<EmployeeUpdate, Employee>(employeeUpdate);
+            employee.FullName = employeeUpdate.FullName;
+            employee.DepartmentId = employeeUpdate.DepartmentId;
+            employee.Details = employeeUpdate.Details;
+            employee.ImagePath = employeeUpdate.ImagePath;
+            employee.IsActive = employeeUpdate.IsActive;
+            employee.Phone = employeeUpdate.Phone;
 
             _repository.Update(employee);
             await _unitOfWork.SaveAsync();

@@ -4,7 +4,7 @@ namespace SMT.ViewModel.Dto.ReportDto
 {
     public class ReportCreate
     {
-        public string Barcode { get; set; }
+        public int Id { get; set; }
 
         public int LineId { get; set; }
 
@@ -12,6 +12,10 @@ namespace SMT.ViewModel.Dto.ReportDto
 
         public int ModelId { get; set; }
 
-        public DateTime Date { get; set; } = DateTime.Now;
+        public int EmployeeId { get; set; }
+
+        public string Barcode { get; set; }
+
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
     }
 }

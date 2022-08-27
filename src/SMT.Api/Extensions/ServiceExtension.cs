@@ -118,7 +118,6 @@ namespace SMT.Api.Extensions
             services.AddScoped<IReportRepository, ReportRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IPcbRepairerRepository, PcbRepairerRepository>();
-            services.AddScoped<IRepairRepository, RepairRepository>();
             services.AddScoped<IMachineRepository, MachineRepository>();
             services.AddScoped<IMachineRepairRepository, MachineRepairRepository>();
             services.AddScoped<IMachineRepairerRepository, MachineRepairerRepository>();
@@ -138,7 +137,6 @@ namespace SMT.Api.Extensions
             services.AddScoped<IReportService, ReportService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IPcbRepairerService, PcbRepairerService>();
-            services.AddScoped<IRepairService, RepairService>();
             services.AddScoped<IMachineService, MachineService>();
             services.AddScoped<IMachineRepairService, MachineRepairService>();
             services.AddScoped<IMachineRepairerService, MachineRepairerService>();

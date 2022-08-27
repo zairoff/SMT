@@ -2,7 +2,7 @@
 
 namespace SMT.Domain
 {
-    public class Report
+    public class Report2
     {
         public int Id { get; set; }
 

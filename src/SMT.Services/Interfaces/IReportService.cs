@@ -1,10 +1,7 @@
-﻿using SMT.Domain;
-using SMT.ViewModel.Dto.ReportDto;
+﻿using SMT.ViewModel.Dto.ReportDto;
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
-using static SMT.Access.Repository.ReportRepository;
 
 namespace SMT.Services.Interfaces
 {
@@ -30,5 +27,7 @@ namespace SMT.Services.Interfaces
                                                                 int? lineId,
                                                                 DateTime from,
                                                                 DateTime to);
+
+        Task<IEnumerable<ReportResponse>> GetByDateAsync(DateTime date);
     }
 }

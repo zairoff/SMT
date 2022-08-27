@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 using System;
 using SMT.Services.Exceptions;
 using SMT.Services.Utils;
-using static SMT.Access.Repository.ReportRepository;
 
 namespace SMT.Services
 {
+    // Depricated changed to report2
     public class ReportService : IReportService
     {
         private readonly IReportRepository _repository;
@@ -68,33 +68,6 @@ namespace SMT.Services
             return _mapper.Map<Report, ReportResponse>(report);
         }
 
-        public async Task<ReportResponse> GetByBarcodeAsync(string barcode)
-        {
-            var report = await _repository.FindAsync(p => p.Barcode == barcode && p.Status == false);
-
-            return _mapper.Map<Report, ReportResponse>(report);
-        }
-
-        public async Task<ReportResponse> UpdateAsync(int id, ReportUpdate reportUpdate)
-        {
-            var report = await _repository.FindAsync(p => p.Id == id);
-
-            if (report == null)
-                throw new NotFoundException("Report not found");
-
-            _repository.Update(report);
-            await _unitOfWork.SaveAsync();
-
-            return _mapper.Map<Report, ReportResponse>(report);
-        }
-
-        public async Task<IEnumerable<ReportResponse>> GetByModelAndLineIdAsync(int modelId, int lineId, DateTime date)
-        {
-            var reports = await _repository.GetByOrderAsync(r => r.ModelId == modelId && r.LineId == lineId && r.Date.Date == date.Date);
-
-            return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
-        }
-
         public async Task<IEnumerable<ReportResponse>> GetByAsync(int? productId,
                                                                 int? brandId,
                                                                 int? modelId,
@@ -124,14 +97,51 @@ namespace SMT.Services
                 predicate = predicate.And(p => p.LineId == lineId);
             }
 
-            predicate = predicate.And(p => p.Date.Date >= from);
+            predicate = predicate.And(p => p.CreatedDate.Date >= from);
 
-            predicate = predicate.And(p => p.Date.Date <= to);
+            predicate = predicate.And(p => p.CreatedDate.Date <= to);
 
 
             var reports = await _repository.GetByAsync(predicate);
 
             return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
+        }
+
+        public async Task<ReportResponse> GetByBarcodeAsync(string barcode)
+        {
+            var report = await _repository.FindAsync(p => p.Barcode.Equals(barcode));
+
+            return _mapper.Map<Report, ReportResponse>(report);
+        }
+
+        public async Task<IEnumerable<ReportResponse>> GetByDateAsync(DateTime date)
+        {
+            var reports = await _repository.GetByAsync(p => p.CreatedDate.Date == (date.Date));
+
+            return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
+        }
+
+        public async Task<IEnumerable<ReportResponse>> GetByModelAndLineIdAsync(int modelId, int lineId, DateTime date)
+        {
+            var reports = await _repository.GetByAsync(p => p.CreatedDate.Date == date.Date && p.ModelId == modelId && p.LineId == lineId);
+
+            return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
+        }
+
+        public async Task<ReportResponse> UpdateAsync(int id, ReportUpdate reportUpdate)
+        {
+            var report = await _repository.FindAsync(p => p.Id == id);
+
+            if (report == null)
+                throw new NotFoundException("Report not found");
+
+            report.Action = reportUpdate.Action;
+            report.Condition = reportUpdate.Condition;
+            report.EmployeeId = reportUpdate.EmployeeId;
+            report.Status = reportUpdate.Status;
+            report.UpdatedDate = DateTime.Now;
+
+            return _mapper.Map<Report, ReportResponse>(report);
         }
 
     }

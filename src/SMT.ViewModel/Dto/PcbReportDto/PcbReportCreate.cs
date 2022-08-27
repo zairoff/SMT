@@ -14,6 +14,6 @@ namespace SMT.ViewModel.Dto.PcbReportDto
 
         public int PcbPositionId { get; set; }
 
-        public static DateTime Date => DateTime.UtcNow;
+        public static DateTime Date => DateTime.Now;
     }
 }

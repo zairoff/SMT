@@ -41,6 +41,14 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetByDate")]
+        public async Task<IActionResult> GetByDate(DateTime date)
+        {
+            var result = await _service.GetByDateAsync(date);
+
+            return Ok(result);
+        }
+
         [HttpGet]
         [Route("GetByModelIdAndLineId")]
         public async Task<IActionResult> GetByModelIdAndLineId(int modelId, int lineId, DateTime date)
@@ -52,7 +60,7 @@ namespace SMT.Api.Controllers
 
         [HttpGet]
         [Route("GetBy")]
-        public async Task<IActionResult> GetBy(int? productId, int? brandId, int? modelId, int? lineId, DateTime from, DateTime to)
+        public async Task<IActionResult> GetBy(int productId, int brandId, int modelId, int lineId, DateTime from, DateTime to)
         {
             var result = await _service.GetByAsync(productId, brandId, modelId, lineId, from, to);
 
