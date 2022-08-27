@@ -12,7 +12,6 @@ using SMT.Services.Utils;
 
 namespace SMT.Services
 {
-    // Depricated changed to report2
     public class ReportService : IReportService
     {
         private readonly IReportRepository _repository;
@@ -34,6 +33,7 @@ namespace SMT.Services
                 throw new ConflictException($"{reportCreate.Barcode} alredy exists, close the first threat");
 
             report = _mapper.Map<ReportCreate, Report>(reportCreate);
+            report.CreatedDate = DateTime.Now;
 
             await _repository.AddAsync(report);
             await _unitOfWork.SaveAsync();
@@ -109,14 +109,14 @@ namespace SMT.Services
 
         public async Task<ReportResponse> GetByBarcodeAsync(string barcode)
         {
-            var report = await _repository.FindAsync(p => p.Barcode.Equals(barcode));
+            var report = await _repository.FindAsync(p => p.Barcode.Equals(barcode) && p.Status == false);
 
             return _mapper.Map<Report, ReportResponse>(report);
         }
 
-        public async Task<IEnumerable<ReportResponse>> GetByDateAsync(DateTime date)
+        public async Task<IEnumerable<ReportResponse>> GetByDateAsync(DateTime date, bool status)
         {
-            var reports = await _repository.GetByAsync(p => p.CreatedDate.Date == (date.Date));
+            var reports = await _repository.GetByAsync(p => p.CreatedDate.Date == (date.Date) && p.Status == status);
 
             return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
         }
@@ -137,12 +137,14 @@ namespace SMT.Services
 
             report.Action = reportUpdate.Action;
             report.Condition = reportUpdate.Condition;
-            report.EmployeeId = reportUpdate.EmployeeId;
+            report.Employee = reportUpdate.Employee;
             report.Status = reportUpdate.Status;
             report.UpdatedDate = DateTime.Now;
 
+            _repository.Update(report);
+            await _unitOfWork.SaveAsync();
+
             return _mapper.Map<Report, ReportResponse>(report);
         }
-
     }
 }

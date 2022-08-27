@@ -34,7 +34,7 @@ namespace SMT.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -65,10 +65,10 @@ namespace SMT.Api
                 endpoints.MapControllers();
             });
 
-            //await Seed(app, loggerFactory.CreateLogger<Startup>());
+            //Seed(app, loggerFactory.CreateLogger<Startup>());
         }
 
-        private static async Task Seed(IApplicationBuilder app, ILogger<Startup> logger)
+        private static void Seed(IApplicationBuilder app, ILogger<Startup> logger)
         {
             using var scope = app.ApplicationServices.CreateScope();
             var scopedProvider = scope.ServiceProvider;
@@ -82,7 +82,7 @@ namespace SMT.Api
 
                 var userManager = scopedProvider.GetRequiredService<UserManager<ApplicationUser>>();
                 var roleManager = scopedProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                await IdentityDbContextSeed.SeedAsync(userManager, roleManager);
+                IdentityDbContextSeed.SeedAsync(userManager, roleManager).Wait();
             }
             catch (Exception ex)
             {

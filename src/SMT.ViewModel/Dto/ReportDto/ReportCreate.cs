@@ -12,10 +12,8 @@ namespace SMT.ViewModel.Dto.ReportDto
 
         public int ModelId { get; set; }
 
-        public int EmployeeId { get; set; }
+        public string Employee { get; set; }
 
         public string Barcode { get; set; }
-
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
     }
 }

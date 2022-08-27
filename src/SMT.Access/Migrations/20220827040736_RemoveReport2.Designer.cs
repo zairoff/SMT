@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMT.Access.Data;
 
 namespace SMT.Access.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220827040736_RemoveReport2")]
+    partial class RemoveReport2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -480,8 +482,8 @@ namespace SMT.Access.Migrations
                     b.Property<int>("DefectId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Employee")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
 
                     b.Property<int>("LineId")
                         .HasColumnType("int");
@@ -498,6 +500,8 @@ namespace SMT.Access.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DefectId");
+
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("LineId");
 
@@ -738,6 +742,12 @@ namespace SMT.Access.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SMT.Domain.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SMT.Domain.Line", "Line")
                         .WithMany()
                         .HasForeignKey("LineId")
@@ -751,6 +761,8 @@ namespace SMT.Access.Migrations
                         .IsRequired();
 
                     b.Navigation("Defect");
+
+                    b.Navigation("Employee");
 
                     b.Navigation("Line");
 

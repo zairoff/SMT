@@ -42,9 +42,9 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet("GetByDate")]
-        public async Task<IActionResult> GetByDate(DateTime date)
+        public async Task<IActionResult> GetByDate(DateTime date, bool status)
         {
-            var result = await _service.GetByDateAsync(date);
+            var result = await _service.GetByDateAsync(date, status);
 
             return Ok(result);
         }
