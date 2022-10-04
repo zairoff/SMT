@@ -39,37 +39,37 @@ namespace SMT.Access.Data
             
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder options)
-        //{
-        //    //IConfigurationRoot configuration = new ConfigurationBuilder()
-        //    //        //.SetBasePath(Directory.GetCurrentDirectory())
-        //    //        .AddJsonFile(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "../SMT.Api/appsettings.json")))
-        //    //        .Build();
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            //IConfigurationRoot configuration = new ConfigurationBuilder()
+            //        //.SetBasePath(Directory.GetCurrentDirectory())
+            //        .AddJsonFile(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "../SMT.Api/appsettings.json")))
+            //        .Build();
 
-        //    ////options.UseNpgsql("Server=localhost;Port=5432;Database=smtDB;User Id=postgres;Password=postgres;");
+            ////options.UseNpgsql("Server=localhost;Port=5432;Database=smtDB;User Id=postgres;Password=postgres;");
 
-        //    //var connectionString = configuration.GetConnectionString("DbConnectionDev");
+            //var connectionString = configuration.GetConnectionString("DbConnectionDev");
 
-        //    var connectionString = "Server=(localdb)\\mssqllocaldb;Database=smttest;Trusted_Connection=True;MultipleActiveResultSets=true";
-        //    options.UseSqlServer(connectionString, s => s.UseHierarchyId());
-        //}
+            var connectionString = "Server=192.168.0.103,53476; Database=smt04102022; User Id=sa; Password=Artel2020; Trusted_Connection=True";
+            options.UseSqlServer(connectionString, s => s.UseHierarchyId());
+        }
 
-        //public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
-        //{
-        //    public AppDbContext CreateDbContext(string[] args)
-        //    {
-        //        //IConfigurationRoot configuration = new ConfigurationBuilder()
-        //        //    //.SetBasePath(Directory.GetCurrentDirectory())
-        //        //    .AddJsonFile(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "../SMT.Api/appsettings.json")))
-        //        //    .Build();
-        //        //var connectionString = configuration.GetConnectionString("DbConnectionDev");
+        public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+        {
+            public AppDbContext CreateDbContext(string[] args)
+            {
+                //IConfigurationRoot configuration = new ConfigurationBuilder()
+                //    //.SetBasePath(Directory.GetCurrentDirectory())
+                //    .AddJsonFile(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "../SMT.Api/appsettings.json")))
+                //    .Build();
+                //var connectionString = configuration.GetConnectionString("DbConnectionDev");
 
-        //        var connectionString = "Server=(localdb)\\mssqllocaldb;Database=smttest;Trusted_Connection=True;MultipleActiveResultSets=true";
+                var connectionString = "Server=192.168.0.103,53476; Database=smt04102022; User Id=sa; Password=Artel2020; Trusted_Connection=True";
 
-        //        var builder = new DbContextOptionsBuilder<AppDbContext>();
-        //        builder.UseSqlServer(connectionString, s => s.UseHierarchyId());
-        //        return new AppDbContext(builder.Options);
-        //    }
-        //}
+                var builder = new DbContextOptionsBuilder<AppDbContext>();
+                builder.UseSqlServer(connectionString, s => s.UseHierarchyId());
+                return new AppDbContext(builder.Options);
+            }
+        }
     }
 }

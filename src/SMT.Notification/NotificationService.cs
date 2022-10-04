@@ -22,10 +22,7 @@ namespace SMT.Notification
         {
             
             await _botClient.SendTextMessageAsync(chatId: _chatId,
-                            text: "Diqqat!!!\nXudud: PCBA-1\nModel: " + 
-                            reports[0].Model.Name + "\nNuqson: " +
-                            GetDefects(reports) + "\nYig'uvchi: " + 
-                            reports[0].Employee.FullName + "\nSoni: " + reports.Count);
+                            text: $"Diqqat!!!\nXudud: {reports[0].Line.Name}\nModel:{reports[0].Model.Name}\nNuqson: {GetDefects(reports)}\nYig'uvchi: {reports[0].Employee.FullName}\nSoni: {reports.Count}");
         }
 
         private static string GetDefects(List<PcbReport> reports)
@@ -46,6 +43,12 @@ namespace SMT.Notification
                                 $" {repair.Action}\nBajardi:" +
                                 $" {repair.Employee.FullName}\nGacha amal qiladi: " +
                                 $"{repair.NotificationDate}");
+        }
+
+        public async Task NotifyAsync(List<Report> reports)
+        {
+            await _botClient.SendTextMessageAsync(chatId: _chatId,
+                            text: $"Diqqat!!!\nXudud: {reports[0].Line.Name}\nModel:{reports[0].Model.Name}\nNuqson: {reports[0].Defect.Name}\nSoni: {reports.Count}");
         }
     }
 }

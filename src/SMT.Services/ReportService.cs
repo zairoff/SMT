@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System;
 using SMT.Services.Exceptions;
 using SMT.Services.Utils;
+using System.Linq;
+using SMT.Notification;
 
 namespace SMT.Services
 {
@@ -17,12 +19,14 @@ namespace SMT.Services
         private readonly IReportRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly INotificationService _notificationService;
 
-        public ReportService(IReportRepository repository, IUnitOfWork unitOfWork, IMapper mapper)
+        public ReportService(IReportRepository repository, IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _notificationService = notificationService;
         }
 
         public async Task<ReportResponse> AddAsync(ReportCreate reportCreate)
@@ -37,6 +41,18 @@ namespace SMT.Services
 
             await _repository.AddAsync(report);
             await _unitOfWork.SaveAsync();
+
+            var reports = await _repository.GetByAsync(r => r.ModelId == reportCreate.ModelId &&
+                                            r.LineId == reportCreate.LineId &&
+                                            r.DefectId == reportCreate.DefectId &&
+                                            r.CreatedDate.Date == DateTime.Now.Date);
+
+            /*var count = await _repository.CountAsync(r => r.ModelId == reportCreate.ModelId &&
+                                            r.PositionId == reportCreate.PcbPositionId &&
+                                            r.Date.Date == DateTime.Now.Date);*/
+            var count = reports.Count();
+            if (count > 3)
+                await _notificationService.NotifyAsync(reports.ToList());
 
             return _mapper.Map<Report, ReportResponse>(report);
         }
