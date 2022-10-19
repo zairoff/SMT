@@ -10,8 +10,8 @@ using SMT.Access.Data;
 namespace SMT.Access.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220827040736_RemoveReport2")]
-    partial class RemoveReport2
+    [Migration("20221004133958_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -96,7 +96,7 @@ namespace SMT.Access.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("DepartmentId")
+                    b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Details")
@@ -482,8 +482,8 @@ namespace SMT.Access.Migrations
                     b.Property<int>("DefectId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
+                    b.Property<string>("Employee")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("LineId")
                         .HasColumnType("int");
@@ -500,8 +500,6 @@ namespace SMT.Access.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DefectId");
-
-                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("LineId");
 
@@ -554,9 +552,7 @@ namespace SMT.Access.Migrations
                 {
                     b.HasOne("SMT.Domain.Department", "Department")
                         .WithMany()
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DepartmentId");
 
                     b.Navigation("Department");
                 });
@@ -742,12 +738,6 @@ namespace SMT.Access.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SMT.Domain.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SMT.Domain.Line", "Line")
                         .WithMany()
                         .HasForeignKey("LineId")
@@ -761,8 +751,6 @@ namespace SMT.Access.Migrations
                         .IsRequired();
 
                     b.Navigation("Defect");
-
-                    b.Navigation("Employee");
 
                     b.Navigation("Line");
 
