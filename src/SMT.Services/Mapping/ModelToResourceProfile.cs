@@ -18,6 +18,7 @@ using SMT.ViewModel.Dto.RepairerDto;
 using SMT.ViewModel.Dto.MachineDto;
 using SMT.ViewModel.Dto.MachineRepairDto;
 using SMT.ViewModel.Dto.MachineRepairerDto;
+using SMT.ViewModel.Dto.PlanDto;
 
 namespace SMT.Services.Mapping
 {
@@ -57,6 +58,8 @@ namespace SMT.Services.Mapping
                                                 s.NotificationDate.Value.ToString("yyyy-MM-dd HH:mm") : ""));
 
             CreateMap<MachineRepairer, MachineRepairerResponse>();
+
+            CreateMap<Plan, PlanResponse>();
         }
     }
 }

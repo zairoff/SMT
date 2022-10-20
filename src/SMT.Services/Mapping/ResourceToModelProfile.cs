@@ -18,6 +18,7 @@ using SMT.ViewModel.Dto.MachineDto;
 using SMT.ViewModel.Dto.MachineRepairDto;
 using SMT.ViewModel.Dto.MachineRepairerDto;
 using System;
+using SMT.ViewModel.Dto.PlanDto;
 
 namespace SMT.Services.Mapping
 {
@@ -64,7 +65,7 @@ namespace SMT.Services.Mapping
             CreateMap<ReportCreate, Report>();
 
             CreateMap<EmployeeUpdate, Employee>();
-            CreateMap<EmployeeCreate, Employee>();
+            CreateMap<PlanCreate, Employee>();
 
             CreateMap<RepairerCreate, PcbRepairer>();
 
@@ -75,6 +76,9 @@ namespace SMT.Services.Mapping
                 .ForMember(m => m.Date, s => s.MapFrom(s => DateTime.Parse(s.CreatedDate)));
 
             CreateMap<MachineRepairerCreate, MachineRepairer>();
+
+            CreateMap<PlanUpdate, Plan>();
+            CreateMap<PlanCreate, Plan>();
         }
     }
 }

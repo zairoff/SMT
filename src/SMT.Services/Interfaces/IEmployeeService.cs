@@ -10,7 +10,7 @@ namespace SMT.Services.Interfaces
 
         Task<EmployeeResponse> GetAsync(int id);
 
-        Task<EmployeeResponse> AddAsync(EmployeeCreate employeeCreate);
+        Task<EmployeeResponse> AddAsync(PlanCreate employeeCreate);
 
         Task<EmployeeResponse> UpdateAsync(int id, EmployeeUpdate employeeUpdate);
 
