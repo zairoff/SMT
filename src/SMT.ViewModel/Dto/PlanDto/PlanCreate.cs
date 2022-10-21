@@ -2,7 +2,7 @@
 
 namespace SMT.ViewModel.Dto.PlanDto
 {
-    public class PlanCreateDto
+    public class PlanCreate
     {
         public int LineId { get; set; }
 

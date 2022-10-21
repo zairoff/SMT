@@ -23,9 +23,9 @@ namespace SMT.Services
             _mapper = mapper;
         }
 
-        public async Task<EmployeeResponse> AddAsync(PlanCreate employeeCreate)
+        public async Task<EmployeeResponse> AddAsync(EmployeeCreate employeeCreate)
         {
-            var employee = _mapper.Map<PlanCreate, Employee>(employeeCreate);
+            var employee = _mapper.Map<EmployeeCreate, Employee>(employeeCreate);
 
             await _repository.AddAsync(employee);
             await _unitOfWork.SaveAsync();

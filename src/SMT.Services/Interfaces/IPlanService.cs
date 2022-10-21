@@ -1,5 +1,4 @@
-﻿using SMT.ViewModel.Dto.EmployeeDto;
-using SMT.ViewModel.Dto.PlanDto;
+﻿using SMT.ViewModel.Dto.PlanDto;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

@@ -2,7 +2,7 @@
 
 namespace SMT.ViewModel.Dto.EmployeeDto
 {
-    public class PlanCreate
+    public class EmployeeCreate
     {
         public string ImagePath { get; set; }
 

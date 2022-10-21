@@ -59,7 +59,8 @@ namespace SMT.Services.Mapping
 
             CreateMap<MachineRepairer, MachineRepairerResponse>();
 
-            CreateMap<Plan, PlanResponse>();
+            CreateMap<Plan, PlanResponse>()
+                .ForMember(m => m.Date, s => s.MapFrom(s => s.Date.ToString("yyyy-MM-dd")));
         }
     }
 }

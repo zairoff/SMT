@@ -66,7 +66,7 @@ namespace SMT.Services
 
         public async Task<IEnumerable<PlanResponse>> GetByDate(DateTime date)
         {
-            var plans = await _repository.GetByAsync(p => p.Date == date.Date);
+            var plans = await _repository.GetByAsync(p => p.Date.Date == date.Date);
 
             return _mapper.Map<IEnumerable<Plan>, IEnumerable<PlanResponse>>(plans);
         }

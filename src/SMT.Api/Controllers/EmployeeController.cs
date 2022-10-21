@@ -53,7 +53,7 @@ namespace SMT.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateEmployee([FromBody] PlanCreate employeeCreate)
+        public async Task<IActionResult> CreateEmployee([FromBody] EmployeeCreate employeeCreate)
         {
             var result = await _service.AddAsync(employeeCreate);
 

@@ -12,7 +12,7 @@ namespace SMT.ViewModel.Dto.PlanDto
 
         public int ProducedCount { get; set; }
 
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
 
         public virtual LineResponse Line { get; set; }
 
