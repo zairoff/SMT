@@ -56,5 +56,29 @@ namespace SMT.Api.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("DefectsByLine")]
+        public async Task<IActionResult> DefectsByLine(int lineId, DateTime from, DateTime to)
+        {
+            var result = await _staticsRepository.GroupByDefectAsync(lineId, from, to);
+
+            return Ok(result);
+        }
+
+        [HttpGet("DefectCountByLine")]
+        public async Task<IActionResult> DefectCountByLine(int lineId, DateTime from, DateTime to)
+        {
+            var result = await _staticsRepository.GroupByDefectAsync(lineId, "Defect", from, to);
+
+            return Ok(result);
+        }
+
+        [HttpGet("ClosedDefectCountByLine")]
+        public async Task<IActionResult> ClosedDefectCountByLine(int lineId, DateTime from, DateTime to)
+        {
+            var result = await _staticsRepository.GroupByDefectAsync(lineId, "Closed", true, from, to);
+
+            return Ok(result);
+        }
     }
 }

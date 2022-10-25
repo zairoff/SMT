@@ -77,6 +77,14 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetByLineAndDate")]
+        public async Task<IActionResult> GetByLineAndDate(int lineId, DateTime from, DateTime to)
+        {
+            var result = await _service.GetByLineAndDate(lineId, from, to);
+
+            return Ok(result);
+        }
+
         // TODO: need to implement
         //[HttpGet]
         //[Route("GetBy")]

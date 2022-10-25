@@ -93,5 +93,36 @@ namespace SMT.Access.Repository.Statics
                                            .OrderByDescending(o => o.Count)
                                            .ToListAsync();
         }
+
+        public async Task<IEnumerable<StaticsModel>> GroupByDefectAsync(int lineId, DateTime from, DateTime to)
+        {
+            return await _context.Reports.Where(r => r.LineId == lineId && r.CreatedDate >= from && r.CreatedDate <= to)
+                                       .Select(r => r.Defect)
+                                           .GroupBy(g => g.Name)
+                                           .Select(g => new StaticsModel
+                                           {
+                                               Name = g.Key,
+                                               Count = g.Count()
+                                           })
+                                           .OrderByDescending(o => o.Count)
+                                           .ToListAsync();
+        }
+
+        public async Task<StaticsModel> GroupByDefectAsync(int lineId, string name, bool status, DateTime from, DateTime to)
+        {
+            var count = await _context.Reports.Where(r => r.LineId == lineId && r.Status == status && r.CreatedDate >= from && r.CreatedDate <= to)
+                                           .CountAsync();
+
+            return new StaticsModel { Name = name, Count = count };
+        }
+
+        // GetAll
+        public async Task<StaticsModel> GroupByDefectAsync(int lineId, string name, DateTime from, DateTime to)
+        {
+            var count = await _context.Reports.Where(r => r.LineId == lineId && r.CreatedDate >= from && r.CreatedDate <= to)
+                                           .CountAsync();
+
+            return new StaticsModel { Name = name, Count = count };
+        }
     }
 }

@@ -118,5 +118,12 @@ namespace SMT.Services
 
             return _mapper.Map<Plan, PlanResponse>(plan);
         }
+
+        public async Task<IEnumerable<PlanResponse>> GetByLineAndDate(int lineId, DateTime from, DateTime to)
+        {
+            var plans = await _repository.GetByAsync(p => p.LineId == lineId && p.Date >= from && p.Date <= to);
+
+            return _mapper.Map<IEnumerable<Plan>, IEnumerable<PlanResponse>>(plans);
+        }
     }
 }

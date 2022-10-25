@@ -29,5 +29,7 @@ namespace SMT.Services.Interfaces
                                                                 DateTime to);
 
         Task<IEnumerable<ReportResponse>> GetByDateAsync(DateTime date, bool status);
+
+        Task<IEnumerable<ReportResponse>> GetByLineAsync(int lineId, DateTime from, DateTime to);
     }
 }

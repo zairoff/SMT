@@ -21,6 +21,8 @@ namespace SMT.Services.Interfaces
 
         Task<IEnumerable<PlanResponse>> GetByDate(DateTime date);
 
+        Task<IEnumerable<PlanResponse>> GetByLineAndDate(int lineId, DateTime from, DateTime to);
+
         Task<PlanResponse> AddAsync(PlanCreate planCreate);
 
         Task<PlanResponse> UpdateAsync(int id, PlanUpdate planUpdate);
