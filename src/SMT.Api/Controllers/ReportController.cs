@@ -51,9 +51,9 @@ namespace SMT.Api.Controllers
 
         [HttpGet]
         [Route("GetByModelIdAndLineId")]
-        public async Task<IActionResult> GetByModelIdAndLineId(int modelId, int lineId, DateTime date)
+        public async Task<IActionResult> GetByModelIdAndLineId(int modelId, int lineId, DateTime date, bool isClosed)
         {
-            var result = await _service.GetByModelAndLineIdAsync(modelId, lineId, date);
+            var result = await _service.GetByModelAndLineIdAsync(modelId, lineId, date, isClosed);
 
             return Ok(result);
         }
@@ -69,6 +69,7 @@ namespace SMT.Api.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateReport([FromBody] ReportCreate reportCreate)
         {
