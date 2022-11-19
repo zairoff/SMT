@@ -54,6 +54,7 @@ namespace SMT.Access.Repository
                             .Include(m => m.Model)
                             .ThenInclude(m => m.ProductBrand)
                             .ThenInclude(m => m.Brand)
+                            .OrderByDescending(m => m.UpdatedDate)
                             .ToListAsync();
         }
 
