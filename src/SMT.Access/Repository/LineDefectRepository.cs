@@ -24,12 +24,12 @@ namespace SMT.Access.Repository
 
         public async override Task<IEnumerable<LineDefect>> GetAllAsync()
         {
-            return await DbSet.Include(p => p.Line).Include(p => p.Defect).ToListAsync();
+            return await DbSet.Include(p => p.Line).Include(p => p.Defect).OrderBy(x => x.Defect.Name).ToListAsync();
         }
 
         public async Task<IEnumerable<LineDefect>> GetByAsync(Expression<Func<LineDefect, bool>> expression)
         {
-            return await DbSet.Where(expression).Include(p => p.Line).Include(p => p.Defect).ToListAsync();
+            return await DbSet.Where(expression).Include(p => p.Line).Include(p => p.Defect).OrderBy(x => x.Defect.Name).ToListAsync();
         }
     }
 }

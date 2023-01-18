@@ -30,6 +30,7 @@ namespace SMT.Access.Repository
                         .ThenInclude(m => m.Product)
                         .Include(m => m.ProductBrand)
                         .ThenInclude(m => m.Brand)
+                        .OrderBy(x => x.Name)
                         .ToListAsync();
         }
 
@@ -40,6 +41,7 @@ namespace SMT.Access.Repository
                             .ThenInclude(m => m.Product)
                             .Include(m => m.ProductBrand)
                             .ThenInclude(m => m.Brand)
+                            .OrderBy(x => x.Name)
                             .ToListAsync();
         }
         
