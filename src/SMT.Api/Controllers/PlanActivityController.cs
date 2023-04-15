@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SMT.Services.Interfaces;
 using System.Threading.Tasks;
 using System;
-using SMT.Services.Interfaces;
-using SMT.ViewModel.Dto.EmployeeDto;
-using SMT.ViewModel.Dto.PlanDto;
+using SMT.ViewModel.Dto.PlanActivityDto;
 
 namespace SMT.Api.Controllers
 {
-    public class PlanController : BaseController
+    public class PlanActivityController : BaseController
     {
-        private readonly IPlanService _service;
+        private readonly IPlanActivityService _service;
 
-        public PlanController(IPlanService planService)
+        public PlanActivityController(IPlanActivityService planService)
         {
             _service = planService;
         }
@@ -34,33 +33,6 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
-        [Route("GetByProduct")]
-        public async Task<IActionResult> GetByProductId(int productId)
-        {
-            var result = await _service.GetByProductId(productId);
-
-            return Ok(result);
-        }
-        
-        [HttpGet]
-        [Route("GetByBrand")]
-        public async Task<IActionResult> GetByBrandId(int brandId)
-        {
-            var result = await _service.GetByProductId(brandId);
-
-            return Ok(result);
-        }
-        
-        [HttpGet]
-        [Route("GetByModel")]
-        public async Task<IActionResult> GetByModelId(int modelId)
-        {
-            var result = await _service.GetByProductId(modelId);
-
-            return Ok(result);
-        }
-        
-        [HttpGet]
         [Route("GetByLine")]
         public async Task<IActionResult> GetByLineId(int lineId)
         {
@@ -78,27 +50,17 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet("GetByLineAndDate")]
-        public async Task<IActionResult> GetByLineAndDate(int lineId, DateTime from, DateTime to)
+        public async Task<IActionResult> GetByLineAndDate(int lineId, DateTime date)
         {
-            var result = await _service.GetByLineAndDate(lineId, from, to);
+            var result = await _service.GetByLineAndDate(lineId, date);
 
             return Ok(result);
         }
 
-        // TODO: need to implement
-        //[HttpGet]
-        //[Route("GetBy")]
-        //public async Task<IActionResult> GetBy(int productId, int brandId, int modelId, int lineId, DateTime from, DateTime to)
-        //{
-        //    var result = await _service.GetByAsync(productId, brandId, modelId, lineId, from, to);
-
-        //    return Ok(result);
-        //}
-
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateReport([FromBody] PlanCreate planCreate)
+        public async Task<IActionResult> CreateReport([FromBody] PlanActivityCreate planCreate)
         {
             var result = await _service.AddAsync(planCreate);
 
@@ -110,7 +72,7 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateReport(int id, [FromBody] PlanUpdate planUpdate)
+        public async Task<IActionResult> UpdateReport(int id, [FromBody] PlanActivityUpdate planUpdate)
         {
             var result = await _service.UpdateAsync(id, planUpdate);
 

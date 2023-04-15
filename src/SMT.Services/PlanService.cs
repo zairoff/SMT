@@ -4,7 +4,6 @@ using SMT.Access.Unit;
 using SMT.Domain;
 using SMT.Services.Exceptions;
 using SMT.Services.Interfaces;
-using SMT.ViewModel.Dto.EmployeeDto;
 using SMT.ViewModel.Dto.PlanDto;
 using System;
 using System.Collections.Generic;

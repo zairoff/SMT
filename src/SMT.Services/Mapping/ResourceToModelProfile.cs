@@ -19,6 +19,7 @@ using SMT.ViewModel.Dto.MachineRepairDto;
 using SMT.ViewModel.Dto.MachineRepairerDto;
 using System;
 using SMT.ViewModel.Dto.PlanDto;
+using SMT.ViewModel.Dto.PlanActivityDto;
 
 namespace SMT.Services.Mapping
 {
@@ -79,6 +80,9 @@ namespace SMT.Services.Mapping
 
             CreateMap<PlanUpdate, Plan>();
             CreateMap<PlanCreate, Plan>();
+
+            CreateMap<PlanActivityCreate, PlanActivity>();
+            CreateMap<PlanActivityUpdate, PlanActivity>();
         }
     }
 }

@@ -28,6 +28,7 @@ namespace SMT.Access.Data
         public DbSet<Machine> Machines { get; set; }
         public DbSet<MachineRepair> MachineRepairs { get; set; }
         public DbSet<MachineRepairer> MachineRepairers { get; set; }
+        public DbSet<PlanActivity> PlanActivities { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
