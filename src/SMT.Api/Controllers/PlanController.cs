@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System;
 using SMT.Services.Interfaces;
-using SMT.ViewModel.Dto.EmployeeDto;
 using SMT.ViewModel.Dto.PlanDto;
 
 namespace SMT.Api.Controllers
@@ -46,7 +45,7 @@ namespace SMT.Api.Controllers
         [Route("GetByBrand")]
         public async Task<IActionResult> GetByBrandId(int brandId)
         {
-            var result = await _service.GetByProductId(brandId);
+            var result = await _service.GetByBrandId(brandId);
 
             return Ok(result);
         }
@@ -55,7 +54,7 @@ namespace SMT.Api.Controllers
         [Route("GetByModel")]
         public async Task<IActionResult> GetByModelId(int modelId)
         {
-            var result = await _service.GetByProductId(modelId);
+            var result = await _service.GetByModelId(modelId);
 
             return Ok(result);
         }
@@ -98,7 +97,7 @@ namespace SMT.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateReport([FromBody] PlanCreate planCreate)
+        public async Task<IActionResult> CreatePlan([FromBody] PlanCreate planCreate)
         {
             var result = await _service.AddAsync(planCreate);
 
@@ -110,7 +109,7 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateReport(int id, [FromBody] PlanUpdate planUpdate)
+        public async Task<IActionResult> UpdatePlan(int id, [FromBody] PlanUpdate planUpdate)
         {
             var result = await _service.UpdateAsync(id, planUpdate);
 
@@ -121,7 +120,7 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeleteReport(int id)
+        public async Task<IActionResult> DeletePlan(int id)
         {
             var result = await _service.DeleteAsync(id);
 
