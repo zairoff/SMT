@@ -6,6 +6,8 @@ namespace SMT.ViewModel.Dto.PlanActivityDto
     {
         public int LineId { get; set; }
 
+        public string Issue { get; set; }
+
         public string Reason { get; set; }
 
         public string Act { get; set; }

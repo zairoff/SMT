@@ -10,6 +10,8 @@ namespace SMT.Domain
 
         public virtual Line Line { get; set; }
 
+        public string Issue { get; set; }
+
         public string Reason { get; set; }
 
         public string Act { get; set; }
