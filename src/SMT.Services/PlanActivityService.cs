@@ -92,10 +92,7 @@ namespace SMT.Services
             if (plan == null)
                 throw new NotFoundException("Not found");
 
-            plan.LineId = planActivityUpdate.LineId;
-            plan.Expires = planActivityUpdate.Expires;
             plan.Status = planActivityUpdate.Status;
-            plan.Date = planActivityUpdate.Date;
             plan.Act = planActivityUpdate.Act;
             plan.Reason = planActivityUpdate.Reason;
             plan.Responsible = planActivityUpdate.Responsible;
