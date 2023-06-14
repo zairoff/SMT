@@ -60,8 +60,8 @@ namespace SMT.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateReport([FromBody] PlanActivityCreate planCreate)
-        {
+        public async Task<IActionResult> CreatePlanActivity([FromBody] PlanActivityCreate planCreate)
+        {  
             var result = await _service.AddAsync(planCreate);
 
             return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
@@ -72,7 +72,7 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateReport(int id, [FromBody] PlanActivityUpdate planUpdate)
+        public async Task<IActionResult> UpdatePlanActivity(int id, [FromBody] PlanActivityUpdate planUpdate)
         {
             var result = await _service.UpdateAsync(id, planUpdate);
 
@@ -83,7 +83,7 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeleteReport(int id)
+        public async Task<IActionResult> DeletePlanActivity(int id)
         {
             var result = await _service.DeleteAsync(id);
 
