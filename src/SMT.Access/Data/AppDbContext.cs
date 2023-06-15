@@ -6,17 +6,11 @@ namespace SMT.Access.Data
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<Brand> Brands { get; set; }
-        public DbSet<ProductBrand> ProductBrands { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Line> Lines { get; set; }
         public DbSet<Defect> Defects { get; set; }
         public DbSet<Model> Models { get; set; }
-        public DbSet<PcbPosition> PcbPositions { get; set; }
-        public DbSet<PcbReport> PcbReports { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Barcode> Barcodes { get; set; }
         public DbSet<EmployeeCareer> EmployeeCareers { get; set; }
         public DbSet<EmployeeHistory> EmployeeHistories { get; set; }
         public DbSet<Vacation> Vacations { get; set; }
@@ -51,7 +45,7 @@ namespace SMT.Access.Data
 
             //var connectionString = configuration.GetConnectionString("DbConnectionDev");
 
-            var connectionString = "Server=192.168.0.103,53476; Database=smt04102022; User Id=sa; Password=Artel2020; Trusted_Connection=True";
+            var connectionString = "Server=192.168.0.103,53476; Database=oyna; User Id=sa; Password=Artel2020; Trusted_Connection=True";
             options.UseSqlServer(connectionString, s => s.UseHierarchyId());
         }
 
@@ -65,7 +59,7 @@ namespace SMT.Access.Data
                 //    .Build();
                 //var connectionString = configuration.GetConnectionString("DbConnectionDev");
 
-                var connectionString = "Server=192.168.0.103,53476; Database=smt04102022; User Id=sa; Password=Artel2020; Trusted_Connection=True";
+                var connectionString = "Server=192.168.0.103,53476; Database=oyna; User Id=sa; Password=Artel2020; Trusted_Connection=True";
 
                 var builder = new DbContextOptionsBuilder<AppDbContext>();
                 builder.UseSqlServer(connectionString, s => s.UseHierarchyId());

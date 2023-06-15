@@ -17,20 +17,6 @@ namespace SMT.Access.Repository.Statics
             _context = context;
         }
 
-        public async Task<IEnumerable<StaticsModel>> GroupByBrandAsync(DateTime from, DateTime to)
-        {
-            return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
-                                       .Select(r => r.Model.ProductBrand.Brand)
-                                           .GroupBy(g => g.Name)
-                                           .Select(g => new StaticsModel
-                                           {
-                                               Name = g.Key,
-                                               Count = g.Count()
-                                           })
-                                           .OrderByDescending(o => o.Count)
-                                           .ToListAsync();
-        }
-
         public async Task<IEnumerable<StaticsModel>> GroupByLineAsync(DateTime from, DateTime to)
         {
             return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
@@ -64,20 +50,6 @@ namespace SMT.Access.Repository.Statics
                                                 })
                                             .OrderByDescending(o => o.Count)
                                             .ToListAsync();
-        }
-
-        public async Task<IEnumerable<StaticsModel>> GroupByProductAsync(DateTime from, DateTime to)
-        {
-            return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
-                                       .Select(r => r.Model.ProductBrand.Product)
-                                           .GroupBy(g => g.Name)
-                                           .Select(g => new StaticsModel
-                                           {
-                                               Name = g.Key,
-                                               Count = g.Count()
-                                           })
-                                           .OrderByDescending(o => o.Count)
-                                           .ToListAsync();
         }
 
         public async Task<IEnumerable<StaticsModel>> GroupByDefectAsync(DateTime from, DateTime to)

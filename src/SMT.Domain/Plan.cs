@@ -10,6 +10,10 @@ namespace SMT.Domain
 
         public int ModelId { get; set; }
 
+        public string Employee { get; set; }
+
+        public string DayNight { get; set; }
+
         public int RequiredCount { get; set; }
 
         public int ProducedCount { get; set; }

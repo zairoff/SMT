@@ -11,7 +11,7 @@ namespace SMT.Access.Identity
             await roleManager.CreateAsync(new IdentityRole(ApplicationUserRoles.Admin));
             await roleManager.CreateAsync(new IdentityRole(ApplicationUserRoles.User));
 
-            var defaultUser = new ApplicationUser { UserName = "user@smt.uz", Telegram = "user@smt.uz" };
+            var defaultUser = new ApplicationUser { UserName = "user@artel-window.uz", Telegram = "user@artel-window.uz" };
             var result = await userManager.CreateAsync(defaultUser, "User2022!");
 
             if (!result.Succeeded)
@@ -19,7 +19,7 @@ namespace SMT.Access.Identity
 
             await userManager.AddToRoleAsync(defaultUser, ApplicationUserRoles.User);
 
-            string adminUserName = "admin@smt.uz";
+            string adminUserName = "admin@artel-window.uz";
             var adminUser = new ApplicationUser { UserName = adminUserName, Telegram = adminUserName };
             result = await userManager.CreateAsync(adminUser, "Admin2022!");
 

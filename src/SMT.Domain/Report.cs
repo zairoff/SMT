@@ -26,8 +26,6 @@ namespace SMT.Domain
 
         public string Condition { get; set; }
 
-        public string Barcode { get; set; }
-
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
         public DateTime UpdatedDate { get; set; }
