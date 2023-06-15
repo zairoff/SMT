@@ -12,8 +12,6 @@ namespace SMT.Services.Interfaces
 
         Task<ModelResponse> GetByNameAsync(string name);
 
-        Task<IEnumerable<ModelResponse>> GetByProductBrandId(int productBrandId);
-
         Task<ModelResponse> AddAsync(ModelCreate modelCreate);
 
         Task<ModelResponse> UpdateAsync(int id, ModelUpdate modelUpdate);

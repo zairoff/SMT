@@ -1,6 +1,4 @@
-﻿using SMT.ViewModel.Dto.ProductBrandDto;
-
-namespace SMT.ViewModel.Dto.ModelDto
+﻿namespace SMT.ViewModel.Dto.ModelDto
 {
     public class ModelResponse
     {
@@ -8,6 +6,6 @@ namespace SMT.ViewModel.Dto.ModelDto
 
         public string Name { get; set; }
 
-        public ProductBrandResponse ProductBrand { get; set; }
+        public double Size { get; set; }
     }
 }

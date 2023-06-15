@@ -31,12 +31,7 @@ namespace SMT.Services
 
         public async Task<ReportResponse> AddAsync(ReportCreate reportCreate)
         {
-            var report = await _repository.FindAsync(p => p.Barcode == reportCreate.Barcode && p.Status == false);
-
-            if (report != null)
-                throw new ConflictException($"{reportCreate.Barcode} alredy exists, close the first threat");
-
-            report = _mapper.Map<ReportCreate, Report>(reportCreate);
+            var report = _mapper.Map<ReportCreate, Report>(reportCreate);
             report.CreatedDate = DateTime.Now;
 
             await _repository.AddAsync(report);
@@ -84,24 +79,12 @@ namespace SMT.Services
             return _mapper.Map<Report, ReportResponse>(report);
         }
 
-        public async Task<IEnumerable<ReportResponse>> GetByAsync(int? productId,
-                                                                int? brandId,
-                                                                int? modelId,
+        public async Task<IEnumerable<ReportResponse>> GetByAsync(int? modelId,
                                                                 int? lineId,
                                                                 DateTime from,
                                                                 DateTime to)
         {
             var predicate = PredicateBuilder.True<Report>();
-
-            if (productId.HasValue && productId.Value > 0)
-            {
-                predicate = predicate.And(p => p.Model.ProductBrand.ProductId == productId);
-            }
-
-            if (brandId.HasValue && brandId.Value > 0)
-            {
-                predicate = predicate.And(p => p.Model.ProductBrand.BrandId == brandId);
-            }
 
             if (modelId.HasValue && modelId.Value > 0)
             {
@@ -123,16 +106,9 @@ namespace SMT.Services
             return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
         }
 
-        public async Task<ReportResponse> GetByBarcodeAsync(string barcode)
-        {
-            var report = await _repository.FindAsync(p => p.Barcode.Equals(barcode) && p.Status == false);
-
-            return _mapper.Map<Report, ReportResponse>(report);
-        }
-
         public async Task<IEnumerable<ReportResponse>> GetByDateAsync(DateTime date, bool status)
         {
-            var reports = await _repository.GetByAsync(p => p.CreatedDate.Date == (date.Date) && p.Status == status);
+            var reports = await _repository.GetByAsync(p => p.CreatedDate.Date == date.Date);
 
             return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
         }
@@ -146,7 +122,7 @@ namespace SMT.Services
 
         public async Task<IEnumerable<ReportResponse>> GetByModelAndLineIdAsync(int modelId, int lineId, DateTime date, bool isClosed)
         {
-            var reports = await _repository.GetByAsync(p => p.CreatedDate.Date == date.Date && p.ModelId == modelId && p.LineId == lineId && p.Status == isClosed);
+            var reports = await _repository.GetByAsync(p => p.CreatedDate.Date == date.Date && p.ModelId == modelId && p.LineId == lineId);
 
             return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
         }
@@ -161,7 +137,6 @@ namespace SMT.Services
             report.Action = reportUpdate.Action;
             report.Condition = reportUpdate.Condition;
             report.Employee = reportUpdate.Employee;
-            report.Status = reportUpdate.Status;
             report.UpdatedDate = DateTime.Now;
 
             _repository.Update(report);

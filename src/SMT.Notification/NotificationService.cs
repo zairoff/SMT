@@ -18,22 +18,6 @@ namespace SMT.Notification
             _repairChatId = repairChatId;
         }
 
-        public async Task NotifyPcbAsync(List<PcbReport> reports)
-        {
-            
-            await _botClient.SendTextMessageAsync(chatId: _chatId,
-                            text: $"Diqqat!!!\nXudud: {reports[0].Line.Name}\nModel:{reports[0].Model.Name}\nNuqson: {GetDefects(reports)}\nYig'uvchi: {reports[0].Employee.FullName}\nSoni: {reports.Count}");
-        }
-
-        private static string GetDefects(List<PcbReport> reports)
-        {
-            var defects = new HashSet<string>();
-            foreach(var report in reports)
-                defects.Add(report.Defect.Name);
-
-            return string.Join(", ", defects);
-        }
-
         public async Task NotifyRepairAsync(MachineRepair repair)
         {
             await _botClient.SendTextMessageAsync(chatId: _repairChatId,

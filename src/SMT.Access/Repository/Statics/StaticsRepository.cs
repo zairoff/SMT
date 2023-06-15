@@ -25,7 +25,7 @@ namespace SMT.Access.Repository.Statics
                                            .Select(g => new StaticsModel
                                            {
                                                Name = g.Key,
-                                               Count = g.Count()
+                                               Count = g.Count(),
                                            })
                                            .OrderByDescending(o => o.Count)
                                            .ToListAsync();
@@ -46,7 +46,7 @@ namespace SMT.Access.Repository.Statics
                                             .Select(g => new StaticsModel
                                                 { 
                                                     Name = g.Key,
-                                                    Count = g.Count()
+                                                    Count = g.Count(),
                                                 })
                                             .OrderByDescending(o => o.Count)
                                             .ToListAsync();
@@ -80,15 +80,6 @@ namespace SMT.Access.Repository.Statics
                                            .ToListAsync();
         }
 
-        public async Task<StaticsModel> GroupByDefectAsync(int lineId, string name, bool status, DateTime from, DateTime to)
-        {
-            var count = await _context.Reports.Where(r => r.LineId == lineId && r.Status == status && r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
-                                           .CountAsync();
-
-            return new StaticsModel { Name = name, Count = count };
-        }
-
-        // GetAll
         public async Task<StaticsModel> GroupByDefectAsync(int lineId, string name, DateTime from, DateTime to)
         {
             var count = await _context.Reports.Where(r => r.LineId == lineId && r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)

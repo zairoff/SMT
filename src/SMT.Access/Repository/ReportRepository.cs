@@ -23,11 +23,6 @@ namespace SMT.Access.Repository
                             .Include(m => m.Defect)
                             .Include(m => m.Line)
                             .Include(m => m.Model)
-                            .ThenInclude(m => m.ProductBrand)
-                            .ThenInclude(m => m.Product)
-                            .Include(m => m.Model)
-                            .ThenInclude(m => m.ProductBrand)
-                            .ThenInclude(m => m.Brand)
                             .FirstOrDefaultAsync();
 
         public async override Task<IEnumerable<Report>> GetAllAsync()
@@ -35,11 +30,6 @@ namespace SMT.Access.Repository
             return await DbSet.Include(m => m.Defect)
                             .Include(m => m.Line)
                             .Include(m => m.Model)
-                            .ThenInclude(m => m.ProductBrand)
-                            .ThenInclude(m => m.Product)
-                            .Include(m => m.Model)
-                            .ThenInclude(m => m.ProductBrand)
-                            .ThenInclude(m => m.Brand)
                             .ToListAsync();
         }
 
@@ -49,11 +39,6 @@ namespace SMT.Access.Repository
                             .Include(m => m.Defect)
                             .Include(m => m.Line)
                             .Include(m => m.Model)
-                            .ThenInclude(m => m.ProductBrand)
-                            .ThenInclude(m => m.Product)
-                            .Include(m => m.Model)
-                            .ThenInclude(m => m.ProductBrand)
-                            .ThenInclude(m => m.Brand)
                             .OrderByDescending(m => m.UpdatedDate)
                             .ToListAsync();
         }
@@ -64,11 +49,6 @@ namespace SMT.Access.Repository
                             .Include(m => m.Defect)
                             .Include(m => m.Line)
                             .Include(m => m.Model)
-                            .ThenInclude(m => m.ProductBrand)
-                            .ThenInclude(m => m.Product)
-                            .Include(m => m.Model)
-                            .ThenInclude(m => m.ProductBrand)
-                            .ThenInclude(m => m.Brand)
                             .OrderByDescending(m => m.Id)
                             .ToListAsync();
         }

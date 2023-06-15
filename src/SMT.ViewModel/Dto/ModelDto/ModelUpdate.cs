@@ -2,8 +2,8 @@
 {
     public class ModelUpdate
     {
-        public int ProductBrandId { get; set; }
-
         public string Name { get; set; }
+
+        public double Size { get; set; }
     }
 }

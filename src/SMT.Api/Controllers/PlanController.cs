@@ -31,24 +31,6 @@ namespace SMT.Api.Controllers
 
             return Ok(result);
         }
-
-        [HttpGet]
-        [Route("GetByProduct")]
-        public async Task<IActionResult> GetByProductId(int productId)
-        {
-            var result = await _service.GetByProductId(productId);
-
-            return Ok(result);
-        }
-        
-        [HttpGet]
-        [Route("GetByBrand")]
-        public async Task<IActionResult> GetByBrandId(int brandId)
-        {
-            var result = await _service.GetByBrandId(brandId);
-
-            return Ok(result);
-        }
         
         [HttpGet]
         [Route("GetByModel")]

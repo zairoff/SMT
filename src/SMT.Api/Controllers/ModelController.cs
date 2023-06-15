@@ -40,15 +40,6 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
-        [Route("GetByProductBrandId")]
-        public async Task<IActionResult> GetByProductBrandId(int productBrandId)
-        {
-            var result = await _service.GetByProductBrandId(productBrandId);
-
-            return Ok(result);
-        }
-
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

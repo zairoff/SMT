@@ -22,11 +22,6 @@ namespace SMT.Access.Repository
             return await DbSet.Where(expression)
                             .Include(m => m.Line)
                             .Include(m => m.Model)
-                            .ThenInclude(m => m.ProductBrand)
-                            .ThenInclude(m => m.Product)
-                            .Include(m => m.Model)
-                            .ThenInclude(m => m.ProductBrand)
-                            .ThenInclude(m => m.Brand)
                             .FirstOrDefaultAsync();
         }
 
@@ -34,11 +29,6 @@ namespace SMT.Access.Repository
         {
             return await DbSet.Include(m => m.Line)
                             .Include(m => m.Model)
-                            .ThenInclude(m => m.ProductBrand)
-                            .ThenInclude(m => m.Product)
-                            .Include(m => m.Model)
-                            .ThenInclude(m => m.ProductBrand)
-                            .ThenInclude(m => m.Brand)
                             .ToListAsync();
         }
 
@@ -47,11 +37,6 @@ namespace SMT.Access.Repository
             return await DbSet.Where(expression)
                             .Include(m => m.Line)
                             .Include(m => m.Model)
-                            .ThenInclude(m => m.ProductBrand)
-                            .ThenInclude(m => m.Product)
-                            .Include(m => m.Model)
-                            .ThenInclude(m => m.ProductBrand)
-                            .ThenInclude(m => m.Brand)
                             .ToListAsync();
         }
     }

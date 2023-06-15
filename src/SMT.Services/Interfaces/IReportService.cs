@@ -11,8 +11,6 @@ namespace SMT.Services.Interfaces
 
         Task<ReportResponse> GetAsync(int id);
 
-        Task<ReportResponse> GetByBarcodeAsync(string barcode);
-
         Task<IEnumerable<ReportResponse>> GetByModelAndLineIdAsync(int mdoelId, int lineId, DateTime date, bool isClosed);
 
         Task<ReportResponse> AddAsync(ReportCreate reportCreate);
@@ -21,12 +19,7 @@ namespace SMT.Services.Interfaces
 
         Task<ReportResponse> DeleteAsync(int id);
 
-        Task<IEnumerable<ReportResponse>> GetByAsync(int? productId,
-                                                                int? brandId,
-                                                                int? modelId,
-                                                                int? lineId,
-                                                                DateTime from,
-                                                                DateTime to);
+        Task<IEnumerable<ReportResponse>> GetByAsync(int? modelId, int? lineId, DateTime from, DateTime to);
 
         Task<IEnumerable<ReportResponse>> GetByDateAsync(DateTime date, bool status);
 

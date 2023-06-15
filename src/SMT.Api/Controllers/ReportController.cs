@@ -32,15 +32,6 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
-        [Route("GetByBarcode")]
-        public async Task<IActionResult> GetByBarcode(string barcode)
-        {
-            var result = await _service.GetByBarcodeAsync(barcode);
-
-            return Ok(result);
-        }
-
         [HttpGet("GetByDate")]
         public async Task<IActionResult> GetByDate(DateTime date, bool status)
         {
@@ -60,9 +51,9 @@ namespace SMT.Api.Controllers
 
         [HttpGet]
         [Route("GetBy")]
-        public async Task<IActionResult> GetBy(int productId, int brandId, int modelId, int lineId, DateTime from, DateTime to)
+        public async Task<IActionResult> GetBy(int modelId, int lineId, DateTime from, DateTime to)
         {
-            var result = await _service.GetByAsync(productId, brandId, modelId, lineId, from, to);
+            var result = await _service.GetByAsync(modelId, lineId, from, to);
 
             return Ok(result);
         }

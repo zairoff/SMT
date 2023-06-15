@@ -13,10 +13,6 @@ namespace SMT.Services.Interfaces
 
         Task<IEnumerable<PlanResponse>> GetByLineId(int lineId);
 
-        Task<IEnumerable<PlanResponse>> GetByProductId(int productId);
-
-        Task<IEnumerable<PlanResponse>> GetByBrandId(int brandId);
-
         Task<IEnumerable<PlanResponse>> GetByModelId(int modelId);
 
         Task<IEnumerable<PlanResponse>> GetByDate(DateTime date);

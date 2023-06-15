@@ -25,8 +25,7 @@ namespace SMT.Services
 
         public async Task<ModelResponse> AddAsync(ModelCreate modelCreate)
         {
-            var model = await _repository.FindAsync(p => p.Name == modelCreate.Name &&
-                                                    p.ProductBrandId == modelCreate.ProductBrandId);
+            var model = await _repository.FindAsync(p => p.Name == modelCreate.Name);
 
             if (model != null)
                 throw new ConflictException($"{modelCreate.Name} already exist");
@@ -66,13 +65,6 @@ namespace SMT.Services
             var Model = await _repository.FindAsync(p => p.Id == id);
 
             return _mapper.Map<Model, ModelResponse>(Model);
-        }
-
-        public async Task<IEnumerable<ModelResponse>> GetByProductBrandId(int productBrandId)
-        {
-            var models = await _repository.GetByAsync(m => m.ProductBrandId == productBrandId);
-
-            return _mapper.Map<IEnumerable<Model>, IEnumerable<ModelResponse>>(models);
         }
 
         public async Task<ModelResponse> GetByNameAsync(string name)

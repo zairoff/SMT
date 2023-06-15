@@ -12,6 +12,10 @@ namespace SMT.ViewModel.Dto.PlanDto
 
         public int ProducedCount { get; set; }
 
+        public string Employee { get; set; }
+
+        public string DayNight { get; set; }
+
         public DateTime Date { get; set; }
     }
 }

@@ -84,20 +84,6 @@ namespace SMT.Services
             return _mapper.Map<IEnumerable<Plan>, IEnumerable<PlanResponse>>(plans);
         }
 
-        public async Task<IEnumerable<PlanResponse>> GetByBrandId(int brandId)
-        {
-            var plans = await _repository.GetByAsync(p => p.Model.ProductBrand.BrandId == brandId);
-
-            return _mapper.Map<IEnumerable<Plan>, IEnumerable<PlanResponse>>(plans);
-        }
-
-        public async Task<IEnumerable<PlanResponse>> GetByProductId(int productId)
-        {
-            var plans = await _repository.GetByAsync(p => p.Model.ProductBrand.ProductId == productId);
-
-            return _mapper.Map<IEnumerable<Plan>, IEnumerable<PlanResponse>>(plans);
-        }
-
         public async Task<PlanResponse> UpdateAsync(int id, PlanUpdate planUpdate)
         {
             var plan = await _repository.FindAsync(p => p.Id == id);

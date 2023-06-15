@@ -16,22 +16,6 @@ namespace SMT.Api.Controllers
             _staticsRepository = staticsRepository;
         }
 
-        [HttpGet("ByProduct")]
-        public async Task<IActionResult> GroupByProduct(DateTime from, DateTime to)
-        {
-            var result = await _staticsRepository.GroupByProductAsync(from, to);
-
-            return Ok(result);
-        }
-
-        [HttpGet("ByBrand")]
-        public async Task<IActionResult> GroupByBrand(DateTime from, DateTime to)
-        {
-            var result = await _staticsRepository.GroupByBrandAsync(from, to);
-
-            return Ok(result);
-        }
-
         [HttpGet("ByModel")]
         public async Task<IActionResult> GroupByModel(DateTime from, DateTime to)
         {
@@ -69,14 +53,6 @@ namespace SMT.Api.Controllers
         public async Task<IActionResult> DefectCountByLine(int lineId, DateTime from, DateTime to)
         {
             var result = await _staticsRepository.GroupByDefectAsync(lineId, "Defect", from, to);
-
-            return Ok(result);
-        }
-
-        [HttpGet("ClosedDefectCountByLine")]
-        public async Task<IActionResult> ClosedDefectCountByLine(int lineId, DateTime from, DateTime to)
-        {
-            var result = await _staticsRepository.GroupByDefectAsync(lineId, "Closed", true, from, to);
 
             return Ok(result);
         }

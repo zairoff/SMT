@@ -17,19 +17,13 @@ namespace SMT.Access.Repository
         {
         }
 
-        public async override Task<Model> FindAsync(Expression<Func<Model, bool>> expression) => await DbSet.Where(expression)
-                            .Include(m => m.ProductBrand)
-                            .ThenInclude(m => m.Product)
-                            .Include(m => m.ProductBrand)
-                            .ThenInclude(m => m.Brand)
-                            .FirstOrDefaultAsync();
+        public async override Task<Model> FindAsync(Expression<Func<Model, bool>> expression) => await DbSet
+            .Where(expression)
+            .FirstOrDefaultAsync();
 
         public async override Task<IEnumerable<Model>> GetAllAsync()
         {
-            return await DbSet.Include(m => m.ProductBrand)
-                        .ThenInclude(m => m.Product)
-                        .Include(m => m.ProductBrand)
-                        .ThenInclude(m => m.Brand)
+            return await DbSet
                         .OrderBy(x => x.Name)
                         .ToListAsync();
         }
@@ -37,10 +31,6 @@ namespace SMT.Access.Repository
         public async Task<IEnumerable<Model>> GetByAsync(Expression<Func<Model, bool>> expression)
         {
             return await DbSet.Where(expression)
-                            .Include(m => m.ProductBrand)
-                            .ThenInclude(m => m.Product)
-                            .Include(m => m.ProductBrand)
-                            .ThenInclude(m => m.Brand)
                             .OrderBy(x => x.Name)
                             .ToListAsync();
         }

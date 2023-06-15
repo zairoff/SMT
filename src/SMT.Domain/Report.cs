@@ -18,8 +18,6 @@ namespace SMT.Domain
 
         public virtual Model Model { get; set; }
 
-        public bool Status { get; set; }
-
         public string Employee { get; set; }
 
         public string Action { get; set; }
