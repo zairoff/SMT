@@ -49,8 +49,6 @@ namespace SMT.Services.Mapping
             CreateMap<EmployeeUpdate, Employee>();
             CreateMap<EmployeeCreate, Employee>();
 
-            CreateMap<RepairerCreate, PcbRepairer>();
-
             CreateMap<MachineCreate, Machine>();
 
             CreateMap<MachineRepairCreate, MachineRepair>()

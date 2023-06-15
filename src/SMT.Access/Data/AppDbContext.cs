@@ -13,12 +13,9 @@ namespace SMT.Access.Data
         public DbSet<Model> Models { get; set; }
         public DbSet<EmployeeCareer> EmployeeCareers { get; set; }
         public DbSet<EmployeeHistory> EmployeeHistories { get; set; }
-        public DbSet<Vacation> Vacations { get; set; }
         public DbSet<Plan> Plans { get; set; }
-        public DbSet<PlanDetail> PlanDetails { get; set; }
         public DbSet<LineDefect> LineDefects { get; set; }
         public DbSet<Report> Reports { get; set; }
-        public DbSet<PcbRepairer> PcbRepairers { get; set; }
         public DbSet<Machine> Machines { get; set; }
         public DbSet<MachineRepair> MachineRepairs { get; set; }
         public DbSet<MachineRepairer> MachineRepairers { get; set; }

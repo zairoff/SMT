@@ -38,8 +38,6 @@ namespace SMT.Services.Mapping
             CreateMap<Employee, EmployeeResponse>()
                 .ForMember(e => e.ImageUrl, o => o.MapFrom(s => s.ImagePath));
 
-            CreateMap<PcbRepairer, RepairerResponse>();
-
             CreateMap<Machine, MachineResponse>();
 
             CreateMap<MachineRepair, MachineRepairResponse>()
