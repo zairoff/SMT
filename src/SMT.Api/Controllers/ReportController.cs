@@ -33,18 +33,18 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet("GetByDate")]
-        public async Task<IActionResult> GetByDate(DateTime date, bool status)
+        public async Task<IActionResult> GetByDate(DateTime date)
         {
-            var result = await _service.GetByDateAsync(date, status);
+            var result = await _service.GetByDateAsync(date);
 
             return Ok(result);
         }
 
         [HttpGet]
         [Route("GetByModelIdAndLineId")]
-        public async Task<IActionResult> GetByModelIdAndLineId(int modelId, int lineId, DateTime date, bool isClosed)
+        public async Task<IActionResult> GetByModelIdAndLineId(int modelId, int lineId, DateTime date)
         {
-            var result = await _service.GetByModelAndLineIdAsync(modelId, lineId, date, isClosed);
+            var result = await _service.GetByModelAndLineIdAsync(modelId, lineId, date);
 
             return Ok(result);
         }

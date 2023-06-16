@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,7 +13,6 @@ using SMT.Api.ExceptionHandler;
 using SMT.Api.Extensions;
 using System;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace SMT.Api
 {
@@ -45,8 +43,6 @@ namespace SMT.Api
             app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
             loggerFactory.AddFile(Configuration["AppSettings:LogFolder"]);
 
-            //Seed(app);
-
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors();
@@ -65,7 +61,7 @@ namespace SMT.Api
                 endpoints.MapControllers();
             });
 
-            //Seed(app, loggerFactory.CreateLogger<Startup>());
+            Seed(app, loggerFactory.CreateLogger<Startup>());
         }
 
         private static void Seed(IApplicationBuilder app, ILogger<Startup> logger)
@@ -77,7 +73,10 @@ namespace SMT.Api
                 var appContext = scopedProvider.GetRequiredService<AppDbContext>();
                 var identityContext = scopedProvider.GetRequiredService<AppIdentityDbContext>();
 
+                appContext.Database.EnsureCreated();
                 appContext.Database.Migrate();
+
+                identityContext.Database.EnsureCreated();
                 identityContext.Database.Migrate();
 
                 var userManager = scopedProvider.GetRequiredService<UserManager<ApplicationUser>>();

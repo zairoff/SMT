@@ -11,7 +11,7 @@ namespace SMT.Services.Interfaces
 
         Task<ReportResponse> GetAsync(int id);
 
-        Task<IEnumerable<ReportResponse>> GetByModelAndLineIdAsync(int mdoelId, int lineId, DateTime date, bool isClosed);
+        Task<IEnumerable<ReportResponse>> GetByModelAndLineIdAsync(int mdoelId, int lineId, DateTime date);
 
         Task<ReportResponse> AddAsync(ReportCreate reportCreate);
 
@@ -21,7 +21,7 @@ namespace SMT.Services.Interfaces
 
         Task<IEnumerable<ReportResponse>> GetByAsync(int? modelId, int? lineId, DateTime from, DateTime to);
 
-        Task<IEnumerable<ReportResponse>> GetByDateAsync(DateTime date, bool status);
+        Task<IEnumerable<ReportResponse>> GetByDateAsync(DateTime date);
 
         Task<IEnumerable<ReportResponse>> GetByLineAsync(int lineId, DateTime from, DateTime to);
     }
