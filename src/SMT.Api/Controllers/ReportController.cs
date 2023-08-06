@@ -67,6 +67,24 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("GetByLineAndStatus")]
+        public async Task<IActionResult> GetByLineAndStatus(int lineId, bool status, DateTime from, DateTime to)
+        {
+            var result = await _service.GetByLineAsync(lineId, status, from, to);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("GetByLineAndDefect")]
+        public async Task<IActionResult> GetByLineAndDefect(int lineId, string defectName, DateTime from, DateTime to)
+        {
+            var result = await _service.GetByLineAndDefectAsync(lineId, defectName, from, to);
+
+            return Ok(result);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]

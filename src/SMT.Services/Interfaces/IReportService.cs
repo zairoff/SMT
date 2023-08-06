@@ -30,6 +30,8 @@ namespace SMT.Services.Interfaces
 
         Task<IEnumerable<ReportResponse>> GetByDateAsync(DateTime date, bool status);
 
-        Task<IEnumerable<ReportResponse>> GetByLineAsync(int lineId, DateTime from, DateTime to);
+        Task<IEnumerable<ReportResponse>> GetByLineAsync(int lineId, bool status, DateTime from, DateTime to);
+
+        Task<IEnumerable<ReportResponse>> GetByLineAndDefectAsync(int lineId, string defectName, DateTime from, DateTime to);
     }
 }
