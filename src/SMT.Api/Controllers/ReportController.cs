@@ -49,6 +49,14 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetByUpdatedDate")]
+        public async Task<IActionResult> GetByUpdatedDate(DateTime date, bool status)
+        {
+            var result = await _service.GetByUpdatedDate(date, status);
+
+            return Ok(result);
+        }
+
         [HttpGet]
         [Route("GetByModelIdAndLineId")]
         public async Task<IActionResult> GetByModelIdAndLineId(int modelId, int lineId, DateTime date, bool isClosed)
