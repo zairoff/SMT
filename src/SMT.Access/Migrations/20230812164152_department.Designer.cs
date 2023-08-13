@@ -10,8 +10,8 @@ using SMT.Access.Data;
 namespace SMT.Access.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230615103849_init")]
-    partial class init
+    [Migration("20230812164152_department")]
+    partial class department
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -176,6 +176,28 @@ namespace SMT.Access.Migrations
                     b.HasIndex("LineId");
 
                     b.ToTable("LineDefects");
+                });
+
+            modelBuilder.Entity("SMT.Domain.LineOwner", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LineId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("LineId");
+
+                    b.ToTable("LineOwners");
                 });
 
             modelBuilder.Entity("SMT.Domain.Machine", b =>
@@ -350,12 +372,6 @@ namespace SMT.Access.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Action")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Condition")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -370,9 +386,6 @@ namespace SMT.Access.Migrations
 
                     b.Property<int>("ModelId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -427,6 +440,25 @@ namespace SMT.Access.Migrations
                         .IsRequired();
 
                     b.Navigation("Defect");
+
+                    b.Navigation("Line");
+                });
+
+            modelBuilder.Entity("SMT.Domain.LineOwner", b =>
+                {
+                    b.HasOne("SMT.Domain.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SMT.Domain.Line", "Line")
+                        .WithMany()
+                        .HasForeignKey("LineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
 
                     b.Navigation("Line");
                 });

@@ -8,6 +8,7 @@ using SMT.Services.Interfaces;
 using SMT.ViewModel.Dto.MachineRepairDto;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SMT.Services
@@ -54,9 +55,17 @@ namespace SMT.Services
             return _mapper.Map<MachineRepair, MachineRepairResponse>(machineRepair);
         }
 
-        public async Task<IEnumerable<MachineRepairResponse>> GetAllAsync()
+        public async Task<IEnumerable<MachineRepairResponse>> GetAllAsync(string shift)
         {
-            var machineRepairs = await _repository.GetAllAsync();
+            IEnumerable<MachineRepair> machineRepairs = Enumerable.Empty<MachineRepair>();
+            if (string.IsNullOrEmpty(shift))
+            {
+                machineRepairs = await _repository.GetAllAsync();
+            }
+            else
+            {
+                machineRepairs = await _repository.GetByAsync(x => x.Shift == shift);
+            }
 
             return _mapper.Map<IEnumerable<MachineRepair>, IEnumerable<MachineRepairResponse>>(machineRepairs);
         }
@@ -68,19 +77,36 @@ namespace SMT.Services
             return _mapper.Map<MachineRepair, MachineRepairResponse>(machineRepair);
         }
 
-        public async Task<IEnumerable<MachineRepairResponse>> GetByMachineIdAsync(int machineId)
+        public async Task<IEnumerable<MachineRepairResponse>> GetByMachineIdAsync(int machineId, string shift)
         {
-            var machineRepairs = await _repository.GetByAsync(m => m.MachineId == machineId);
+            IEnumerable<MachineRepair> machineRepairs = Enumerable.Empty<MachineRepair>();
+            if (string.IsNullOrEmpty(shift))
+            {
+                machineRepairs = await _repository.GetByAsync(m => m.MachineId == machineId);
+            }
+            else
+            {
+                machineRepairs = await _repository.GetByAsync(m => m.MachineId == machineId && m.Shift == shift);
+            }
 
             return _mapper.Map<IEnumerable<MachineRepair>, IEnumerable<MachineRepairResponse>>(machineRepairs);
         }
 
-        public async Task<IEnumerable<MachineRepairResponse>> GetByMonthAsync(string dateTime)
+        public async Task<IEnumerable<MachineRepairResponse>> GetByMonthAsync(string shift, string dateTime)
         {
             if(DateTime.TryParse(dateTime, out DateTime date))
             {
                 date = DateTime.Parse(dateTime);
-                var machineRepairs = await _repository.GetByAsync(m => m.Date.Month == date.Month);
+
+                IEnumerable<MachineRepair> machineRepairs = Enumerable.Empty<MachineRepair>();
+                if (string.IsNullOrEmpty(shift))
+                {
+                    machineRepairs = await _repository.GetByAsync(m => m.Date.Month == date.Month);
+                }
+                else
+                {
+                    machineRepairs = await _repository.GetByAsync(m => m.Date.Month == date.Month && m.Shift == shift);
+                }
 
                 return _mapper.Map<IEnumerable<MachineRepair>, IEnumerable<MachineRepairResponse>>(machineRepairs);
             }
@@ -90,12 +116,20 @@ namespace SMT.Services
             }
         }
 
-        public async Task<IEnumerable<MachineRepairResponse>> GetByMachineIdAndDateAsync(int machineId, string date)
+        public async Task<IEnumerable<MachineRepairResponse>> GetByMachineIdAndDateAsync(int machineId, string shift, string date)
         {
             if (DateTime.TryParse(date, out DateTime dateTime))
             {
                 dateTime = DateTime.Parse(date);
-                var machineRepairs = await _repository.GetByAsync(m => m.MachineId == machineId && m.Date.Month == dateTime.Month);
+                IEnumerable<MachineRepair> machineRepairs = Enumerable.Empty<MachineRepair>();
+                if (string.IsNullOrEmpty(shift))
+                {
+                    machineRepairs = await _repository.GetByAsync(m => m.MachineId == machineId && m.Date.Month == dateTime.Month);
+                }
+                else
+                {
+                    machineRepairs = await _repository.GetByAsync(m => m.MachineId == machineId && m.Date.Month == dateTime.Month && m.Shift == shift);
+                }
 
                 return _mapper.Map<IEnumerable<MachineRepair>, IEnumerable<MachineRepairResponse>>(machineRepairs);
             }
@@ -112,7 +146,6 @@ namespace SMT.Services
             if (machineRepair == null)
                 throw new NotFoundException("Not found");
 
-            machineRepair.IsActive = machineRepairUpdate.IsActive;
             _repository.Update(machineRepair);
             await _unitOfWork.SaveAsync();
 

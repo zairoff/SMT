@@ -12,8 +12,6 @@ namespace SMT.ViewModel.Dto.ReportDto
 
         public int ModelId { get; set; }
 
-        public string Employee { get; set; }
-
-        public string Barcode { get; set; }
+        public string Shift { get; set; }
     }
 }

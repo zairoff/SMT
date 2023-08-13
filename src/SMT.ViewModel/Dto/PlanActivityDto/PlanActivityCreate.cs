@@ -16,6 +16,8 @@ namespace SMT.ViewModel.Dto.PlanActivityDto
 
         public string Status { get; set; }
 
+        public string Shift { get; set; }
+
         public DateTime Date { get; set; }
 
         public DateTime Expires { get; set; }

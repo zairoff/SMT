@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System;
 using SMT.Services.Interfaces;
 using SMT.ViewModel.Dto.PlanDto;
+using SMT.Domain;
 
 namespace SMT.Api.Controllers
 {
@@ -17,9 +18,9 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(string shift)
         {
-            var result = await _service.GetAllAsync();
+            var result = await _service.GetAllAsync(shift);
 
             return Ok(result);
         }
@@ -34,34 +35,34 @@ namespace SMT.Api.Controllers
         
         [HttpGet]
         [Route("GetByModel")]
-        public async Task<IActionResult> GetByModelId(int modelId)
+        public async Task<IActionResult> GetByModelId(int modelId, string shift)
         {
-            var result = await _service.GetByModelId(modelId);
+            var result = await _service.GetByModelId(modelId, shift);
 
             return Ok(result);
         }
         
         [HttpGet]
         [Route("GetByLine")]
-        public async Task<IActionResult> GetByLineId(int lineId)
+        public async Task<IActionResult> GetByLineId(int lineId, string shift)
         {
-            var result = await _service.GetByLineId(lineId);
+            var result = await _service.GetByLineId(lineId, shift);
 
             return Ok(result);
         }
 
         [HttpGet("GetByDate")]
-        public async Task<IActionResult> GetByDate(DateTime date)
+        public async Task<IActionResult> GetByDate(DateTime date, string shift)
         {
-            var result = await _service.GetByDate(date);
+            var result = await _service.GetByDate(date, shift);
 
             return Ok(result);
         }
 
         [HttpGet("GetByLineAndDate")]
-        public async Task<IActionResult> GetByLineAndDate(int lineId, DateTime from, DateTime to)
+        public async Task<IActionResult> GetByLineAndDate(int lineId, string shift, DateTime from, DateTime to)
         {
-            var result = await _service.GetByLineAndDate(lineId, from, to);
+            var result = await _service.GetByLineAndDate(lineId, shift, from, to);
 
             return Ok(result);
         }

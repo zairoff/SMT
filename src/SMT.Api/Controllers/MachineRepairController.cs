@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SMT.Services.Interfaces;
 using SMT.ViewModel.Dto.MachineRepairDto;
-using System;
 using System.Threading.Tasks;
 
 namespace SMT.Api.Controllers
@@ -19,9 +18,9 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(string shift)
         {
-            var result = await _service.GetAllAsync();
+            var result = await _service.GetAllAsync(shift);
 
             return Ok(result);
         }
@@ -35,25 +34,25 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet("GetByMachine")]
-        public async Task<IActionResult> GetByMachine(int machineId)
+        public async Task<IActionResult> GetByMachine(int machineId, string shift)
         {
-            var result = await _service.GetByMachineIdAsync(machineId);
+            var result = await _service.GetByMachineIdAsync(machineId, shift);
 
             return Ok(result);
         }
 
         [HttpGet("GetByMonth")]
-        public async Task<IActionResult> GetByMonth(string month)
+        public async Task<IActionResult> GetByMonth(string shift, string month)
         {
-            var result = await _service.GetByMonthAsync(month);
+            var result = await _service.GetByMonthAsync(shift, month);
 
             return Ok(result);
         }
 
         [HttpGet("ByMachineIdAndDate")]
-        public async Task<IActionResult> GetByMachineIdAndDate(int machineId, string date)
+        public async Task<IActionResult> GetByMachineIdAndDate(int machineId, string shift, string date)
         {
-            var result = await _service.GetByMachineIdAndDateAsync(machineId, date);
+            var result = await _service.GetByMachineIdAndDateAsync(machineId, shift, date);
 
             return Ok(result);
         }

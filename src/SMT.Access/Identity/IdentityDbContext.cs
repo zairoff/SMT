@@ -11,43 +11,27 @@ namespace SMT.Access.Identity
         {
         }
 
-        //protected override void OnModelCreating(ModelBuilder builder)
-        //{
-        //    base.OnModelCreating(builder);
-        //}
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder options)
-        //{
-        //    //IConfigurationRoot configuration = new ConfigurationBuilder()
-        //    //        //.SetBasePath(Directory.GetCurrentDirectory())
-        //    //        .AddJsonFile(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "../SMT.Api/appsettings.json")))
-        //    //        .Build();
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            var connectionString = "Server=(localdb)\\mssqllocaldb;Database=oyna-users;Trusted_Connection=True;MultipleActiveResultSets=true";
+            options.UseSqlServer(connectionString);
+        }
 
-        //    ////options.UseNpgsql("Server=localhost;Port=5432;Database=smtDB;User Id=postgres;Password=postgres;");
+        public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppIdentityDbContext>
+        {
+            public AppIdentityDbContext CreateDbContext(string[] args)
+            {
+                var connectionString = "Server=(localdb)\\mssqllocaldb;Database=oyna-users;Trusted_Connection=True;MultipleActiveResultSets=true";
 
-        //    //var connectionString = configuration.GetConnectionString("IdentityConnection");
-        //    //options.UseNpgsql(connectionString);
-
-        //    var connectionString = "Server=(localdb)\\mssqllocaldb;Database=smtDB;Trusted_Connection=True;MultipleActiveResultSets=true";
-        //    options.UseSqlServer(connectionString);
-        //}
-
-        //public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppIdentityDbContext>
-        //{
-        //    public AppIdentityDbContext CreateDbContext(string[] args)
-        //    {
-        //        //IConfigurationRoot configuration = new ConfigurationBuilder()
-        //        //    //.SetBasePath(Directory.GetCurrentDirectory())
-        //        //    .AddJsonFile(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "../SMT.Api/appsettings.json")))
-        //        //    .Build();
-        //        //var connectionString = configuration.GetConnectionString("IdentityConnection");
-
-        //        var connectionString = "Server=(localdb)\\mssqllocaldb;Database=smtDB;Trusted_Connection=True;MultipleActiveResultSets=true";
-
-        //        var builder = new DbContextOptionsBuilder<AppIdentityDbContext>();
-        //        builder.UseSqlServer(connectionString);
-        //        return new AppIdentityDbContext(builder.Options);
-        //    }
-        //}
+                var builder = new DbContextOptionsBuilder<AppIdentityDbContext>();
+                builder.UseSqlServer(connectionString);
+                return new AppIdentityDbContext(builder.Options);
+            }
+        }
     }
 }

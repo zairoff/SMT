@@ -20,12 +20,8 @@ namespace SMT.Domain
 
         public string Employee { get; set; }
 
-        public string Action { get; set; }
-
-        public string Condition { get; set; }
+        public string Shift { get; set; }
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
-
-        public DateTime UpdatedDate { get; set; }
     }
 }

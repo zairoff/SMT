@@ -7,6 +7,7 @@ using SMT.Services.Interfaces;
 using SMT.ViewModel.Dto.PlanActivityDto;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SMT.Services
@@ -49,11 +50,19 @@ namespace SMT.Services
             return _mapper.Map<PlanActivity, PlanActivityResponse>(plan);
         }
 
-        public async Task<IEnumerable<PlanActivityResponse>> GetAllAsync()
+        public async Task<IEnumerable<PlanActivityResponse>> GetAllAsync(string shift)
         {
-            var plans = await _repository.GetAllAsync();
+            IEnumerable<PlanActivity> planActivities = Enumerable.Empty<PlanActivity>();
+            if (string.IsNullOrEmpty(shift))
+            {
+                planActivities = await _repository.GetAllAsync();
+            }
+            else
+            {
+                planActivities = await _repository.GetByAsync(x => x.Shift == shift);
+            }
 
-            return _mapper.Map<IEnumerable<PlanActivity>, IEnumerable<PlanActivityResponse>>(plans);
+            return _mapper.Map<IEnumerable<PlanActivity>, IEnumerable<PlanActivityResponse>>(planActivities);
         }
 
         public async Task<PlanActivityResponse> GetAsync(int id)
@@ -63,25 +72,49 @@ namespace SMT.Services
             return _mapper.Map<PlanActivity, PlanActivityResponse>(plan);
         }
 
-        public async Task<IEnumerable<PlanActivityResponse>> GetByDate(DateTime date)
+        public async Task<IEnumerable<PlanActivityResponse>> GetByDate(string shift, DateTime date)
         {
-            var plans = await _repository.GetByAsync(p => p.Date.Date == date.Date);
+            IEnumerable<PlanActivity> planActivities = Enumerable.Empty<PlanActivity>();
+            if (string.IsNullOrEmpty(shift))
+            {
+                planActivities = await _repository.GetByAsync(p => p.Date.Date == date.Date);
+            }
+            else
+            {
+                planActivities = await _repository.GetByAsync(p => p.Date.Date == date.Date && p.Shift == shift);
+            }
 
-            return _mapper.Map<IEnumerable<PlanActivity>, IEnumerable<PlanActivityResponse>>(plans);
+            return _mapper.Map<IEnumerable<PlanActivity>, IEnumerable<PlanActivityResponse>>(planActivities);
         }
 
-        public async Task<IEnumerable<PlanActivityResponse>> GetByLineAndDate(int lineId, DateTime date)
+        public async Task<IEnumerable<PlanActivityResponse>> GetByLineAndDate(int lineId, string shift, DateTime date)
         {
-            var plans = await _repository.GetByAsync(p => p.Date.Date == date.Date && p.LineId == lineId);
+            IEnumerable<PlanActivity> planActivities = Enumerable.Empty<PlanActivity>();
+            if (string.IsNullOrEmpty(shift))
+            {
+                planActivities = await _repository.GetByAsync(p => p.Date.Date == date.Date && p.LineId == lineId);
+            }
+            else
+            {
+                planActivities = await _repository.GetByAsync(p => p.Date.Date == date.Date && p.LineId == lineId && p.Shift == shift);
+            }
 
-            return _mapper.Map<IEnumerable<PlanActivity>, IEnumerable<PlanActivityResponse>>(plans);
+            return _mapper.Map<IEnumerable<PlanActivity>, IEnumerable<PlanActivityResponse>>(planActivities);
         }
 
-        public async Task<IEnumerable<PlanActivityResponse>> GetByLineId(int lineId)
+        public async Task<IEnumerable<PlanActivityResponse>> GetByLineId(int lineId, string shift)
         {
-            var plans = await _repository.GetByAsync(p => p.LineId == lineId);
+            IEnumerable<PlanActivity> planActivities = Enumerable.Empty<PlanActivity>();
+            if (string.IsNullOrEmpty(shift))
+            {
+                planActivities = await _repository.GetByAsync(p => p.LineId == lineId);
+            }
+            else
+            {
+                planActivities = await _repository.GetByAsync(p => p.LineId == lineId && p.Shift == shift);
+            }
 
-            return _mapper.Map<IEnumerable<PlanActivity>, IEnumerable<PlanActivityResponse>>(plans);
+            return _mapper.Map<IEnumerable<PlanActivity>, IEnumerable<PlanActivityResponse>>(planActivities);
         }
 
         public async Task<PlanActivityResponse> UpdateAsync(int id, PlanActivityUpdate planActivityUpdate)

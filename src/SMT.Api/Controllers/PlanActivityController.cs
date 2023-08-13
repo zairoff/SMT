@@ -17,9 +17,9 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(string shift)
         {
-            var result = await _service.GetAllAsync();
+            var result = await _service.GetAllAsync(shift);
 
             return Ok(result);
         }
@@ -34,25 +34,25 @@ namespace SMT.Api.Controllers
 
         [HttpGet]
         [Route("GetByLine")]
-        public async Task<IActionResult> GetByLineId(int lineId)
+        public async Task<IActionResult> GetByLineId(int lineId, string shift)
         {
-            var result = await _service.GetByLineId(lineId);
+            var result = await _service.GetByLineId(lineId, shift);
 
             return Ok(result);
         }
 
         [HttpGet("GetByDate")]
-        public async Task<IActionResult> GetByDate(DateTime date)
+        public async Task<IActionResult> GetByDate(string shift, DateTime date)
         {
-            var result = await _service.GetByDate(date);
+            var result = await _service.GetByDate(shift, date);
 
             return Ok(result);
         }
 
         [HttpGet("GetByLineAndDate")]
-        public async Task<IActionResult> GetByLineAndDate(int lineId, DateTime date)
+        public async Task<IActionResult> GetByLineAndDate(int lineId, string shift, DateTime date)
         {
-            var result = await _service.GetByLineAndDate(lineId, date);
+            var result = await _service.GetByLineAndDate(lineId, shift, date);
 
             return Ok(result);
         }

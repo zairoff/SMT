@@ -119,6 +119,7 @@ namespace SMT.Api.Extensions
             services.AddScoped<IStaticsRepository, StaticsRepository>();
             services.AddScoped<IPlanRepository, PlanRepository>();
             services.AddScoped<IPlanActivityRepository, PlanActivityRepository>();
+            services.AddScoped<ILineOwnerRepository, LineOwnerRepository>();
 
             /*************   Services  ************/
 
@@ -134,6 +135,7 @@ namespace SMT.Api.Extensions
             services.AddScoped<IMachineRepairerService, MachineRepairerService>();
             services.AddScoped<IPlanService, PlanService>();
             services.AddScoped<IPlanActivityService, PlanActivityService>();
+            services.AddScoped<ILineOwnerService, LineOwnerService>();
 
 
             /*************   Security  ************/

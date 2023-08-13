@@ -7,22 +7,18 @@ namespace SMT.Services.Interfaces
 {
     public interface IReportService
     {
-        Task<IEnumerable<ReportResponse>> GetAllAsync();
+        Task<IEnumerable<ReportResponse>> GetAllAsync(string shift);
 
         Task<ReportResponse> GetAsync(int id);
 
-        Task<IEnumerable<ReportResponse>> GetByModelAndLineIdAsync(int mdoelId, int lineId, DateTime date);
+        Task<IEnumerable<ReportResponse>> GetByModelAndLineIdAsync(int mdoelId, int lineId, string shift, DateTime date);
 
         Task<ReportResponse> AddAsync(ReportCreate reportCreate);
 
-        Task<ReportResponse> UpdateAsync(int id, ReportUpdate reportUpdate);
-
         Task<ReportResponse> DeleteAsync(int id);
 
-        Task<IEnumerable<ReportResponse>> GetByAsync(int? modelId, int? lineId, DateTime from, DateTime to);
+        Task<IEnumerable<ReportResponse>> GetByAsync(int? modelId, int? lineId, string shift, DateTime from, DateTime to);
 
-        Task<IEnumerable<ReportResponse>> GetByDateAsync(DateTime date);
-
-        Task<IEnumerable<ReportResponse>> GetByLineAsync(int lineId, DateTime from, DateTime to);
+        Task<IEnumerable<ReportResponse>> GetByDateAsync(string shift, DateTime date);
     }
 }

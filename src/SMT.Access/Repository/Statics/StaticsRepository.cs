@@ -20,12 +20,13 @@ namespace SMT.Access.Repository.Statics
         public async Task<IEnumerable<StaticsModel>> GroupByLineAsync(DateTime from, DateTime to)
         {
             return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
-                                       .Select(r => r.Line)
-                                           .GroupBy(g => g.Name)
+                                       .Select(r => new {r.Line, r.Defect})
+                                           .GroupBy(g => g.Line.Name)
                                            .Select(g => new StaticsModel
                                            {
                                                Name = g.Key,
                                                Count = g.Count(),
+                                               Size = g.Sum(x => x.Defect.Size)
                                            })
                                            .OrderByDescending(o => o.Count)
                                            .ToListAsync();
@@ -41,12 +42,13 @@ namespace SMT.Access.Repository.Statics
             //                                        }).ToListAsync();
 
            return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
-                                        .Select(r => r.Model)
-                                            .GroupBy(g => g.Name)
+                                        .Select(r => new {r.Model, r.Defect})
+                                            .GroupBy(g => g.Model.Name)
                                             .Select(g => new StaticsModel
                                                 { 
                                                     Name = g.Key,
                                                     Count = g.Count(),
+                                                    Size = g.Sum(x => x.Defect.Size)
                                                 })
                                             .OrderByDescending(o => o.Count)
                                             .ToListAsync();
@@ -60,7 +62,8 @@ namespace SMT.Access.Repository.Statics
                                            .Select(g => new StaticsModel
                                            {
                                                Name = g.Key,
-                                               Count = g.Count()
+                                               Count = g.Count(),
+                                               Size = g.Sum(x => x.Size)
                                            })
                                            .OrderByDescending(o => o.Count)
                                            .ToListAsync();
@@ -74,7 +77,8 @@ namespace SMT.Access.Repository.Statics
                                            .Select(g => new StaticsModel
                                            {
                                                Name = g.Key,
-                                               Count = g.Count()
+                                               Count = g.Count(),
+                                               Size = g.Sum(x => x.Size)
                                            })
                                            .OrderByDescending(o => o.Count)
                                            .ToListAsync();

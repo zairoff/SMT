@@ -6,7 +6,7 @@ namespace SMT.Services.Interfaces
 {
     public interface IMachineRepairService
     {
-        Task<IEnumerable<MachineRepairResponse>> GetAllAsync();
+        Task<IEnumerable<MachineRepairResponse>> GetAllAsync(string shift);
 
         Task<MachineRepairResponse> GetAsync(int id);
 
@@ -14,11 +14,11 @@ namespace SMT.Services.Interfaces
 
         Task<MachineRepairResponse> UpdateAsync(int id, MachineRepairUpdate machineRepairUpdate);
 
-        Task<IEnumerable<MachineRepairResponse>> GetByMachineIdAsync(int id);
+        Task<IEnumerable<MachineRepairResponse>> GetByMachineIdAsync(int id, string shift);
 
-        Task<IEnumerable<MachineRepairResponse>> GetByMonthAsync(string date);
+        Task<IEnumerable<MachineRepairResponse>> GetByMonthAsync(string shift, string date);
 
-        Task<IEnumerable<MachineRepairResponse>> GetByMachineIdAndDateAsync(int machineId, string date);
+        Task<IEnumerable<MachineRepairResponse>> GetByMachineIdAndDateAsync(int machineId, string shift, string date);
 
         Task<MachineRepairResponse> DeleteAsync(int id);
     }

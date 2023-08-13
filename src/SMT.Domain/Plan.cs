@@ -12,7 +12,7 @@ namespace SMT.Domain
 
         public string Employee { get; set; }
 
-        public string DayNight { get; set; }
+        public string Shift { get; set; }
 
         public int RequiredCount { get; set; }
 

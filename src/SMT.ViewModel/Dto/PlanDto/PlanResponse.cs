@@ -14,7 +14,7 @@ namespace SMT.ViewModel.Dto.PlanDto
 
         public string Employee { get; set; }
 
-        public string DayNight { get; set; }
+        public string Shift { get; set; }
 
         public string Date { get; set; }
 

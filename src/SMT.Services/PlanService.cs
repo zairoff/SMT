@@ -7,6 +7,7 @@ using SMT.Services.Interfaces;
 using SMT.ViewModel.Dto.PlanDto;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SMT.Services
@@ -49,9 +50,18 @@ namespace SMT.Services
             return _mapper.Map<Plan, PlanResponse>(plan);
         }
 
-        public async Task<IEnumerable<PlanResponse>> GetAllAsync()
+        public async Task<IEnumerable<PlanResponse>> GetAllAsync(string shift)
         {
-            var plans = await _repository.GetAllAsync();
+            IEnumerable<Plan> plans = Enumerable.Empty<Plan>();
+
+            if (string.IsNullOrEmpty(shift))
+            {
+                plans = await _repository.GetAllAsync();
+            }
+            else
+            {
+                plans = await _repository.GetByAsync(x => x.Shift ==  shift);
+            }
 
             return _mapper.Map<IEnumerable<Plan>, IEnumerable<PlanResponse>>(plans);
         }
@@ -63,23 +73,47 @@ namespace SMT.Services
             return _mapper.Map<Plan, PlanResponse>(plan);
         }
 
-        public async Task<IEnumerable<PlanResponse>> GetByDate(DateTime date)
+        public async Task<IEnumerable<PlanResponse>> GetByDate(DateTime date, string shift)
         {
-            var plans = await _repository.GetByAsync(p => p.Date.Date == date.Date);
+            IEnumerable<Plan> plans = Enumerable.Empty<Plan>();
+            if (string.IsNullOrEmpty(shift))
+            {
+                plans = await _repository.GetByAsync(p => p.Date.Date == date.Date);
+            }
+            else
+            {
+                plans = await _repository.GetByAsync(p => p.Date.Date == date.Date && p.Shift == shift);
+            }
 
             return _mapper.Map<IEnumerable<Plan>, IEnumerable<PlanResponse>>(plans);
         }
 
-        public async Task<IEnumerable<PlanResponse>> GetByLineId(int lineId)
+        public async Task<IEnumerable<PlanResponse>> GetByLineId(int lineId, string shift)
         {
-            var plans = await _repository.GetByAsync(p => p.LineId == lineId);
+            IEnumerable<Plan> plans = Enumerable.Empty<Plan>();
+            if (string.IsNullOrEmpty(shift))
+            {
+                plans = await _repository.GetByAsync(p => p.LineId == lineId);
+            }
+            else
+            {
+                plans = await _repository.GetByAsync(p => p.LineId == lineId && p.Shift == shift);
+            }
 
             return _mapper.Map<IEnumerable<Plan>, IEnumerable<PlanResponse>>(plans);
         }
 
-        public async Task<IEnumerable<PlanResponse>> GetByModelId(int modelId)
+        public async Task<IEnumerable<PlanResponse>> GetByModelId(int modelId, string shift)
         {
-            var plans = await _repository.GetByAsync(p => p.ModelId == modelId);
+            IEnumerable<Plan> plans = Enumerable.Empty<Plan>();
+            if (string.IsNullOrEmpty(shift))
+            {
+                plans = await _repository.GetByAsync(p => p.ModelId == modelId);
+            }
+            else
+            {
+                plans = await _repository.GetByAsync(p => p.ModelId == modelId && p.Shift == shift);
+            }
 
             return _mapper.Map<IEnumerable<Plan>, IEnumerable<PlanResponse>>(plans);
         }
@@ -97,6 +131,7 @@ namespace SMT.Services
             plan.ProducedCount = planUpdate.ProducedCount;
             plan.RequiredCount = planUpdate.RequiredCount;
             plan.Date = planUpdate.Date;
+            plan.Shift = planUpdate.Shift;
 
             _repository.Update(plan);
             await _unitOfWork.SaveAsync();
@@ -104,9 +139,17 @@ namespace SMT.Services
             return _mapper.Map<Plan, PlanResponse>(plan);
         }
 
-        public async Task<IEnumerable<PlanResponse>> GetByLineAndDate(int lineId, DateTime from, DateTime to)
+        public async Task<IEnumerable<PlanResponse>> GetByLineAndDate(int lineId, string shift, DateTime from, DateTime to)
         {
-            var plans = await _repository.GetByAsync(p => p.LineId == lineId && p.Date >= from && p.Date <= to);
+            IEnumerable<Plan> plans = Enumerable.Empty<Plan>();
+            if (string.IsNullOrEmpty(shift))
+            {
+                plans = await _repository.GetByAsync(p => p.LineId == lineId && p.Date >= from && p.Date <= to);
+            }
+            else
+            {
+                plans = await _repository.GetByAsync(p => p.LineId == lineId && p.Date >= from && p.Date <= to && p.Shift == shift);
+            }
 
             return _mapper.Map<IEnumerable<Plan>, IEnumerable<PlanResponse>>(plans);
         }

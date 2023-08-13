@@ -20,6 +20,7 @@ namespace SMT.Access.Data
         public DbSet<MachineRepair> MachineRepairs { get; set; }
         public DbSet<MachineRepairer> MachineRepairers { get; set; }
         public DbSet<PlanActivity> PlanActivities { get; set; }
+        public DbSet<LineOwner> LineOwners { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -42,7 +43,7 @@ namespace SMT.Access.Data
 
             //var connectionString = configuration.GetConnectionString("DbConnectionDev");
 
-            var connectionString = "Server=192.168.0.103,53476; Database=oyna; User Id=sa; Password=Artel2020; Trusted_Connection=True";
+            var connectionString = "Server=(localdb)\\mssqllocaldb;Database=oyna;Trusted_Connection=True;MultipleActiveResultSets=true";
             options.UseSqlServer(connectionString, s => s.UseHierarchyId());
         }
 
@@ -56,7 +57,7 @@ namespace SMT.Access.Data
                 //    .Build();
                 //var connectionString = configuration.GetConnectionString("DbConnectionDev");
 
-                var connectionString = "Server=192.168.0.103,53476; Database=oyna; User Id=sa; Password=Artel2020; Trusted_Connection=True";
+                var connectionString = "Server=(localdb)\\mssqllocaldb;Database=oyna;Trusted_Connection=True;MultipleActiveResultSets=true";
 
                 var builder = new DbContextOptionsBuilder<AppDbContext>();
                 builder.UseSqlServer(connectionString, s => s.UseHierarchyId());

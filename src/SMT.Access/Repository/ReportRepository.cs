@@ -39,7 +39,7 @@ namespace SMT.Access.Repository
                             .Include(m => m.Defect)
                             .Include(m => m.Line)
                             .Include(m => m.Model)
-                            .OrderByDescending(m => m.UpdatedDate)
+                            .OrderByDescending(m => m.CreatedDate)
                             .ToListAsync();
         }
 

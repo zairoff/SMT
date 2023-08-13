@@ -194,10 +194,7 @@ namespace SMT.Access.Migrations
                     DefectId = table.Column<int>(type: "int", nullable: false),
                     ModelId = table.Column<int>(type: "int", nullable: false),
                     Employee = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Action = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Condition = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -264,6 +261,32 @@ namespace SMT.Access.Migrations
                         principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LineOwners",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    LineId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LineOwners", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LineOwners_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LineOwners_Lines_LineId",
+                        column: x => x.LineId,
+                        principalTable: "Lines",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -342,6 +365,16 @@ namespace SMT.Access.Migrations
                 column: "LineId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_LineOwners_EmployeeId",
+                table: "LineOwners",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LineOwners_LineId",
+                table: "LineOwners",
+                column: "LineId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MachineRepairers_EmployeeId",
                 table: "MachineRepairers",
                 column: "EmployeeId");
@@ -397,6 +430,9 @@ namespace SMT.Access.Migrations
 
             migrationBuilder.DropTable(
                 name: "LineDefects");
+
+            migrationBuilder.DropTable(
+                name: "LineOwners");
 
             migrationBuilder.DropTable(
                 name: "MachineRepairers");

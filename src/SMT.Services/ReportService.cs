@@ -11,6 +11,7 @@ using SMT.Services.Exceptions;
 using SMT.Services.Utils;
 using System.Linq;
 using SMT.Notification;
+using Telegram.Bot.Types;
 
 namespace SMT.Services
 {
@@ -65,9 +66,17 @@ namespace SMT.Services
             return _mapper.Map<Report, ReportResponse>(report);
         }
 
-        public async Task<IEnumerable<ReportResponse>> GetAllAsync()
+        public async Task<IEnumerable<ReportResponse>> GetAllAsync(string shift)
         {
-            var reports = await _repository.GetAllAsync();
+            IEnumerable<Report> reports = Enumerable.Empty<Report>();
+            if (string.IsNullOrEmpty(shift))
+            {
+                reports = await _repository.GetAllAsync();
+            }
+            else
+            {
+                reports = await _repository.GetByAsync(x => x.Shift == shift);
+            }
 
             return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
         }
@@ -81,6 +90,7 @@ namespace SMT.Services
 
         public async Task<IEnumerable<ReportResponse>> GetByAsync(int? modelId,
                                                                 int? lineId,
+                                                                string shift,
                                                                 DateTime from,
                                                                 DateTime to)
         {
@@ -96,6 +106,11 @@ namespace SMT.Services
                 predicate = predicate.And(p => p.LineId == lineId);
             }
 
+            if (!string.IsNullOrEmpty(shift))
+            {
+                predicate = predicate.And(p => p.Shift == shift);
+            }
+
             predicate = predicate.And(p => p.CreatedDate.Date >= from);
 
             predicate = predicate.And(p => p.CreatedDate.Date <= to);
@@ -106,43 +121,34 @@ namespace SMT.Services
             return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
         }
 
-        public async Task<IEnumerable<ReportResponse>> GetByDateAsync(DateTime date)
+        public async Task<IEnumerable<ReportResponse>> GetByDateAsync(string shift, DateTime date)
         {
-            var reports = await _repository.GetByAsync(p => p.CreatedDate.Date == date.Date);
+            IEnumerable<Report> reports = Enumerable.Empty<Report>();
+            if (string.IsNullOrEmpty(shift))
+            {
+                reports = await _repository.GetByAsync(p => p.CreatedDate.Date == date.Date);
+            }
+            else
+            {
+                reports = await _repository.GetByAsync(p => p.CreatedDate.Date == date.Date && p.Shift == shift);
+            }
 
             return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
         }
 
-        public async Task<IEnumerable<ReportResponse>> GetByLineAsync(int lineId, DateTime from, DateTime to)
+        public async Task<IEnumerable<ReportResponse>> GetByModelAndLineIdAsync(int modelId, int lineId, string shift, DateTime date)
         {
-            var reports = await _repository.GetByAsync(p => p.LineId == lineId && p.CreatedDate >= from && p.CreatedDate <= to);
+            IEnumerable<Report> reports = Enumerable.Empty<Report>();
+            if (string.IsNullOrEmpty(shift))
+            {
+                reports = await _repository.GetByAsync(p => p.CreatedDate.Date == date.Date && p.ModelId == modelId && p.LineId == lineId);
+            }
+            else
+            {
+                reports = await _repository.GetByAsync(p => p.CreatedDate.Date == date.Date && p.ModelId == modelId && p.LineId == lineId && p.Shift == shift);
+            }
 
             return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
-        }
-
-        public async Task<IEnumerable<ReportResponse>> GetByModelAndLineIdAsync(int modelId, int lineId, DateTime date)
-        {
-            var reports = await _repository.GetByAsync(p => p.CreatedDate.Date == date.Date && p.ModelId == modelId && p.LineId == lineId);
-
-            return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
-        }
-
-        public async Task<ReportResponse> UpdateAsync(int id, ReportUpdate reportUpdate)
-        {
-            var report = await _repository.FindAsync(p => p.Id == id);
-
-            if (report == null)
-                throw new NotFoundException("Report not found");
-
-            report.Action = reportUpdate.Action;
-            report.Condition = reportUpdate.Condition;
-            report.Employee = reportUpdate.Employee;
-            report.UpdatedDate = DateTime.Now;
-
-            _repository.Update(report);
-            await _unitOfWork.SaveAsync();
-
-            return _mapper.Map<Report, ReportResponse>(report);
         }
     }
 }

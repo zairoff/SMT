@@ -25,8 +25,7 @@ namespace SMT.Notification
                                 $" {repair.Machine.Name}\nSabab:" +
                                 $" {repair.Issue}\nBajarildi:" +
                                 $" {repair.Action}\nBajardi:" +
-                                $" {repair.Employee.FullName}\nGacha amal qiladi: " +
-                                $"{repair.NotificationDate}");
+                                $" {repair.Employee.FullName}\n");
         }
 
         public async Task NotifyAsync(List<Report> reports)

@@ -17,9 +17,9 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(string shift)
         {
-            var result = await _service.GetAllAsync();
+            var result = await _service.GetAllAsync(shift);
 
             return Ok(result);
         }
@@ -33,27 +33,27 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet("GetByDate")]
-        public async Task<IActionResult> GetByDate(DateTime date)
+        public async Task<IActionResult> GetByDate(string shift, DateTime date)
         {
-            var result = await _service.GetByDateAsync(date);
+            var result = await _service.GetByDateAsync(shift, date);
 
             return Ok(result);
         }
 
         [HttpGet]
         [Route("GetByModelIdAndLineId")]
-        public async Task<IActionResult> GetByModelIdAndLineId(int modelId, int lineId, DateTime date)
+        public async Task<IActionResult> GetByModelIdAndLineId(int modelId, int lineId, string shift, DateTime date)
         {
-            var result = await _service.GetByModelAndLineIdAsync(modelId, lineId, date);
+            var result = await _service.GetByModelAndLineIdAsync(modelId, lineId, shift, date);
 
             return Ok(result);
         }
 
         [HttpGet]
         [Route("GetBy")]
-        public async Task<IActionResult> GetBy(int modelId, int lineId, DateTime from, DateTime to)
+        public async Task<IActionResult> GetBy(int modelId, int lineId, string shift, DateTime from, DateTime to)
         {
-            var result = await _service.GetByAsync(modelId, lineId, from, to);
+            var result = await _service.GetByAsync(modelId, lineId, shift, from, to);
 
             return Ok(result);
         }
@@ -67,18 +67,6 @@ namespace SMT.Api.Controllers
             var result = await _service.AddAsync(reportCreate);
 
             return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
-        }
-
-        [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateReport(int id, [FromBody] ReportUpdate reportUpdate)
-        {
-            var result = await _service.UpdateAsync(id, reportUpdate);
-
-            return Ok(result);
         }
 
         [HttpDelete("{id}")]

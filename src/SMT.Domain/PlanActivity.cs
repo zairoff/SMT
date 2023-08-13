@@ -18,6 +18,8 @@ namespace SMT.Domain
 
         public string Responsible { get; set; }
 
+        public string Shift { get; set; }
+
         public string Status { get; set; }
 
         public DateTime Date { get; set; }
