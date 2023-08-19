@@ -8,6 +8,8 @@ namespace SMT.Services.Interfaces
     {
         Task<IEnumerable<LineOwnerResponse>> GetAllAsync();
 
+        Task<IEnumerable<LineOwnerResponse>> GetByLineAsync(int lineId);
+
         Task<LineOwnerResponse> GetAsync(int id);
 
         Task<LineOwnerResponse> AddAsync(LineOwnerCreate lineOwnerCreate);

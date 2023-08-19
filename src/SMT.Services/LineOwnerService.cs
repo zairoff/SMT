@@ -70,5 +70,12 @@ namespace SMT.Services
 
             return _mapper.Map<LineOwner, LineOwnerResponse>(lineOwner);
         }
+
+        public async Task<IEnumerable<LineOwnerResponse>> GetByLineAsync(int lineId)
+        {
+            var lineOwners = await _repository.GetByAsync(x => x.LineId == lineId);
+
+            return _mapper.Map<IEnumerable<LineOwner>, IEnumerable<LineOwnerResponse>>(lineOwners);
+        }
     }
 }

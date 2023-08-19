@@ -17,22 +17,39 @@ namespace SMT.Access.Repository.Statics
             _context = context;
         }
 
-        public async Task<IEnumerable<StaticsModel>> GroupByLineAsync(DateTime from, DateTime to)
+        public async Task<IEnumerable<StaticsModel>> GroupByLineAsync(string shift, DateTime from, DateTime to)
         {
-            return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
-                                       .Select(r => new {r.Line, r.Defect})
-                                           .GroupBy(g => g.Line.Name)
-                                           .Select(g => new StaticsModel
-                                           {
-                                               Name = g.Key,
-                                               Count = g.Count(),
-                                               Size = g.Sum(x => x.Defect.Size)
-                                           })
-                                           .OrderByDescending(o => o.Count)
-                                           .ToListAsync();
+            if (string.IsNullOrEmpty(shift))
+            {
+                return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
+                                      .Select(r => new { r.Line, r.Defect })
+                                          .GroupBy(g => g.Line.Name)
+                                          .Select(g => new StaticsModel
+                                          {
+                                              Name = g.Key,
+                                              Count = g.Count(),
+                                              Size = g.Sum(x => x.Defect.Size)
+                                          })
+                                          .OrderByDescending(o => o.Count)
+                                          .ToListAsync();
+            }
+            else
+            {
+                return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date && r.Shift == shift)
+                                      .Select(r => new { r.Line, r.Defect })
+                                          .GroupBy(g => g.Line.Name)
+                                          .Select(g => new StaticsModel
+                                          {
+                                              Name = g.Key,
+                                              Count = g.Count(),
+                                              Size = g.Sum(x => x.Defect.Size)
+                                          })
+                                          .OrderByDescending(o => o.Count)
+                                          .ToListAsync();
+            }
         }
 
-        public async Task<IEnumerable<StaticsModel>> GroupByModelAsync(DateTime from, DateTime to)
+        public async Task<IEnumerable<StaticsModel>> GroupByModelAsync(string shift, DateTime from, DateTime to)
         {
             //return await _context.Reports.GroupBy(r => r.ModelId)
             //                            .Select(g => new StaticsModel
@@ -41,22 +58,41 @@ namespace SMT.Access.Repository.Statics
             //                                            Count = g.Count()
             //                                        }).ToListAsync();
 
-           return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
-                                        .Select(r => new {r.Model, r.Defect})
+            if (string.IsNullOrEmpty(shift))
+            {
+                return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
+                                        .Select(r => new { r.Model, r.Defect })
                                             .GroupBy(g => g.Model.Name)
                                             .Select(g => new StaticsModel
-                                                { 
-                                                    Name = g.Key,
-                                                    Count = g.Count(),
-                                                    Size = g.Sum(x => x.Defect.Size)
-                                                })
+                                            {
+                                                Name = g.Key,
+                                                Count = g.Count(),
+                                                Size = g.Sum(x => x.Defect.Size)
+                                            })
                                             .OrderByDescending(o => o.Count)
                                             .ToListAsync();
+            }
+            else
+            {
+                return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date && r.Shift == shift)
+                                        .Select(r => new { r.Model, r.Defect })
+                                            .GroupBy(g => g.Model.Name)
+                                            .Select(g => new StaticsModel
+                                            {
+                                                Name = g.Key,
+                                                Count = g.Count(),
+                                                Size = g.Sum(x => x.Defect.Size)
+                                            })
+                                            .OrderByDescending(o => o.Count)
+                                            .ToListAsync();
+            }
         }
 
-        public async Task<IEnumerable<StaticsModel>> GroupByDefectAsync(DateTime from, DateTime to)
+        public async Task<IEnumerable<StaticsModel>> GroupByDefectAsync(string shift, DateTime from, DateTime to)
         {
-            return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
+            if (string.IsNullOrEmpty(shift))
+            {
+                return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
                                        .Select(r => r.Defect)
                                            .GroupBy(g => g.Name)
                                            .Select(g => new StaticsModel
@@ -67,11 +103,10 @@ namespace SMT.Access.Repository.Statics
                                            })
                                            .OrderByDescending(o => o.Count)
                                            .ToListAsync();
-        }
-
-        public async Task<IEnumerable<StaticsModel>> GroupByDefectAsync(int lineId, DateTime from, DateTime to)
-        {
-            return await _context.Reports.Where(r => r.LineId == lineId && r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
+            }
+            else
+            {
+                return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date && r.Shift == shift)
                                        .Select(r => r.Defect)
                                            .GroupBy(g => g.Name)
                                            .Select(g => new StaticsModel
@@ -82,14 +117,71 @@ namespace SMT.Access.Repository.Statics
                                            })
                                            .OrderByDescending(o => o.Count)
                                            .ToListAsync();
+            }
+            
         }
 
-        public async Task<StaticsModel> GroupByDefectAsync(int lineId, string name, DateTime from, DateTime to)
+        public async Task<IEnumerable<StaticsModel>> GroupByDefectAsync(int lineId, string shift, DateTime from, DateTime to)
         {
-            var count = await _context.Reports.Where(r => r.LineId == lineId && r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
-                                           .CountAsync();
+            if (string.IsNullOrEmpty(shift))
+            {
+                return await _context.Reports.Where(r => r.LineId == lineId && r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
+                                       .Select(r => r.Defect)
+                                           .GroupBy(g => g.Name)
+                                           .Select(g => new StaticsModel
+                                           {
+                                               Name = g.Key,
+                                               Count = g.Count(),
+                                               Size = g.Sum(x => x.Size)
+                                           })
+                                           .OrderByDescending(o => o.Count)
+                                           .ToListAsync();
+            }
+            else
+            {
+                return await _context.Reports.Where(r => r.LineId == lineId && r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date && r.Shift == shift)
+                                       .Select(r => r.Defect)
+                                           .GroupBy(g => g.Name)
+                                           .Select(g => new StaticsModel
+                                           {
+                                               Name = g.Key,
+                                               Count = g.Count(),
+                                               Size = g.Sum(x => x.Size)
+                                           })
+                                           .OrderByDescending(o => o.Count)
+                                           .ToListAsync();
+            }
+            
+        }
 
-            return new StaticsModel { Name = name, Count = count };
+        public async Task<StaticsModel> GroupByDefectAsync(int lineId, string name, string shift, DateTime from, DateTime to)
+        {
+            if (string.IsNullOrEmpty(shift))
+            {
+                return await _context.Reports.Where(r => r.LineId == lineId && r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
+                                          .Select(x => x.Defect)
+                                          .GroupBy(x => 1)
+                                          .Select(g => new StaticsModel
+                                          {
+                                              Name = name,
+                                              Count = g.Count(),
+                                              Size = g.Sum(g => g.Size)
+                                          })
+                                          .FirstOrDefaultAsync();
+            }
+            else
+            {
+                return await _context.Reports.Where(r => r.LineId == lineId && r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date && r.Shift == shift)
+                                          .Select(x => x.Defect)
+                                          .GroupBy(x => 1)
+                                          .Select(g => new StaticsModel
+                                          {
+                                              Name = name,
+                                              Count = g.Count(),
+                                              Size = g.Sum(g => g.Size)
+                                          })
+                                          .FirstOrDefaultAsync();
+            }
         }
     }
 }

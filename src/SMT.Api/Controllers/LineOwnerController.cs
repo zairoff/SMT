@@ -33,6 +33,15 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("ByLine")]
+        public async Task<IActionResult> ByLine(int lineId)
+        {
+            var result = await _service.GetByLineAsync(lineId);
+
+            return Ok(result);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

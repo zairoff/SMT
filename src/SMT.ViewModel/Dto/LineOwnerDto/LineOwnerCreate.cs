@@ -3,5 +3,7 @@
     public class LineOwnerCreate
     {
         public int EmployeeId { get; set; }
+
+        public int LineId { get; set; }
     }
 }

@@ -19,12 +19,25 @@ namespace SMT.Access.Repository
 
         public async override Task<LineOwner> FindAsync(Expression<Func<LineOwner, bool>> expression)
         {
-            return await DbSet.Include(e => e.Employee).Where(expression).FirstOrDefaultAsync();
+            return await DbSet.Include(e => e.Employee)
+                .Include(x => x.Line)
+                .Where(expression)
+                .FirstOrDefaultAsync();
         }
 
         public async override Task<IEnumerable<LineOwner>> GetAllAsync()
         {
-            return await DbSet.Include(e => e.Employee).ToListAsync();
+            return await DbSet.Include(e => e.Employee)
+                .Include(x => x.Line)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<LineOwner>> GetByAsync(Expression<Func<LineOwner, bool>> expression)
+        {
+            return await DbSet.Where(expression)
+                .Include(e => e.Line)
+                .Include(e => e.Employee)
+                .ToListAsync();
         }
     }
 }
