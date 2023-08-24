@@ -138,7 +138,15 @@ namespace SMT.Services
         }
         public async Task<IEnumerable<ReportResponse>> GetByUpdatedDate(DateTime date, bool status)
         {
-            var reports = await _repository.GetByAsync(p => p.UpdatedDate.Date == (date.Date) && p.Status == status);
+            IEnumerable<Report> reports;
+            if (status)
+            {
+                reports = await _repository.GetByAsync(p => p.UpdatedDate.Date == (date.Date) && p.Status == status);
+            }
+            else
+            {
+                reports = await _repository.GetByAsync(p => p.CreatedDate.Date == (date.Date) && p.Status == status);
+            }
 
             return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
         }
@@ -147,8 +155,8 @@ namespace SMT.Services
         {
             var reports = await _repository.GetByAsync(x => x.LineId == lineId
                                                        && x.Defect.Name == defectName
-                                                       && x.CreatedDate >= from
-                                                       && x.CreatedDate <= to);
+                                                       && x.CreatedDate.Date >= from.Date
+                                                       && x.CreatedDate.Date <= to.Date);
 
             return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
         }
@@ -157,8 +165,8 @@ namespace SMT.Services
         {
             var reports = await _repository.GetByAsync(x => x.LineId == lineId
                                                        && x.Status == status
-                                                       && x.CreatedDate >= from
-                                                       && x.CreatedDate <= to);
+                                                       && x.CreatedDate.Date >= from.Date
+                                                       && x.CreatedDate.Date <= to.Date);
 
             return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
         }
