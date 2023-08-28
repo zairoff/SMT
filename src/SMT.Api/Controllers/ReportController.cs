@@ -41,6 +41,15 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("GetHistory")]
+        public async Task<IActionResult> GetHistory(string barcode)
+        {
+            var results = await _service.GetHistoryAsync(barcode);
+
+            return Ok(results);
+        }
+
         [HttpGet("GetByDate")]
         public async Task<IActionResult> GetByDate(DateTime date, bool status)
         {

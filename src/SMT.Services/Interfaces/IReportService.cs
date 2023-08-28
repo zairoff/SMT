@@ -13,6 +13,8 @@ namespace SMT.Services.Interfaces
 
         Task<ReportResponse> GetByBarcodeAsync(string barcode);
 
+        Task<IEnumerable<ReportResponse>> GetHistoryAsync(string barcode);
+
         Task<IEnumerable<ReportResponse>> GetByModelAndLineIdAsync(int mdoelId, int lineId, DateTime date, bool isClosed);
 
         Task<ReportResponse> AddAsync(ReportCreate reportCreate);

@@ -196,5 +196,12 @@ namespace SMT.Services
 
             return _mapper.Map<Report, ReportResponse>(report);
         }
+
+        public async Task<IEnumerable<ReportResponse>> GetHistoryAsync(string barcode)
+        {
+            var reports = await _repository.GetByAsync(p => p.Barcode == barcode && p.Status == true);
+
+            return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
+        }
     }
 }
