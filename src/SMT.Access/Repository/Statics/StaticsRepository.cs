@@ -22,13 +22,13 @@ namespace SMT.Access.Repository.Statics
             if (string.IsNullOrEmpty(shift))
             {
                 return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
-                                      .Select(r => new { r.Line, r.Defect })
+                                      .Select(r => new { r.Line, r.Model })
                                           .GroupBy(g => g.Line.Name)
                                           .Select(g => new StaticsModel
                                           {
                                               Name = g.Key,
                                               Count = g.Count(),
-                                              Size = g.Sum(x => x.Defect.Size)
+                                              Size = g.Sum(x => x.Model.Size)
                                           })
                                           .OrderByDescending(o => o.Count)
                                           .ToListAsync();
@@ -36,13 +36,13 @@ namespace SMT.Access.Repository.Statics
             else
             {
                 return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date && r.Shift == shift)
-                                      .Select(r => new { r.Line, r.Defect })
+                                      .Select(r => new { r.Line, r.Model })
                                           .GroupBy(g => g.Line.Name)
                                           .Select(g => new StaticsModel
                                           {
                                               Name = g.Key,
                                               Count = g.Count(),
-                                              Size = g.Sum(x => x.Defect.Size)
+                                              Size = g.Sum(x => x.Model.Size)
                                           })
                                           .OrderByDescending(o => o.Count)
                                           .ToListAsync();
@@ -61,13 +61,13 @@ namespace SMT.Access.Repository.Statics
             if (string.IsNullOrEmpty(shift))
             {
                 return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
-                                        .Select(r => new { r.Model, r.Defect })
+                                        .Select(r => new { r.Model})
                                             .GroupBy(g => g.Model.Name)
                                             .Select(g => new StaticsModel
                                             {
                                                 Name = g.Key,
                                                 Count = g.Count(),
-                                                Size = g.Sum(x => x.Defect.Size)
+                                                Size = g.Sum(x => x.Model.Size)
                                             })
                                             .OrderByDescending(o => o.Count)
                                             .ToListAsync();
@@ -75,13 +75,13 @@ namespace SMT.Access.Repository.Statics
             else
             {
                 return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date && r.Shift == shift)
-                                        .Select(r => new { r.Model, r.Defect })
+                                        .Select(r => new { r.Model })
                                             .GroupBy(g => g.Model.Name)
                                             .Select(g => new StaticsModel
                                             {
                                                 Name = g.Key,
                                                 Count = g.Count(),
-                                                Size = g.Sum(x => x.Defect.Size)
+                                                Size = g.Sum(x => x.Model.Size)
                                             })
                                             .OrderByDescending(o => o.Count)
                                             .ToListAsync();
@@ -93,13 +93,13 @@ namespace SMT.Access.Repository.Statics
             if (string.IsNullOrEmpty(shift))
             {
                 return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
-                                       .Select(r => r.Defect)
-                                           .GroupBy(g => g.Name)
+                                       .Select(r => new { r.Model, r.Defect })
+                                           .GroupBy(g => g.Defect.Name)
                                            .Select(g => new StaticsModel
                                            {
                                                Name = g.Key,
                                                Count = g.Count(),
-                                               Size = g.Sum(x => x.Size)
+                                               Size = g.Sum(x => x.Model.Size)
                                            })
                                            .OrderByDescending(o => o.Count)
                                            .ToListAsync();
@@ -107,18 +107,17 @@ namespace SMT.Access.Repository.Statics
             else
             {
                 return await _context.Reports.Where(r => r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date && r.Shift == shift)
-                                       .Select(r => r.Defect)
-                                           .GroupBy(g => g.Name)
+                                       .Select(r => new { r.Model, r.Defect })
+                                           .GroupBy(g => g.Defect.Name)
                                            .Select(g => new StaticsModel
                                            {
                                                Name = g.Key,
                                                Count = g.Count(),
-                                               Size = g.Sum(x => x.Size)
+                                               Size = g.Sum(x => x.Model.Size)
                                            })
                                            .OrderByDescending(o => o.Count)
                                            .ToListAsync();
             }
-            
         }
 
         public async Task<IEnumerable<StaticsModel>> GroupByDefectAsync(int lineId, string shift, DateTime from, DateTime to)
@@ -126,13 +125,13 @@ namespace SMT.Access.Repository.Statics
             if (string.IsNullOrEmpty(shift))
             {
                 return await _context.Reports.Where(r => r.LineId == lineId && r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
-                                       .Select(r => r.Defect)
-                                           .GroupBy(g => g.Name)
+                                       .Select(r => new { r.Model, r.Defect })
+                                           .GroupBy(g => g.Defect.Name)
                                            .Select(g => new StaticsModel
                                            {
                                                Name = g.Key,
                                                Count = g.Count(),
-                                               Size = g.Sum(x => x.Size)
+                                               Size = g.Sum(x => x.Model.Size)
                                            })
                                            .OrderByDescending(o => o.Count)
                                            .ToListAsync();
@@ -140,13 +139,13 @@ namespace SMT.Access.Repository.Statics
             else
             {
                 return await _context.Reports.Where(r => r.LineId == lineId && r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date && r.Shift == shift)
-                                       .Select(r => r.Defect)
-                                           .GroupBy(g => g.Name)
+                                       .Select(r => new { r.Model, r.Defect })
+                                           .GroupBy(g => g.Defect.Name)
                                            .Select(g => new StaticsModel
                                            {
                                                Name = g.Key,
                                                Count = g.Count(),
-                                               Size = g.Sum(x => x.Size)
+                                               Size = g.Sum(x => x.Model.Size)
                                            })
                                            .OrderByDescending(o => o.Count)
                                            .ToListAsync();
@@ -159,26 +158,26 @@ namespace SMT.Access.Repository.Statics
             if (string.IsNullOrEmpty(shift))
             {
                 return await _context.Reports.Where(r => r.LineId == lineId && r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date)
-                                          .Select(x => x.Defect)
+                                          .Select(x => new { x.Model, x.Defect })
                                           .GroupBy(x => 1)
                                           .Select(g => new StaticsModel
                                           {
                                               Name = name,
                                               Count = g.Count(),
-                                              Size = g.Sum(g => g.Size)
+                                              Size = g.Sum(g => g.Model.Size)
                                           })
                                           .FirstOrDefaultAsync();
             }
             else
             {
                 return await _context.Reports.Where(r => r.LineId == lineId && r.CreatedDate.Date >= from.Date && r.CreatedDate.Date <= to.Date && r.Shift == shift)
-                                          .Select(x => x.Defect)
+                                          .Select(x => new { x.Model, x.Defect })
                                           .GroupBy(x => 1)
                                           .Select(g => new StaticsModel
                                           {
                                               Name = name,
                                               Count = g.Count(),
-                                              Size = g.Sum(g => g.Size)
+                                              Size = g.Sum(g => g.Model.Size)
                                           })
                                           .FirstOrDefaultAsync();
             }

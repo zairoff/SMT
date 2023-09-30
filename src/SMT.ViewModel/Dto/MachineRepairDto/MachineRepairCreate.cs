@@ -12,8 +12,6 @@ namespace SMT.ViewModel.Dto.MachineRepairDto
 
         public string Action { get; set; }
 
-        public bool IsActive { get; set; }
-
         public string Shift { get; set; }
 
         public string CreatedDate { get; set; }
