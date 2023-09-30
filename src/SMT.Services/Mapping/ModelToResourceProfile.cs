@@ -34,7 +34,8 @@ namespace SMT.Services.Mapping
             CreateMap<Line, LineResponse>();
             CreateMap<LineDefect, LineDefectResponse>();
 
-            CreateMap<Report, ReportResponse>();
+            CreateMap<Report, ReportResponse>()
+                .ForMember(x => x.CreatedDate, s => s.MapFrom(x => x.CreatedDate.ToString("yyyy-MM-dd HH:mm")));
 
             CreateMap<Employee, EmployeeResponse>()
                 .ForMember(e => e.ImageUrl, o => o.MapFrom(s => s.ImagePath));

@@ -18,8 +18,6 @@ namespace SMT.Domain
 
         public virtual Model Model { get; set; }
 
-        public string Employee { get; set; }
-
         public string Shift { get; set; }
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;

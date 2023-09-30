@@ -15,10 +15,8 @@ namespace SMT.ViewModel.Dto.ReportDto
 
         public ModelResponse Model { get; set; }
 
-        public string Employee { get; set; }
-
         public string Shift { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+        public string CreatedDate { get; set; }
     }
 }
