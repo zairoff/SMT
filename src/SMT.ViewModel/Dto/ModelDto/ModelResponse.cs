@@ -8,6 +8,12 @@ namespace SMT.ViewModel.Dto.ModelDto
 
         public string Name { get; set; }
 
+        public string NameInBarcode { get; set; }
+
+        public string SapCode { get; set; }
+
+        public bool Deactivated { get; set; }
+
         public ProductBrandResponse ProductBrand { get; set; }
     }
 }
