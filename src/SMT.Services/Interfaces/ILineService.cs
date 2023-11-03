@@ -6,7 +6,7 @@ namespace SMT.Services.Interfaces
 {
     public interface ILineService
     {
-        Task<IEnumerable<LineResponse>> GetAllAsync();
+        Task<IEnumerable<LineResponse>> GetAllAsync(bool? isActive);
 
         Task<LineResponse> GetAsync(int id);
 

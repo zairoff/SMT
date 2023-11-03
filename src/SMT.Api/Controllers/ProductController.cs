@@ -4,7 +4,6 @@ using SMT.ViewModel.Dto.ProductDto;
 using SMT.Services.Interfaces;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Authorization;
 
 namespace SMT.Api.Controllers
 {
@@ -18,9 +17,9 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] bool? isActive)
         {
-            var result = await _service.GetAllAsync();
+            var result = await _service.GetAllAsync(isActive ?? true);
 
             return Ok(result);
         }

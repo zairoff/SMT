@@ -45,15 +45,17 @@ namespace SMT.Services
             if (line == null)
                 throw new NotFoundException("Not found");
 
-            _repository.Delete(line);
+            line.IsActive = false;
+
+            _repository.Update(line);
             await _unitOfWork.SaveAsync();
 
             return _mapper.Map<Line, LineResponse>(line);
         }
 
-        public async Task<IEnumerable<LineResponse>> GetAllAsync()
+        public async Task<IEnumerable<LineResponse>> GetAllAsync(bool? isActive)
         {
-            var lines = await _repository.GetAllAsync();
+            var lines = await _repository.GetByAsync(x => x.IsActive == isActive);
 
             return _mapper.Map<IEnumerable<Line>, IEnumerable<LineResponse>>(lines);
         }

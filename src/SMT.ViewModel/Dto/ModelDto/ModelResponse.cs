@@ -12,7 +12,7 @@ namespace SMT.ViewModel.Dto.ModelDto
 
         public string SapCode { get; set; }
 
-        public bool Deactivated { get; set; }
+        public bool IsActive { get; set; }
 
         public ProductBrandResponse ProductBrand { get; set; }
     }

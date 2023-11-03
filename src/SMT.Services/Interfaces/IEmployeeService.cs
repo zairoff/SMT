@@ -6,7 +6,7 @@ namespace SMT.Services.Interfaces
 {
     public interface IEmployeeService
     {
-        Task<IEnumerable<EmployeeResponse>> GetAllAsync();
+        Task<IEnumerable<EmployeeResponse>> GetAllAsync(bool? isActive);
 
         Task<EmployeeResponse> GetAsync(int id);
 

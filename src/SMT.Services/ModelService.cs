@@ -48,15 +48,17 @@ namespace SMT.Services
             if (model == null)
                 throw new NotFoundException("Model not found");
 
-            _repository.Delete(model);
+            model.IsActive = false;
+
+            _repository.Update(model);
             await _unitOfWork.SaveAsync();
 
             return _mapper.Map<Model, ModelResponse>(model);
         }
 
-        public async Task<IEnumerable<ModelResponse>> GetAllAsync()
+        public async Task<IEnumerable<ModelResponse>> GetAllAsync(bool? isActive)
         {
-            var models = await _repository.GetAllAsync();
+            var models = await _repository.GetByAsync(x => x.IsActive == isActive);
 
             return _mapper.Map<IEnumerable<Model>, IEnumerable<ModelResponse>>(models);
         }

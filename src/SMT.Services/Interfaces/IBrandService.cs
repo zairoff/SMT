@@ -6,7 +6,7 @@ namespace SMT.Services.Interfaces
 {
     public interface IBrandService
     {
-        Task<IEnumerable<BrandResponse>> GetAllAsync();
+        Task<IEnumerable<BrandResponse>> GetAllAsync(bool? isActive);
 
         Task<BrandResponse> GetAsync(int id);
 

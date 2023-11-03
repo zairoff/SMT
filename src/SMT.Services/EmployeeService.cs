@@ -72,9 +72,9 @@ namespace SMT.Services
             return _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeResponse>>(employees);
         }
 
-        public async Task<IEnumerable<EmployeeResponse>> GetAllAsync()
+        public async Task<IEnumerable<EmployeeResponse>> GetAllAsync(bool? isActive)
         {
-            var employees = await _repository.GetAllAsync();
+            var employees = await _repository.GetByAsync(x => x.IsActive == isActive);
 
             return _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeResponse>>(employees);
         }
@@ -107,7 +107,6 @@ namespace SMT.Services
             employee.DepartmentId = employeeUpdate.DepartmentId;
             employee.Details = employeeUpdate.Details;
             employee.ImagePath = employeeUpdate.ImagePath;
-            employee.IsActive = employeeUpdate.IsActive;
             employee.Phone = employeeUpdate.Phone;
 
             _repository.Update(employee);

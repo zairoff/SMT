@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using System;
 
 namespace SMT.Access.Repository
 {
@@ -13,6 +15,12 @@ namespace SMT.Access.Repository
     {
         public DepartmentRepository(AppDbContext context) : base(context)
         {
+
+        }
+
+        public async Task<IEnumerable<Department>> GetByAsync(Expression<Func<Department, bool>> expression)
+        {
+            return await DbSet.Where(expression).OrderBy(x => x.Name).ToListAsync();
         }
 
         public override void Delete(Department entity)

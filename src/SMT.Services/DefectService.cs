@@ -45,17 +45,19 @@ namespace SMT.Services
             if (defect == null)
                 throw new NotFoundException("Not found");
 
-            _repository.Delete(defect);
+            defect.IsActive = false;
+
+            _repository.Update(defect);
             await _unitOfWork.SaveAsync();
 
             return _mapper.Map<Defect, DefectResponse>(defect);
         }
 
-        public async Task<IEnumerable<DefectResponse>> GetAllAsync()
+        public async Task<IEnumerable<DefectResponse>> GetAllAsync(bool? isActive)
         {
-            var defect = await _repository.GetAllAsync();
+            var defects = await _repository.GetByAsync(x => x.IsActive == isActive);
 
-            return _mapper.Map<IEnumerable<Defect>, IEnumerable<DefectResponse>>(defect);
+            return _mapper.Map<IEnumerable<Defect>, IEnumerable<DefectResponse>>(defects);
         }
 
         public async Task<DefectResponse> GetAsync(int id)

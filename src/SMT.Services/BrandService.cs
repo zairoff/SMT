@@ -45,15 +45,17 @@ namespace SMT.Services
             if (brand == null)
                 throw new NotFoundException("Not found");
 
-            _repository.Delete(brand);
+            brand.IsActive = false;
+            _repository.Update(brand);
+
             await _unitOfWork.SaveAsync();
 
             return _mapper.Map<Brand, BrandResponse>(brand);
         }
 
-        public async Task<IEnumerable<BrandResponse>> GetAllAsync()
+        public async Task<IEnumerable<BrandResponse>> GetAllAsync(bool? isActive)
         {
-            var brands = await _repository.GetAllAsync();
+            var brands = await _repository.GetByAsync(x => x.IsActive == isActive);
 
             return _mapper.Map<IEnumerable<Brand>, IEnumerable<BrandResponse>>(brands);
         }

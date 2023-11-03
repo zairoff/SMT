@@ -6,7 +6,7 @@ namespace SMT.Services.Interfaces
 {
     public interface IDefectService
     {
-        Task<IEnumerable<DefectResponse>> GetAllAsync();
+        Task<IEnumerable<DefectResponse>> GetAllAsync(bool? isActive);
 
         Task<DefectResponse> GetAsync(int id);
 

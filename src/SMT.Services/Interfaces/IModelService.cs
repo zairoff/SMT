@@ -6,7 +6,7 @@ namespace SMT.Services.Interfaces
 {
     public interface IModelService
     {
-        Task<IEnumerable<ModelResponse>> GetAllAsync();
+        Task<IEnumerable<ModelResponse>> GetAllAsync(bool? isActive);
 
         Task<ModelResponse> GetAsync(int id);
 

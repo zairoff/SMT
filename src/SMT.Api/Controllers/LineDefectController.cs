@@ -35,7 +35,7 @@ namespace SMT.Api.Controllers
 
         [HttpGet]
         [Route("GetByLineId")]
-        public async Task<IActionResult> GetByProductIdAsync(int lineId)
+        public async Task<IActionResult> GetByLineIdAsync(int lineId)
         {
             var result = await _service.GetByLineIdAsync(lineId);
 

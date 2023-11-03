@@ -14,6 +14,6 @@
 
         public string SapCode { get; set; }
 
-        public bool Deactivated { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }

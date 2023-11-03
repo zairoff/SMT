@@ -64,15 +64,17 @@ namespace SMT.Services
             if (department == null)
                 throw new NotFoundException("Not found");
 
-            _repository.Delete(department);
+            department.IsActive = false;
+
+            _repository.Update(department);
             await _unitOfWork.SaveAsync();
 
             return _mapper.Map<DepartmentResponse>(department);
         }
 
-        public async Task<IEnumerable<DepartmentResponse>> GetAllAsync()
+        public async Task<IEnumerable<DepartmentResponse>> GetAllAsync(bool? isActive)
         {
-            var departments = await _repository.GetAllAsync();
+            var departments = await _repository.GetByAsync(x => x.IsActive == isActive);
 
             return _mapper.Map<IEnumerable<DepartmentResponse>>(departments);
         }
