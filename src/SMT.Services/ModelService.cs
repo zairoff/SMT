@@ -70,9 +70,9 @@ namespace SMT.Services
             return _mapper.Map<Model, ModelResponse>(Model);
         }
 
-        public async Task<IEnumerable<ModelResponse>> GetByProductBrandId(int productBrandId)
+        public async Task<IEnumerable<ModelResponse>> GetByProductBrandId(int productBrandId, bool? isActive)
         {
-            var models = await _repository.GetByAsync(m => m.ProductBrandId == productBrandId);
+            var models = await _repository.GetByAsync(m => m.ProductBrandId == productBrandId && m.IsActive == isActive);
 
             return _mapper.Map<IEnumerable<Model>, IEnumerable<ModelResponse>>(models);
         }
