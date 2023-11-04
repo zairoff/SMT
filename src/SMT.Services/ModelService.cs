@@ -93,6 +93,8 @@ namespace SMT.Services
                 throw new NotFoundException("Not found");
 
             model.Name = modelUpdate.Name;
+            model.NameInBarcode = modelUpdate.NameInBarcode;
+            model.SapCode = modelUpdate.SapCode;
 
             _repository.Update(model);
             await _unitOfWork.SaveAsync();
