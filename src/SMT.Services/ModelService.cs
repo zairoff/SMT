@@ -88,7 +88,7 @@ namespace SMT.Services
         {
             modelUpdate.SapCode.Trim();
 
-            var model = await _repository.FindAsync(x => x.SapCode == modelUpdate.SapCode);
+            var model = await _repository.FindAsync(x => x.SapCode == modelUpdate.SapCode && x.Id != id);
 
             if (model != null)
                 throw new ConflictException($"{modelUpdate.SapCode} already existed");
