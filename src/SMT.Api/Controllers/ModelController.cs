@@ -42,9 +42,9 @@ namespace SMT.Api.Controllers
 
         [HttpGet]
         [Route("GetByProductBrandId")]
-        public async Task<IActionResult> GetByProductBrandId([FromQuery]int productBrandId, [FromQuery] bool? isActive )
+        public async Task<IActionResult> GetByProductBrandId([FromQuery]int productBrandId, [FromQuery] bool? isActive)
         {
-            var result = await _service.GetByProductBrandId(productBrandId, isActive);
+            var result = await _service.GetByProductBrandId(productBrandId, isActive ?? true);
 
             return Ok(result);
         }
