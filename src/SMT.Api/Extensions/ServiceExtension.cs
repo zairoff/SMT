@@ -93,7 +93,6 @@ namespace SMT.Api.Extensions
             //services.BuildServiceProvider().GetService<AppDbContext>().Database.Migrate();
             //services.BuildServiceProvider().GetService<AppIdentityDbContext>().Database.Migrate();
 
-
             services.AddControllers();
             services.AddAutoMapper(typeof(ModelToResourceProfile), typeof(ResourceToModelProfile));
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
@@ -124,6 +123,7 @@ namespace SMT.Api.Extensions
             services.AddScoped<IStaticsRepository, StaticsRepository>();
             services.AddScoped<IPlanRepository, PlanRepository>();
             services.AddScoped<IPlanActivityRepository, PlanActivityRepository>();
+            services.AddScoped<IReadyProductRepository, ReadyProductRepository>();
 
             /*************   Services  ************/
 
@@ -144,6 +144,7 @@ namespace SMT.Api.Extensions
             services.AddScoped<IMachineRepairerService, MachineRepairerService>();
             services.AddScoped<IPlanService, PlanService>();
             services.AddScoped<IPlanActivityService, PlanActivityService>();
+            services.AddScoped<IReadyProductService, ReadyProductService>();
 
 
             /*************   Security  ************/
