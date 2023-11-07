@@ -113,9 +113,9 @@ namespace SMT.Services
                 predicate = predicate.And(p => p.LineId == lineId);
             }
 
-            predicate = predicate.And(p => p.CreatedDate.Date >= from);
+            predicate = predicate.And(p => p.CreatedDate.Date >= from.Date);
 
-            predicate = predicate.And(p => p.CreatedDate.Date <= to);
+            predicate = predicate.And(p => p.CreatedDate.Date <= to.Date);
 
 
             var reports = await _repository.GetByAsync(predicate);
