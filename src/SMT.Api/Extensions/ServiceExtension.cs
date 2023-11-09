@@ -124,6 +124,7 @@ namespace SMT.Api.Extensions
             services.AddScoped<IPlanRepository, PlanRepository>();
             services.AddScoped<IPlanActivityRepository, PlanActivityRepository>();
             services.AddScoped<IReadyProductRepository, ReadyProductRepository>();
+            services.AddScoped<IReadyProductTransactionRepository, ReadyProductTransactionRepository>();
 
             /*************   Services  ************/
 
@@ -145,7 +146,6 @@ namespace SMT.Api.Extensions
             services.AddScoped<IPlanService, PlanService>();
             services.AddScoped<IPlanActivityService, PlanActivityService>();
             services.AddScoped<IReadyProductService, ReadyProductService>();
-
 
             /*************   Security  ************/
             services.AddScoped<IUserService, UserService>();

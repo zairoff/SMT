@@ -21,6 +21,7 @@ using System;
 using SMT.ViewModel.Dto.PlanDto;
 using SMT.ViewModel.Dto.PlanActivityDto;
 using SMT.ViewModel.Dto.ReadyProductDto;
+using SMT.ViewModel.Dto.ProductTransactionDto;
 
 namespace SMT.Services.Mapping
 {
@@ -86,7 +87,9 @@ namespace SMT.Services.Mapping
             CreateMap<PlanActivityUpdate, PlanActivity>();
 
             CreateMap<ReadyProductCreate, ReadyProduct>();
-            CreateMap<ReadyProductUpdate, PlanActivity>();
+            CreateMap<ReadyProductUpdate, ReadyProduct>();
+
+            CreateMap<ReadyProductTransactionCreate, ReadyProductTransaction>();
         }
     }
 }

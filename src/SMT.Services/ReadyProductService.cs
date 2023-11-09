@@ -4,6 +4,7 @@ using SMT.Access.Unit;
 using SMT.Domain;
 using SMT.Services.Exceptions;
 using SMT.Services.Interfaces;
+using SMT.ViewModel.Dto.ProductTransactionDto;
 using SMT.ViewModel.Dto.ReadyProductDto;
 using System;
 using System.Collections.Generic;
@@ -13,95 +14,152 @@ namespace SMT.Services
 {
     public class ReadyProductService : IReadyProductService
     {
-        private readonly IReadyProductRepository _repository;
+        private readonly IReadyProductRepository _readyProductRepository;
+        private readonly IReadyProductTransactionRepository _transactionRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ReadyProductService(IUnitOfWork unitOfWork, IReadyProductRepository repository, IMapper mapper)
+        public ReadyProductService(IUnitOfWork unitOfWork, IReadyProductRepository repository, IMapper mapper, IReadyProductTransactionRepository transactionRepository)
         {
             _unitOfWork = unitOfWork;
-            _repository = repository;
+            _readyProductRepository = repository;
             _mapper = mapper;
-        }
-
-        public async Task<ReadyProductResponse> AddAsync(ReadyProductCreate readyProductCreate)
-        {
-            var readyProduct = _mapper.Map<ReadyProductCreate, ReadyProduct>(readyProductCreate);
-
-            await _repository.AddAsync(readyProduct);
-            await _unitOfWork.SaveAsync();
-
-            return _mapper.Map<ReadyProduct, ReadyProductResponse>(readyProduct);
-        }
-
-        public async Task<ReadyProductResponse> DeleteAsync(int id)
-        {
-            var readyProduct = await _repository.FindAsync(p => p.Id == id);
-
-            if (readyProduct == null)
-                throw new NotFoundException("Not found");
-
-            _repository.Delete(readyProduct);
-            await _unitOfWork.SaveAsync();
-
-            return _mapper.Map<ReadyProduct, ReadyProductResponse>(readyProduct);
+            _transactionRepository = transactionRepository;
         }
 
         public async Task<IEnumerable<ReadyProductResponse>> GetAllAsync()
         {
-            var readyProducts = await _repository.GetAllAsync();
+            var readyProducts = await _readyProductRepository.GetAllAsync();
 
             return _mapper.Map<IEnumerable<ReadyProduct>, IEnumerable<ReadyProductResponse>>(readyProducts);
         }
 
         public async Task<ReadyProductResponse> GetAsync(int id)
         {
-            var readyProduct = await _repository.FindAsync(x => x.Id == id);
+            var readyProduct = await _readyProductRepository.FindAsync(x => x.Id == id);
 
             return _mapper.Map<ReadyProduct, ReadyProductResponse>(readyProduct);
         }
 
-        public async Task<IEnumerable<ReadyProductResponse>> GetByEnterDateAsync(DateTime date)
+        public async Task<ReadyProductResponse> ImportAsync(ReadyProductCreate readyProductCreate)
         {
-            var readyProducts = await _repository.GetByAsync(x => x.Enter.Date == date.Date);
-
-            return _mapper.Map<IEnumerable<ReadyProduct>, IEnumerable<ReadyProductResponse>>(readyProducts);
-        }
-
-        public async Task<IEnumerable<ReadyProductResponse>> GetByExitDateAsync(DateTime date)
-        {
-            var readyProducts = await _repository.GetByAsync(x => x.Exit.Date == date.Date);
-
-            return _mapper.Map<IEnumerable<ReadyProduct>, IEnumerable<ReadyProductResponse>>(readyProducts);
-        }
-
-        public async Task<ReadyProductResponse> UpdateAsync(int id, ReadyProductUpdate readyProductUpdate)
-        {
-            var readyProduct = await _repository.FindAsync(p => p.Id == id);
+            var readyProduct = await _readyProductRepository.FindAsync(p => p.ModelId == readyProductCreate.ModelId);
 
             if (readyProduct == null)
-                throw new NotFoundException("Not found");
+            {
+                readyProduct = _mapper.Map<ReadyProductCreate, ReadyProduct>(readyProductCreate);
 
-            readyProduct.Count = readyProductUpdate.Count;
+                await _readyProductRepository.AddAsync(readyProduct);
+            }
+            else
+            {
+                readyProduct.Count += readyProductCreate.Count;
+                _readyProductRepository.Update(readyProduct);
+            }
 
-            _repository.Update(readyProduct);
+            var transaction = new ReadyProductTransaction
+            {
+                ModelId = readyProductCreate.ModelId,
+                Count = readyProductCreate.Count,
+                Status = ReadyProductTransactionType.Import,
+                Date = DateTime.Now,
+            };
+
+            await _transactionRepository.AddAsync(transaction);
+
             await _unitOfWork.SaveAsync();
 
             return _mapper.Map<ReadyProduct, ReadyProductResponse>(readyProduct);
         }
 
-        public async Task<IEnumerable<ReadyProductResponse>> GetByEnterDateRangeAsync(DateTime from, DateTime to)
+        public async Task<ReadyProductResponse> ExportAsync(ReadyProductUpdate readyProductUpdate)
         {
-            var readyProducts = await _repository.GetByAsync(x => x.Enter.Date >= from.Date && x.Enter.Date <= to.Date);
+            var readyProduct = await _readyProductRepository.FindAsync(p => p.ModelId == readyProductUpdate.ModelId);
 
-            return _mapper.Map<IEnumerable<ReadyProduct>, IEnumerable<ReadyProductResponse>>(readyProducts);
+            if (readyProduct == null)
+            {
+                throw new NotFoundException("Not found");
+            }
+
+            if (readyProduct.Count < readyProductUpdate.Count)
+            {
+                throw new InvalidOperationException("Not enough");
+            }
+
+            readyProduct.Count -= readyProductUpdate.Count;
+            _readyProductRepository.Update(readyProduct);
+
+            var transaction = new ReadyProductTransaction
+            {
+                ModelId = readyProductUpdate.ModelId,
+                Count = readyProductUpdate.Count,
+                Status = ReadyProductTransactionType.Export,
+                Date = DateTime.Now,
+            };
+
+            await _transactionRepository.AddAsync(transaction);
+
+            await _unitOfWork.SaveAsync();
+
+            return _mapper.Map<ReadyProduct, ReadyProductResponse>(readyProduct);
         }
 
-        public async Task<IEnumerable<ReadyProductResponse>> GetByExitDateRangeAsync(DateTime from, DateTime to)
+        public async Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateAsync(DateTime date, TransactionType transactionType)
         {
-            var readyProducts = await _repository.GetByAsync(x => x.Exit.Date >= from.Date && x.Exit.Date <= to.Date);
+            var productTransactionType = (ReadyProductTransactionType)transactionType;
 
-            return _mapper.Map<IEnumerable<ReadyProduct>, IEnumerable<ReadyProductResponse>>(readyProducts);
+            IEnumerable<ReadyProductTransaction> readyProducts;
+
+            if (productTransactionType == ReadyProductTransactionType.All)
+            {
+                readyProducts = await _transactionRepository.GetByAsync(x => x.Date.Date == date.Date);
+            }
+            else
+            {
+                readyProducts = await _transactionRepository.GetByAsync(x => x.Date.Date == date.Date && x.Status == productTransactionType);
+            }
+
+            return _mapper.Map<IEnumerable<ReadyProductTransaction>, IEnumerable<ReadyProductTransactionResponse>>(readyProducts);
+        }
+
+        public async Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateRangeAsync(DateTime from, DateTime to, TransactionType transactionType)
+        {
+            var productTransactionType = (ReadyProductTransactionType)transactionType;
+
+            IEnumerable<ReadyProductTransaction> readyProducts;
+
+            if (productTransactionType == ReadyProductTransactionType.All)
+            {
+                readyProducts = await _transactionRepository.GetByAsync(x => x.Date.Date >= from.Date && x.Date.Date <= to);
+            }
+            else
+            {
+                readyProducts = await _transactionRepository.GetByAsync(x => x.Date.Date >= from.Date && x.Date.Date <= to && x.Status == productTransactionType);
+            }
+
+            return _mapper.Map<IEnumerable<ReadyProductTransaction>, IEnumerable<ReadyProductTransactionResponse>>(readyProducts);
+        }
+
+        public async Task<ReadyProductTransactionResponse> DeleteTransactionAsync(int id)
+        {
+            var readyProductTransaction = await _transactionRepository.FindAsync(p => p.Id == id);
+
+            if (readyProductTransaction == null)
+                throw new NotFoundException("Transaction not found");
+
+            _transactionRepository.Delete(readyProductTransaction);
+
+            var readyProduct = await _readyProductRepository.FindAsync(x => x.ModelId == readyProductTransaction.ModelId);
+
+            if (readyProductTransaction == null)
+                throw new NotFoundException($"Ready product not found");
+
+            readyProduct.Count -= readyProductTransaction.Count;
+            _readyProductRepository.Update(readyProduct);
+
+            await _unitOfWork.SaveAsync();
+
+            return _mapper.Map<ReadyProductTransaction, ReadyProductTransactionResponse>(readyProductTransaction);
         }
     }
 }

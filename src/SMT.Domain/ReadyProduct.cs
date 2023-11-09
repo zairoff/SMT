@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SMT.Domain
+﻿namespace SMT.Domain
 {
     public class ReadyProduct
     {
@@ -11,11 +9,5 @@ namespace SMT.Domain
         public Model Model { get; set; }
 
         public int Count { get; set; }
-
-        public bool Inside { get; set; }
-
-        public DateTime Enter { get; set; }
-
-        public DateTime Exit { get; set; }
     }
 }

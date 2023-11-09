@@ -41,6 +41,15 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
+        [Route("GetBySapCode")]
+        public async Task<IActionResult> GetBySapCode(string sapCode)
+        {
+            var result = await _service.GetBySapCodeAsync(sapCode);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
         [Route("GetByProductBrandId")]
         public async Task<IActionResult> GetByProductBrandId([FromQuery]int productBrandId, [FromQuery] bool? isActive)
         {

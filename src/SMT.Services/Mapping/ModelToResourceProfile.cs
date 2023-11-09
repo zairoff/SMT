@@ -21,6 +21,7 @@ using SMT.ViewModel.Dto.MachineRepairerDto;
 using SMT.ViewModel.Dto.PlanDto;
 using SMT.ViewModel.Dto.PlanActivityDto;
 using SMT.ViewModel.Dto.ReadyProductDto;
+using SMT.ViewModel.Dto.ProductTransactionDto;
 
 namespace SMT.Services.Mapping
 {
@@ -68,9 +69,11 @@ namespace SMT.Services.Mapping
                 .ForMember(m => m.Date, s => s.MapFrom(s => s.Date.ToString("yyyy-MM-dd")))
                 .ForMember(m => m.Expires, s => s.MapFrom(s => s.Expires.ToString("yyyy-MM-dd")));
 
-            CreateMap<ReadyProduct, ReadyProductResponse>()
-                .ForMember(m => m.Enter, s => s.MapFrom(s => s.Enter.ToString("yyyy-MM-dd")))
-                .ForMember(m => m.Exit, s => s.MapFrom(s => s.Exit.ToString("yyyy-MM-dd")));
+            CreateMap<ReadyProduct, ReadyProductResponse>();
+
+            CreateMap<ReadyProductTransaction, ReadyProductTransactionResponse>()
+               .ForMember(m => m.Date, s => s.MapFrom(s => s.Date.ToString("yyyy-MM-dd HH:mm")))
+               .ForMember(m => m.Status, s => s.MapFrom(s => s.Status.ToString()));
         }
     }
 }

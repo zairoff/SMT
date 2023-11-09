@@ -107,5 +107,12 @@ namespace SMT.Services
 
             return _mapper.Map<Model, ModelResponse>(model);
         }
+
+        public async Task<ModelResponse> GetBySapCodeAsync(string sapCode)
+        {
+            var model = await _repository.FindAsync(p => p.SapCode == sapCode);
+
+            return _mapper.Map<Model, ModelResponse>(model);
+        }
     }
 }

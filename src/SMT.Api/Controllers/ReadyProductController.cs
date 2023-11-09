@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SMT.Services.Interfaces;
+using SMT.ViewModel.Dto.ProductTransactionDto;
 using SMT.ViewModel.Dto.ReadyProductDto;
 using System;
 using System.Threading.Tasks;
@@ -35,37 +36,19 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
-        [Route("GetByEnterDate")]
-        public async Task<IActionResult> GetByEnterDate(DateTime dateTime)
+        [Route("GetByDate")]
+        public async Task<IActionResult> GetByDate([FromQuery] DateTime dateTime, [FromQuery] TransactionType transactionType)
         {
-            var result = await _service.GetByEnterDateAsync(dateTime);
+            var result = await _service.GetByDateAsync(dateTime, transactionType);
 
             return Ok(result);
         }
 
         [HttpGet]
-        [Route("GetByEnterDateRange")]
-        public async Task<IActionResult> GetByEnterDateRange(DateTime from, DateTime to)
+        [Route("GetByDateRange")]
+        public async Task<IActionResult> GetByDateRange(DateTime from, DateTime to, TransactionType transactionType)
         {
-            var result = await _service.GetByEnterDateRangeAsync(from, to);
-
-            return Ok(result);
-        }
-
-        [HttpGet]
-        [Route("GetByExitDate")]
-        public async Task<IActionResult> GetByExitDate(DateTime dateTime)
-        {
-            var result = await _service.GetByExitDateAsync(dateTime);
-
-            return Ok(result);
-        }
-
-        [HttpGet]
-        [Route("GetByExitDateRange")]
-        public async Task<IActionResult> GetByExitDateRange(DateTime from, DateTime to)
-        {
-            var result = await _service.GetByExitDateRangeAsync(from, to);
+            var result = await _service.GetByDateRangeAsync(from, to, transactionType);
 
             return Ok(result);
         }
@@ -73,23 +56,21 @@ namespace SMT.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Create([FromBody] ReadyProductCreate readyProductCreate)
+        public async Task<IActionResult> Import([FromBody] ReadyProductCreate readyProductCreate)
         {
-            var result = await _service.AddAsync(readyProductCreate);
+            var result = await _service.ImportAsync(readyProductCreate);
 
             return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }
 
-        [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Update(int id, [FromBody] ReadyProductUpdate readyProductUpdate)
+        public async Task<IActionResult> Export([FromBody] ReadyProductUpdate readyProductUpdate)
         {
-            var result = await _service.UpdateAsync(id, readyProductUpdate);
+            var result = await _service.ExportAsync(readyProductUpdate);
 
-            return Ok(result);
+            return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }
 
         [HttpDelete("{id}")]
@@ -98,7 +79,7 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _service.DeleteAsync(id);
+            var result = await _service.DeleteTransactionAsync(id);
 
             return Ok(result);
         }

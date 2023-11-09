@@ -1,4 +1,5 @@
-﻿using SMT.ViewModel.Dto.ReadyProductDto;
+﻿using SMT.ViewModel.Dto.ProductTransactionDto;
+using SMT.ViewModel.Dto.ReadyProductDto;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,20 +10,16 @@ namespace SMT.Services.Interfaces
     {
         Task<IEnumerable<ReadyProductResponse>> GetAllAsync();
 
+        Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateAsync(DateTime date, TransactionType transactionType);
+
+        Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateRangeAsync(DateTime from, DateTime to, TransactionType transactionType);
+
+        Task<ReadyProductTransactionResponse> DeleteTransactionAsync(int id);
+
         Task<ReadyProductResponse> GetAsync(int id);
 
-        Task<IEnumerable<ReadyProductResponse>> GetByEnterDateAsync(DateTime date);
+        Task<ReadyProductResponse> ImportAsync(ReadyProductCreate readyProductCreate);
 
-        Task<IEnumerable<ReadyProductResponse>> GetByExitDateAsync(DateTime date);
-
-        Task<IEnumerable<ReadyProductResponse>> GetByEnterDateRangeAsync(DateTime from, DateTime to);
-
-        Task<IEnumerable<ReadyProductResponse>> GetByExitDateRangeAsync(DateTime from, DateTime to);
-
-        Task<ReadyProductResponse> AddAsync(ReadyProductCreate readyProductCreate);
-
-        Task<ReadyProductResponse> UpdateAsync(int id, ReadyProductUpdate readyProductUpdate);
-
-        Task<ReadyProductResponse> DeleteAsync(int id);
+        Task<ReadyProductResponse> ExportAsync(ReadyProductUpdate readyProductUpdate);
     }
 }

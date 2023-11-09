@@ -22,7 +22,7 @@ namespace SMT.Notification
         {
             
             await _botClient.SendTextMessageAsync(chatId: _chatId,
-                            text: $"Diqqat!!!\nXudud: {reports[0].Line.Name}\nModel:{reports[0].Model.Name}\nNuqson: {GetDefects(reports)}\nYig'uvchi: {reports[0].Employee.FullName}\nSoni: {reports.Count}");
+                            text: $"Diqqat!!!\nXudud: {reports[0].Line.Name}\nModel: {reports[0].Model.Name}\nNuqson: {GetDefects(reports)}\nYig'uvchi: {reports[0].Employee.FullName}\nSoni: {reports.Count}");
         }
 
         private static string GetDefects(List<PcbReport> reports)
