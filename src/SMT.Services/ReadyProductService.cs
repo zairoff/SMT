@@ -1,30 +1,38 @@
 ﻿using AutoMapper;
+using CoreHtmlToImage;
 using SMT.Access.Repository.Interfaces;
 using SMT.Access.Unit;
 using SMT.Domain;
+using SMT.Notification;
 using SMT.Services.Exceptions;
 using SMT.Services.Interfaces;
 using SMT.ViewModel.Dto.ProductTransactionDto;
 using SMT.ViewModel.Dto.ReadyProductDto;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SMT.Services
 {
     public class ReadyProductService : IReadyProductService
     {
+        private readonly IModelRepository _modelRepository;
         private readonly IReadyProductRepository _readyProductRepository;
         private readonly IReadyProductTransactionRepository _transactionRepository;
+        private readonly INotificationService _notificationService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ReadyProductService(IUnitOfWork unitOfWork, IReadyProductRepository repository, IMapper mapper, IReadyProductTransactionRepository transactionRepository)
+        public ReadyProductService(IUnitOfWork unitOfWork, IReadyProductRepository repository, IMapper mapper, IReadyProductTransactionRepository transactionRepository, IModelRepository modelRepository, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _readyProductRepository = repository;
             _mapper = mapper;
             _transactionRepository = transactionRepository;
+            _modelRepository = modelRepository;
+            _notificationService = notificationService;
         }
 
         public async Task<IEnumerable<ReadyProductResponse>> GetAllAsync()
@@ -43,6 +51,13 @@ namespace SMT.Services
 
         public async Task<ReadyProductResponse> ImportAsync(ReadyProductCreate readyProductCreate)
         {
+            var model = await _modelRepository.FindAsync(x => x.Id == readyProductCreate.ModelId);
+
+            if (model == null)
+            {
+                throw new NotFoundException("Model not found");
+            }
+
             var readyProduct = await _readyProductRepository.FindAsync(p => p.ModelId == readyProductCreate.ModelId);
 
             if (readyProduct == null)
@@ -68,6 +83,14 @@ namespace SMT.Services
             await _transactionRepository.AddAsync(transaction);
 
             await _unitOfWork.SaveAsync();
+
+            // transaction
+            await NotifyTransaction(transaction, model);
+
+            // all products
+            var readyProducts = await _readyProductRepository.GetAllAsync();
+
+            await NotifyAllProducts(readyProducts);
 
             return _mapper.Map<ReadyProduct, ReadyProductResponse>(readyProduct);
         }
@@ -147,7 +170,8 @@ namespace SMT.Services
             if (readyProductTransaction == null)
                 throw new NotFoundException("Transaction not found");
 
-            _transactionRepository.Delete(readyProductTransaction);
+            readyProductTransaction.Status = ReadyProductTransactionType.Deleted;
+            _transactionRepository.Update(readyProductTransaction);
 
             var readyProduct = await _readyProductRepository.FindAsync(x => x.ModelId == readyProductTransaction.ModelId);
 
@@ -159,7 +183,138 @@ namespace SMT.Services
 
             await _unitOfWork.SaveAsync();
 
+            await NotifyTransaction(readyProductTransaction, readyProduct.Model);
+
+            // all products
+            var readyProducts = await _readyProductRepository.GetAllAsync();
+
+            await NotifyAllProducts(readyProducts);
+
             return _mapper.Map<ReadyProductTransaction, ReadyProductTransactionResponse>(readyProductTransaction);
+        }
+
+        private async Task NotifyTransaction(ReadyProductTransaction transaction, Model model)
+        {
+            var title = BuilTitle(transaction);
+
+            var html = BuildTransactionNotificationBody(transaction, model, title);
+
+            var memoryStream = ConvertHtmlToImage(html);
+
+            await _notificationService.NotifyAsync(memoryStream, title);
+        }
+
+        private async Task NotifyAllProducts(IEnumerable<ReadyProduct> readyProducts)
+        {
+            var html = BuildReadyProductsNotificationBody(readyProducts);
+
+            var memoryStream = ConvertHtmlToImage(html);
+
+            await _notificationService.NotifyAsync(memoryStream, "OMBORDA MAVJUD MODELLAR");
+        }
+
+        private static string BuilTitle(ReadyProductTransaction transaction)
+        {
+            if (transaction.Status == ReadyProductTransactionType.Import)
+            {
+                return "KIRIM";
+            }
+
+            if (transaction.Status == ReadyProductTransactionType.Export)
+            {
+                return "CHIQIM";
+            }
+
+            return "KIRIM O'CHIRILDI, SABAB: OPERATOR XATOLIGI";
+        }
+
+        private static string BuildTransactionNotificationBody(ReadyProductTransaction transaction, Model model, string title)
+        {
+            return $@"<!DOCTYPE html>
+                        <html>
+                        <head>
+                        <style>
+                        table {{
+                          font-family: arial, sans-serif;
+                          border-collapse: collapse;
+                          width: 100%;
+                        }}
+
+                        td, th {{
+                          border: 1px solid #dddddd;
+                          text-align: left;
+                          padding: 8px;
+                        }}
+                        </style>
+                        </head>
+                            <body>
+                                <h2>{title}</h2>
+                                <table>
+                                  <tr>
+                                    <th>MODEL</th>
+                                    <th>SAP CODE</th>
+                                    <th>VAQT</th>
+                                    <th>SONI</th>
+                                  </tr>
+                                  <tr>
+                                    <td>{model.Name}</td>
+                                    <td>{model.SapCode}</td>
+                                    <td>{transaction.Date}</td>
+                                    <td>{transaction.Count}</td>
+                                  </tr>
+                                </table>
+                            </body>
+                        </html>";
+        }
+
+        private static string BuildReadyProductsNotificationBody(IEnumerable<ReadyProduct> readyProducts)
+        {
+            var builder = new StringBuilder();
+            foreach (var readyProduct in readyProducts)
+            {
+                builder.AppendLine("<tr>");
+                builder.AppendLine($"<td>{readyProduct.Model.Name}</td>");
+                builder.AppendLine($"<td>{readyProduct.Model.SapCode}</td>");
+                builder.AppendLine($"<td>{readyProduct.Count}</td>");
+                builder.AppendLine("</tr>");
+            }
+
+            return $@"<!DOCTYPE html>
+                        <html>
+                        <head>
+                        <style>
+                        table {{
+                          font-family: arial, sans-serif;
+                          border-collapse: collapse;
+                          width: 100%;
+                        }}
+
+                        td, th {{
+                          border: 1px solid #dddddd;
+                          text-align: left;
+                          padding: 8px;
+                        }}
+                        </style>
+                        </head>
+                            <body>
+                                <h2>OMBORDA MAVJUD MODELLAR</h2>
+                                <table>
+                                  <tr>
+                                    <th>MODEL</th>
+                                    <th>SAP CODE</th>
+                                    <th>SONI</th>
+                                  </tr>
+                                  {builder}
+                                </table>
+                            </body>
+                        </html>";
+        }
+
+        private static MemoryStream ConvertHtmlToImage(string html)
+        {
+            var converter = new HtmlConverter();
+            var bytes = converter.FromHtmlString(html);
+           return new MemoryStream(bytes);
         }
     }
 }

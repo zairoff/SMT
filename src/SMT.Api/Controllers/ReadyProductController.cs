@@ -63,7 +63,7 @@ namespace SMT.Api.Controllers
             return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }
 
-        [HttpPost]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Export([FromBody] ReadyProductUpdate readyProductUpdate)

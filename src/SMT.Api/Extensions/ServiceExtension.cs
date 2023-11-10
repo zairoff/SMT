@@ -99,7 +99,8 @@ namespace SMT.Api.Extensions
             services.AddScoped<ITelegramBotClient>(conf => new TelegramBotClient(configuration.GetValue<string>("AppSettings:BotToken")));
             services.AddScoped<INotificationService>(conf => new NotificationService(conf.GetRequiredService<ITelegramBotClient>(),
                 Convert.ToInt64(configuration["AppSettings:QCChatId"]),
-                Convert.ToInt64(configuration["AppSettings:ReapirChatID"])));
+                Convert.ToInt64(configuration["AppSettings:ReapirChatID"]),
+                Convert.ToInt64(configuration["AppSettings:ReadyProductsChatId"])));
 
 
             /*************   Repository  ************/

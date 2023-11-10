@@ -72,7 +72,7 @@ namespace SMT.Services.Mapping
             CreateMap<ReadyProduct, ReadyProductResponse>();
 
             CreateMap<ReadyProductTransaction, ReadyProductTransactionResponse>()
-               .ForMember(m => m.Date, s => s.MapFrom(s => s.Date.ToString("yyyy-MM-dd HH:mm")))
+               .ForMember(m => m.Date, s => s.MapFrom(s => s.Date.ToString("yyyy-MM-dd HH:mm:ss")))
                .ForMember(m => m.Status, s => s.MapFrom(s => s.Status.ToString()));
         }
     }
