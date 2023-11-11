@@ -1,20 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using SMT.Access.Data;
-using SMT.Access.Identity;
 using SMT.Api.ExceptionHandler;
 using SMT.Api.Extensions;
-using System;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace SMT.Api
 {
@@ -68,26 +61,26 @@ namespace SMT.Api
             //Seed(app, loggerFactory.CreateLogger<Startup>());
         }
 
-        private static void Seed(IApplicationBuilder app, ILogger<Startup> logger)
-        {
-            using var scope = app.ApplicationServices.CreateScope();
-            var scopedProvider = scope.ServiceProvider;
-            try
-            {
-                var appContext = scopedProvider.GetRequiredService<AppDbContext>();
-                var identityContext = scopedProvider.GetRequiredService<AppIdentityDbContext>();
+        //private static void Seed(IApplicationBuilder app, ILogger<Startup> logger)
+        //{
+        //    using var scope = app.ApplicationServices.CreateScope();
+        //    var scopedProvider = scope.ServiceProvider;
+        //    try
+        //    {
+        //        var appContext = scopedProvider.GetRequiredService<AppDbContext>();
+        //        var identityContext = scopedProvider.GetRequiredService<AppIdentityDbContext>();
 
-                appContext.Database.Migrate();
-                identityContext.Database.Migrate();
+        //        appContext.Database.Migrate();
+        //        identityContext.Database.Migrate();
 
-                var userManager = scopedProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                var roleManager = scopedProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                IdentityDbContextSeed.SeedAsync(userManager, roleManager).Wait();
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "An error occurred seeding the DB.");
-            }
-        }
+        //        var userManager = scopedProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        //        var roleManager = scopedProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        //        IdentityDbContextSeed.SeedAsync(userManager, roleManager).Wait();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        logger.LogError(ex, "An error occurred seeding the DB.");
+        //    }
+        //}
     }
 }

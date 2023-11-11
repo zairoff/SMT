@@ -36,6 +36,24 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
+        [Route("GetByProductBrand")]
+        public async Task<IActionResult> GetProductBrand([FromQuery] int productBrandId)
+        {
+            var result = await _service.GetByProductBrandAsync(productBrandId);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("GetByProduct")]
+        public async Task<IActionResult> GetByProduct([FromQuery] int productId)
+        {
+            var result = await _service.GetByProductAsync(productId);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
         [Route("GetByDate")]
         public async Task<IActionResult> GetByDate([FromQuery] DateTime dateTime, [FromQuery] TransactionType transactionType)
         {

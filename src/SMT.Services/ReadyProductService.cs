@@ -37,7 +37,7 @@ namespace SMT.Services
 
         public async Task<IEnumerable<ReadyProductResponse>> GetAllAsync()
         {
-            var readyProducts = await _readyProductRepository.GetAllAsync();
+            var readyProducts = await _readyProductRepository.GetByAsync(x => x.Count > 0);
 
             return _mapper.Map<IEnumerable<ReadyProduct>, IEnumerable<ReadyProductResponse>>(readyProducts);
         }
@@ -47,6 +47,20 @@ namespace SMT.Services
             var readyProduct = await _readyProductRepository.FindAsync(x => x.Id == id);
 
             return _mapper.Map<ReadyProduct, ReadyProductResponse>(readyProduct);
+        }
+
+        public async Task<IEnumerable<ReadyProductResponse>> GetByProductBrandAsync(int productBrandId)
+        {
+            var readyProducts =  await _readyProductRepository.GetByAsync(x => x.Model.ProductBrandId == productBrandId && x.Count > 0);
+
+            return _mapper.Map<IEnumerable<ReadyProduct>, IEnumerable<ReadyProductResponse>>(readyProducts);
+        }
+
+        public async Task<IEnumerable<ReadyProductResponse>> GetByProductAsync(int productId)
+        {
+            var readyProducts = await _readyProductRepository.GetByAsync(x => x.Model.ProductBrand.ProductId == productId && x.Count > 0);
+
+            return _mapper.Map<IEnumerable<ReadyProduct>, IEnumerable<ReadyProductResponse>>(readyProducts);
         }
 
         public async Task<ReadyProductResponse> ImportAsync(ReadyProductCreate readyProductCreate)
@@ -88,7 +102,7 @@ namespace SMT.Services
             await NotifyTransaction(transaction, model);
 
             // all products
-            var readyProducts = await _readyProductRepository.GetAllAsync();
+            var readyProducts = await _readyProductRepository.GetByAsync(x => x.Count > 0);
 
             await NotifyAllProducts(readyProducts);
 
@@ -123,6 +137,14 @@ namespace SMT.Services
             await _transactionRepository.AddAsync(transaction);
 
             await _unitOfWork.SaveAsync();
+
+            // transaction
+            await NotifyTransaction(transaction, readyProduct.Model);
+
+            // all products
+            var readyProducts = await _readyProductRepository.GetByAsync(x => x.Count > 0);
+
+            await NotifyAllProducts(readyProducts);
 
             return _mapper.Map<ReadyProduct, ReadyProductResponse>(readyProduct);
         }
@@ -217,15 +239,15 @@ namespace SMT.Services
         {
             if (transaction.Status == ReadyProductTransactionType.Import)
             {
-                return "KIRIM";
+                return "OMBORGA KIRDI";
             }
 
             if (transaction.Status == ReadyProductTransactionType.Export)
             {
-                return "CHIQIM";
+                return "OMBORDAN CHIQDI";
             }
 
-            return "KIRIM O'CHIRILDI, SABAB: OPERATOR XATOLIGI";
+            return "OMBORGA KIRILGAN O'CHIRILDI, SABAB: OPERATOR XATOLIGI";
         }
 
         private static string BuildTransactionNotificationBody(ReadyProductTransaction transaction, Model model, string title)

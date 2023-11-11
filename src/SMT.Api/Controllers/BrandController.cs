@@ -18,9 +18,18 @@ namespace SMT.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] bool? isActive)
         {
-            var result = await _service.GetAllAsync(isActive ?? true);
+            try
+            {
+                var result = await _service.GetAllAsync(isActive ?? true);
 
-            return Ok(result);
+                return Ok(result);
+            }
+            catch (System.Exception ex)
+            {
+
+                throw;
+            }
+            
         }
 
         [HttpGet("{id}")]

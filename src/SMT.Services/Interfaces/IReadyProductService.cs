@@ -18,6 +18,10 @@ namespace SMT.Services.Interfaces
 
         Task<ReadyProductResponse> GetAsync(int id);
 
+        Task<IEnumerable<ReadyProductResponse>> GetByProductBrandAsync(int productBrandId);
+
+        Task<IEnumerable<ReadyProductResponse>> GetByProductAsync(int productId);
+
         Task<ReadyProductResponse> ImportAsync(ReadyProductCreate readyProductCreate);
 
         Task<ReadyProductResponse> ExportAsync(ReadyProductUpdate readyProductUpdate);
