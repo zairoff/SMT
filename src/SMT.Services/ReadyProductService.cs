@@ -208,7 +208,7 @@ namespace SMT.Services
             await NotifyTransaction(readyProductTransaction, readyProduct.Model);
 
             // all products
-            var readyProducts = await _readyProductRepository.GetAllAsync();
+            var readyProducts = await _readyProductRepository.GetByAsync(x => x.Count > 0);
 
             await NotifyAllProducts(readyProducts);
 
