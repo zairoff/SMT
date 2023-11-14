@@ -12,7 +12,7 @@ namespace SMT.Services.Interfaces
 
         Task<ModelResponse> GetByNameAsync(string name);
 
-        Task<ModelResponse> GetBySapCodeAsync(string sapCode);
+        Task<ModelResponse> GetBySapCodeAsync(string sapCode, bool isActive);
 
         Task<IEnumerable<ModelResponse>> GetByProductBrandId(int productBrandId, bool? isActive);
 

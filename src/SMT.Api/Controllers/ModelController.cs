@@ -42,9 +42,9 @@ namespace SMT.Api.Controllers
 
         [HttpGet]
         [Route("GetBySapCode")]
-        public async Task<IActionResult> GetBySapCode(string sapCode)
+        public async Task<IActionResult> GetBySapCode(string sapCode, bool? isActive)
         {
-            var result = await _service.GetBySapCodeAsync(sapCode);
+            var result = await _service.GetBySapCodeAsync(sapCode, isActive ?? true);
 
             return Ok(result);
         }
