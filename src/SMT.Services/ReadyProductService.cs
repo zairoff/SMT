@@ -220,15 +220,9 @@ namespace SMT.Services
 
         public async Task NotifyAsync()
         {
-            var importTask = _transactionRepository.GetByAsync(x => x.Status == ReadyProductTransactionType.Import && x.Date.Date == DateTime.Now.Date);
-            var exportTask = _transactionRepository.GetByAsync(x => x.Status == ReadyProductTransactionType.Export && x.Date.Date == DateTime.Now.Date);
-            var readyProductTask = _readyProductRepository.GetByAsync(x => x.Count > 0);
-
-            await Task.WhenAll(importTask, exportTask, readyProductTask);
-
-            var imports = await importTask;
-            var exports = await exportTask;
-            var readyProducts = await readyProductTask;
+            var imports = await _transactionRepository.GetByAsync(x => x.Status == ReadyProductTransactionType.Import && x.Date.Date == DateTime.Now.Date);
+            var exports = await _transactionRepository.GetByAsync(x => x.Status == ReadyProductTransactionType.Export && x.Date.Date == DateTime.Now.Date);
+            var readyProducts = await _readyProductRepository.GetByAsync(x => x.Count > 0);
 
             if (imports.Any())
             {
