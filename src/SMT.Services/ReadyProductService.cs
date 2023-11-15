@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CoreHtmlToImage;
+using SMT.Access.Migrations;
 using SMT.Access.Repository.Interfaces;
 using SMT.Access.Unit;
 using SMT.Domain;
@@ -11,6 +12,7 @@ using SMT.ViewModel.Dto.ReadyProductDto;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -99,12 +101,12 @@ namespace SMT.Services
             await _unitOfWork.SaveAsync();
 
             // transaction
-            await NotifyTransaction(transaction, model);
+            //await NotifyTransaction(transaction, model);
 
             // all products
-            var readyProducts = await _readyProductRepository.GetByAsync(x => x.Count > 0);
+            //var readyProducts = await _readyProductRepository.GetByAsync(x => x.Count > 0);
 
-            await NotifyAllProducts(readyProducts);
+            //await NotifyAllProducts(readyProducts);
 
             return _mapper.Map<ReadyProduct, ReadyProductResponse>(readyProduct);
         }
@@ -128,7 +130,8 @@ namespace SMT.Services
 
             var transaction = new ReadyProductTransaction
             {
-                ModelId = readyProductUpdate.ModelId,
+                ModelId = readyProduct.ModelId,
+                Model = readyProduct.Model,
                 Count = readyProductUpdate.Count,
                 Status = ReadyProductTransactionType.Export,
                 Date = DateTime.Now,
@@ -139,7 +142,7 @@ namespace SMT.Services
             await _unitOfWork.SaveAsync();
 
             // transaction
-            await NotifyTransaction(transaction, readyProduct.Model);
+            await NotifyTransactions(new List<ReadyProductTransaction> { transaction });
 
             // all products
             var readyProducts = await _readyProductRepository.GetByAsync(x => x.Count > 0);
@@ -205,34 +208,58 @@ namespace SMT.Services
 
             await _unitOfWork.SaveAsync();
 
-            await NotifyTransaction(readyProductTransaction, readyProduct.Model);
+            //await NotifyTransaction(readyProductTransaction, readyProduct.Model);
 
             // all products
-            var readyProducts = await _readyProductRepository.GetByAsync(x => x.Count > 0);
+            //var readyProducts = await _readyProductRepository.GetByAsync(x => x.Count > 0);
 
-            await NotifyAllProducts(readyProducts);
+            //await NotifyAllProducts(readyProducts);
 
             return _mapper.Map<ReadyProductTransaction, ReadyProductTransactionResponse>(readyProductTransaction);
         }
 
-        private async Task NotifyTransaction(ReadyProductTransaction transaction, Model model)
+        public async Task NotifyAsync()
         {
-            var title = BuilTitle(transaction);
+            var importTask = _transactionRepository.GetByAsync(x => x.Status == ReadyProductTransactionType.Import && x.Date.Date == DateTime.Now.Date);
+            var exportTask = _transactionRepository.GetByAsync(x => x.Status == ReadyProductTransactionType.Export && x.Date.Date == DateTime.Now.Date);
+            var readyProductTask = _readyProductRepository.GetByAsync(x => x.Count > 0);
 
-            var html = BuildTransactionNotificationBody(transaction, model, title);
+            await Task.WhenAll(importTask, exportTask, readyProductTask);
+
+            var imports = await importTask;
+            var exports = await exportTask;
+            var readyProducts = await readyProductTask;
+
+            if (imports.Any())
+            {
+                await NotifyTransactions(imports);
+            }
+
+            if (exports.Any())
+            {
+                await NotifyTransactions(exports);
+            }
+
+            if (readyProducts.Any())
+            {
+                await NotifyAllProducts(readyProducts);
+            }
+        }
+
+        private async Task NotifyTransactions(IEnumerable<ReadyProductTransaction> transactions)
+        {
+            if (transactions == null || !transactions.Any())
+            {
+                return;
+            }
+
+            var title = BuilTitle(transactions.First());
+
+            var html = BuildNotificationTransactionsBody(transactions, title);
 
             var memoryStream = ConvertHtmlToImage(html);
 
             await _notificationService.NotifyAsync(memoryStream, title);
-        }
-
-        private async Task NotifyAllProducts(IEnumerable<ReadyProduct> readyProducts)
-        {
-            var html = BuildReadyProductsNotificationBody(readyProducts);
-
-            var memoryStream = ConvertHtmlToImage(html);
-
-            await _notificationService.NotifyAsync(memoryStream, "OMBORDA MAVJUD MODELLAR");
         }
 
         private static string BuilTitle(ReadyProductTransaction transaction)
@@ -250,8 +277,19 @@ namespace SMT.Services
             return "OMBORGA KIRILGAN O'CHIRILDI, SABAB: OPERATOR XATOLIGI";
         }
 
-        private static string BuildTransactionNotificationBody(ReadyProductTransaction transaction, Model model, string title)
+        private static string BuildNotificationTransactionsBody(IEnumerable<ReadyProductTransaction> transactions, string title)
         {
+            var builder = new StringBuilder();
+            foreach (var readyProduct in transactions)
+            {
+                builder.AppendLine("<tr>");
+                builder.AppendLine($"<td>{readyProduct.Model.Name}</td>");
+                builder.AppendLine($"<td>{readyProduct.Model.SapCode}</td>");
+                builder.AppendLine($"<td>{readyProduct.Date}</td>");
+                builder.AppendLine($"<td>{readyProduct.Count}</td>");
+                builder.AppendLine("</tr>");
+            }
+
             return $@"<!DOCTYPE html>
                         <html>
                         <head>
@@ -275,18 +313,27 @@ namespace SMT.Services
                                   <tr>
                                     <th>MODEL</th>
                                     <th>SAP CODE</th>
-                                    <th>VAQT</th>
+                                    <th>SANA</th>
                                     <th>SONI</th>
                                   </tr>
-                                  <tr>
-                                    <td>{model.Name}</td>
-                                    <td>{model.SapCode}</td>
-                                    <td>{transaction.Date}</td>
-                                    <td>{transaction.Count}</td>
-                                  </tr>
+                                  {builder}
                                 </table>
                             </body>
                         </html>";
+        }
+
+        private async Task NotifyAllProducts(IEnumerable<ReadyProduct> readyProducts)
+        {
+            if (readyProducts == null || !readyProducts.Any())
+            {
+                return;
+            }
+
+            var html = BuildReadyProductsNotificationBody(readyProducts);
+
+            var memoryStream = ConvertHtmlToImage(html);
+
+            await _notificationService.NotifyAsync(memoryStream, "OMBORDA MAVJUD MODELLAR");
         }
 
         private static string BuildReadyProductsNotificationBody(IEnumerable<ReadyProduct> readyProducts)

@@ -81,6 +81,17 @@ namespace SMT.Api.Controllers
             return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }
 
+        [HttpPost]
+        [Route("/Notify")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Notify()
+        {
+            await _service.NotifyAsync();
+
+            return new OkResult();
+        }
+
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

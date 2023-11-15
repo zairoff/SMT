@@ -25,5 +25,7 @@ namespace SMT.Services.Interfaces
         Task<ReadyProductResponse> ImportAsync(ReadyProductCreate readyProductCreate);
 
         Task<ReadyProductResponse> ExportAsync(ReadyProductUpdate readyProductUpdate);
+
+        Task NotifyAsync();
     }
 }
