@@ -142,12 +142,12 @@ namespace SMT.Services
             await _unitOfWork.SaveAsync();
 
             // transaction
-            await NotifyTransactions(new List<ReadyProductTransaction> { transaction });
+            //await NotifyTransactions(new List<ReadyProductTransaction> { transaction });
 
             // all products
-            var readyProducts = await _readyProductRepository.GetByAsync(x => x.Count > 0);
+            //var readyProducts = await _readyProductRepository.GetByAsync(x => x.Count > 0);
 
-            await NotifyAllProducts(readyProducts);
+            //await NotifyAllProducts(readyProducts);
 
             return _mapper.Map<ReadyProduct, ReadyProductResponse>(readyProduct);
         }
@@ -226,12 +226,16 @@ namespace SMT.Services
 
             if (imports.Any())
             {
-                await NotifyTransactions(imports);
+                var title = BuilTitle(imports.First());
+
+                await NotifyTransactions(imports, title);
             }
 
             if (exports.Any())
             {
-                await NotifyTransactions(exports);
+                var title = BuilTitle(exports.First());
+
+                await NotifyTransactions(exports, title);
             }
 
             if (readyProducts.Any() && (imports.Any() || exports.Any()))
@@ -240,14 +244,41 @@ namespace SMT.Services
             }
         }
 
-        private async Task NotifyTransactions(IEnumerable<ReadyProductTransaction> transactions)
+        public async Task GroupByNotifyAsync()
+        {
+            try
+            {
+                var imports = await _transactionRepository.GetGroupByModelAsync(x => x.Status == ReadyProductTransactionType.Import && x.Date.Date == DateTime.Now.Date);
+                var exports = await _transactionRepository.GetGroupByModelAsync(x => x.Status == ReadyProductTransactionType.Export && x.Date.Date == DateTime.Now.Date);
+                var readyProducts = await _readyProductRepository.GetByAsync(x => x.Count > 0);
+
+                if (imports.Any())
+                {
+                    await NotifyTransactions(imports, $"{DateTime.Now:yyyy:MM:dd} SANADA OMBORGA KIRGAN MAHSULOTLAR");
+                }
+
+                if (exports.Any())
+                {
+                    await NotifyTransactions(exports, $"{DateTime.Now:yyyy:MM:dd} SANADA OMBORDAN CHIQGAN MAHSULOTLAR");
+                }
+
+                if (readyProducts.Any() && (imports.Any() || exports.Any()))
+                {
+                    await NotifyAllProducts(readyProducts);
+                }
+            }
+            catch(Exception ex)
+            {
+
+            }           
+        }
+
+        private async Task NotifyTransactions(IEnumerable<ReadyProductTransaction> transactions, string title)
         {
             if (transactions == null || !transactions.Any())
             {
                 return;
             }
-
-            var title = BuilTitle(transactions.First());
 
             var html = BuildNotificationTransactionsBody(transactions, title);
 
@@ -279,7 +310,6 @@ namespace SMT.Services
                 builder.AppendLine("<tr>");
                 builder.AppendLine($"<td>{readyProduct.Model.Name}</td>");
                 builder.AppendLine($"<td>{readyProduct.Model.SapCode}</td>");
-                builder.AppendLine($"<td>{readyProduct.Date}</td>");
                 builder.AppendLine($"<td>{readyProduct.Count}</td>");
                 builder.AppendLine("</tr>");
             }
@@ -307,7 +337,6 @@ namespace SMT.Services
                                   <tr>
                                     <th>MODEL</th>
                                     <th>SAP CODE</th>
-                                    <th>SANA</th>
                                     <th>SONI</th>
                                   </tr>
                                   {builder}

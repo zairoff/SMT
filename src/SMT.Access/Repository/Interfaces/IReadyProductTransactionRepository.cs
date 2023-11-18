@@ -10,5 +10,7 @@ namespace SMT.Access.Repository.Interfaces
     public interface IReadyProductTransactionRepository : IBaseRepository<ReadyProductTransaction>
     {
         Task<IEnumerable<ReadyProductTransaction>> GetByAsync(Expression<Func<ReadyProductTransaction, bool>> expression);
+
+        Task<IEnumerable<ReadyProductTransaction>> GetGroupByModelAsync(Expression<Func<ReadyProductTransaction, bool>> expression);
     }
 }

@@ -92,6 +92,17 @@ namespace SMT.Api.Controllers
             return new OkResult();
         }
 
+        [HttpPost]
+        [Route("/Notify/GroupBy")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GroupByNotify()
+        {
+            await _service.GroupByNotifyAsync();
+
+            return new OkResult();
+        }
+
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
