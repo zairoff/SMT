@@ -54,7 +54,7 @@ namespace SMT.Access.Repository
 
         public async Task<IEnumerable<ReadyProductTransaction>> GetGroupByModelAsync(Expression<Func<ReadyProductTransaction, bool>> expression)
         {
-            return await DbSet.Where(expression)
+            var rr = await DbSet.Where(expression)
                            .Select(m => new { m.Model, m.Count })
                            .GroupBy(x => new { x.Model.Name, x.Model.SapCode })
                            .Select(x => new ReadyProductTransaction
@@ -62,8 +62,10 @@ namespace SMT.Access.Repository
                                Model = new Model { Name = x.Key.Name, SapCode = x.Key.SapCode },
                                Count = x.Sum(x => x.Count),
                            })
-                           .Distinct()
+                           .OrderByDescending(x => x.Count)
                            .ToListAsync();
+
+            return rr;
         }
     }
 }

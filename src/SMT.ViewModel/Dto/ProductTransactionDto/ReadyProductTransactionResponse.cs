@@ -12,7 +12,7 @@ namespace SMT.ViewModel.Dto.ProductTransactionDto
 
         public int Count { get; set; }
 
-        public ReadyProductTransactionType Status { get; set; }
+        public string Status { get; set; }
 
         public DateTime Date { get; set; }
     }

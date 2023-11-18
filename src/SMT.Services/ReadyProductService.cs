@@ -170,6 +170,15 @@ namespace SMT.Services
             return _mapper.Map<IEnumerable<ReadyProductTransaction>, IEnumerable<ReadyProductTransactionResponse>>(readyProducts);
         }
 
+        public async Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateGroupByAsync(DateTime date, TransactionType transactionType)
+        {
+            var productTransactionType = (ReadyProductTransactionType)transactionType;
+
+            IEnumerable<ReadyProductTransaction> readyProducts = await _transactionRepository.GetGroupByModelAsync(x => x.Date.Date == date.Date && x.Status == productTransactionType);
+
+            return _mapper.Map<IEnumerable<ReadyProductTransaction>, IEnumerable<ReadyProductTransactionResponse>>(readyProducts);
+        }
+
         public async Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateRangeAsync(DateTime from, DateTime to, TransactionType transactionType)
         {
             var productTransactionType = (ReadyProductTransactionType)transactionType;
@@ -184,6 +193,34 @@ namespace SMT.Services
             {
                 readyProducts = await _transactionRepository.GetByAsync(x => x.Date.Date >= from.Date && x.Date.Date <= to && x.Status == productTransactionType);
             }
+
+            return _mapper.Map<IEnumerable<ReadyProductTransaction>, IEnumerable<ReadyProductTransactionResponse>>(readyProducts);
+        }
+
+        public async Task<IEnumerable<ReadyProductTransactionResponse>> GetBySapCodeDateRange(string sapCode, DateTime from, DateTime to, TransactionType transactionType)
+        {
+            var productTransactionType = (ReadyProductTransactionType)transactionType;
+
+            IEnumerable<ReadyProductTransaction> readyProducts;
+
+            if (productTransactionType == ReadyProductTransactionType.All)
+            {
+                readyProducts = await _transactionRepository.GetByAsync(x => x.Model.SapCode == sapCode && x.Date.Date >= from.Date && x.Date.Date <= to);
+            }
+            else
+            {
+                readyProducts = await _transactionRepository.GetByAsync(x => x.Model.SapCode == sapCode && x.Date.Date >= from.Date && x.Date.Date <= to && x.Status == productTransactionType);
+            }
+
+            return _mapper.Map<IEnumerable<ReadyProductTransaction>, IEnumerable<ReadyProductTransactionResponse>>(readyProducts);
+        }
+
+        public async Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateRangeGroupByAsync(DateTime from, DateTime to, TransactionType transactionType)
+        {
+            var productTransactionType = (ReadyProductTransactionType)transactionType;
+
+            var readyProducts = await _transactionRepository.GetGroupByModelAsync(x => x.Date.Date >= from.Date && x.Date.Date <= to && x.Status == productTransactionType);
+
 
             return _mapper.Map<IEnumerable<ReadyProductTransaction>, IEnumerable<ReadyProductTransactionResponse>>(readyProducts);
         }

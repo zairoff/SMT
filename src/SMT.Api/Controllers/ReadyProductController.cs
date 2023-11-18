@@ -63,10 +63,37 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
+        [Route("GetByDateGroupBy")]
+        public async Task<IActionResult> GetByDateGroupBy([FromQuery] DateTime dateTime, [FromQuery] TransactionType transactionType)
+        {
+            var result = await _service.GetByDateGroupByAsync(dateTime, transactionType);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
         [Route("GetByDateRange")]
         public async Task<IActionResult> GetByDateRange(DateTime from, DateTime to, TransactionType transactionType)
         {
             var result = await _service.GetByDateRangeAsync(from, to, transactionType);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("GetBySapCodeDateRange")]
+        public async Task<IActionResult> GetBySapCodeDateRange(string sapCode, DateTime from, DateTime to, TransactionType transactionType)
+        {
+            var result = await _service.GetBySapCodeDateRange(sapCode, from, to, transactionType);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("GetByDateRangeGroupBy")]
+        public async Task<IActionResult> GetByDateRangeGroupBy(DateTime from, DateTime to, TransactionType transactionType)
+        {
+            var result = await _service.GetByDateRangeGroupByAsync(from, to, transactionType);
 
             return Ok(result);
         }

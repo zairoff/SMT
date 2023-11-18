@@ -12,7 +12,13 @@ namespace SMT.Services.Interfaces
 
         Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateAsync(DateTime date, TransactionType transactionType);
 
+        Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateGroupByAsync(DateTime date, TransactionType transactionType);
+
         Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateRangeAsync(DateTime from, DateTime to, TransactionType transactionType);
+
+        Task<IEnumerable<ReadyProductTransactionResponse>> GetBySapCodeDateRange(string sacpCode, DateTime from, DateTime to, TransactionType transactionType);
+
+        Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateRangeGroupByAsync(DateTime from, DateTime to, TransactionType transactionType);
 
         Task<ReadyProductTransactionResponse> DeleteTransactionAsync(int id);
 
