@@ -64,9 +64,8 @@ namespace SMT.Api.Extensions
             services.AddDbContext<AppDbContext>(options =>
                             options.UseSqlServer(configuration.GetConnectionString("DbConnection"), builder =>
                             {
-                                builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                                 builder.UseHierarchyId();
-                            }
+                            }                          
                         ));
 
             services.AddDbContext<AppIdentityDbContext>(options =>

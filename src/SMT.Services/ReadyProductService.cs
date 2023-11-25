@@ -67,39 +67,54 @@ namespace SMT.Services
 
         public async Task<ReadyProductResponse> ImportAsync(ReadyProductCreate readyProductCreate)
         {
-            var model = await _modelRepository.FindAsync(x => x.Id == readyProductCreate.ModelId);
-
-            if (model == null)
+            try
             {
-                throw new NotFoundException("Model not found");
+                await _readyProductRepository.BeginTransactionAsync();
+
+                var model = await _modelRepository.FindAsync(x => x.Id == readyProductCreate.ModelId);
+
+                if (model == null)
+                {
+                    throw new NotFoundException("Model not found");
+                }
+
+                var readyProduct = await _readyProductRepository.FindAsync(p => p.ModelId == readyProductCreate.ModelId);
+
+                if (readyProduct == null)
+                {
+                    readyProduct = _mapper.Map<ReadyProductCreate, ReadyProduct>(readyProductCreate);
+
+                    await _readyProductRepository.AddAsync(readyProduct);
+                }
+                else
+                {
+                    readyProduct.Count += readyProductCreate.Count;
+                    _readyProductRepository.Update(readyProduct);
+                }
+
+                var transaction = new ReadyProductTransaction
+                {
+                    ModelId = readyProductCreate.ModelId,
+                    Count = readyProductCreate.Count,
+                    Status = ReadyProductTransactionType.Import,
+                    Date = DateTime.Now,
+                };
+
+                await _transactionRepository.AddAsync(transaction);
+
+                await _unitOfWork.SaveAsync();
+
+                await _readyProductRepository.CommitTransactionAsync();
+
+                return _mapper.Map<ReadyProduct, ReadyProductResponse>(readyProduct);
             }
-
-            var readyProduct = await _readyProductRepository.FindAsync(p => p.ModelId == readyProductCreate.ModelId);
-
-            if (readyProduct == null)
+            catch (Exception ex)
             {
-                readyProduct = _mapper.Map<ReadyProductCreate, ReadyProduct>(readyProductCreate);
+                await _readyProductRepository.RollBackTransactionAsync();
 
-                await _readyProductRepository.AddAsync(readyProduct);
+                throw;
             }
-            else
-            {
-                readyProduct.Count += readyProductCreate.Count;
-                _readyProductRepository.Update(readyProduct);
-            }
-
-            var transaction = new ReadyProductTransaction
-            {
-                ModelId = readyProductCreate.ModelId,
-                Count = readyProductCreate.Count,
-                Status = ReadyProductTransactionType.Import,
-                Date = DateTime.Now,
-            };
-
-            await _transactionRepository.AddAsync(transaction);
-
-            await _unitOfWork.SaveAsync();
-
+            
             // transaction
             //await NotifyTransaction(transaction, model);
 
@@ -108,39 +123,53 @@ namespace SMT.Services
 
             //await NotifyAllProducts(readyProducts);
 
-            return _mapper.Map<ReadyProduct, ReadyProductResponse>(readyProduct);
         }
 
         public async Task<ReadyProductResponse> ExportAsync(ReadyProductUpdate readyProductUpdate)
         {
-            var readyProduct = await _readyProductRepository.FindAsync(p => p.ModelId == readyProductUpdate.ModelId);
-
-            if (readyProduct == null)
+            try
             {
-                throw new NotFoundException("Not found");
+                await _readyProductRepository.BeginTransactionAsync();
+
+                var readyProduct = await _readyProductRepository.FindAsync(p => p.ModelId == readyProductUpdate.ModelId);
+
+                if (readyProduct == null)
+                {
+                    throw new NotFoundException("Not found");
+                }
+
+                if (readyProduct.Count < readyProductUpdate.Count)
+                {
+                    throw new InvalidOperationException("Not enough");
+                }
+
+                readyProduct.Count -= readyProductUpdate.Count;
+                _readyProductRepository.Update(readyProduct);
+
+                var transaction = new ReadyProductTransaction
+                {
+                    ModelId = readyProduct.ModelId,
+                    Model = readyProduct.Model,
+                    Count = readyProductUpdate.Count,
+                    Status = ReadyProductTransactionType.Export,
+                    Date = DateTime.Now,
+                };
+
+                await _transactionRepository.AddAsync(transaction);
+
+                await _unitOfWork.SaveAsync();
+
+                await _readyProductRepository.CommitTransactionAsync();
+
+                return _mapper.Map<ReadyProduct, ReadyProductResponse>(readyProduct);
             }
-
-            if (readyProduct.Count < readyProductUpdate.Count)
+            catch (Exception ex)
             {
-                throw new InvalidOperationException("Not enough");
+                await _readyProductRepository.RollBackTransactionAsync();
+
+                throw;
             }
-
-            readyProduct.Count -= readyProductUpdate.Count;
-            _readyProductRepository.Update(readyProduct);
-
-            var transaction = new ReadyProductTransaction
-            {
-                ModelId = readyProduct.ModelId,
-                Model = readyProduct.Model,
-                Count = readyProductUpdate.Count,
-                Status = ReadyProductTransactionType.Export,
-                Date = DateTime.Now,
-            };
-
-            await _transactionRepository.AddAsync(transaction);
-
-            await _unitOfWork.SaveAsync();
-
+            
             // transaction
             //await NotifyTransactions(new List<ReadyProductTransaction> { transaction });
 
@@ -149,7 +178,6 @@ namespace SMT.Services
 
             //await NotifyAllProducts(readyProducts);
 
-            return _mapper.Map<ReadyProduct, ReadyProductResponse>(readyProduct);
         }
 
         public async Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateAsync(DateTime date, TransactionType transactionType)
