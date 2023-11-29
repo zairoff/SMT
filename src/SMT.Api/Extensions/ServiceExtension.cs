@@ -150,6 +150,7 @@ namespace SMT.Api.Extensions
             services.AddScoped<IPlanService, PlanService>();
             services.AddScoped<IPlanActivityService, PlanActivityService>();
             services.AddScoped<IReadyProductService, ReadyProductService>();
+            services.AddScoped<IReadyProductTransactionService, ReadyProductTransactionService>();
 
             /*************   Security  ************/
             services.AddScoped<IUserService, UserService>();

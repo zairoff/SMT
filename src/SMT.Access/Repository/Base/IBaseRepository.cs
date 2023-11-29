@@ -12,8 +12,5 @@ namespace SMT.Access.Repository.Base
         void Update(T entity);
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> FindAsync(Expression<Func<T, bool>> expression);
-        Task BeginTransactionAsync();
-        Task CommitTransactionAsync();
-        Task RollBackTransactionAsync();
     }
 }

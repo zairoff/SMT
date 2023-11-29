@@ -89,7 +89,7 @@ namespace SMT.Services.Mapping
             CreateMap<ReadyProductCreate, ReadyProduct>();
             CreateMap<ReadyProductUpdate, ReadyProduct>();
 
-            CreateMap<ReadyProductTransactionCreate, ReadyProductTransaction>();
+            CreateMap<ReadyProductTransactionImport, ReadyProductTransaction>();
         }
     }
 }

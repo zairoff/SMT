@@ -17,15 +17,20 @@ namespace SMT.Access.Repository
         {
         }
 
-        public async override Task<ReadyProduct> FindAsync(Expression<Func<ReadyProduct, bool>> expression) =>
-                           await DbSet.Where(expression)
-                           .Include(m => m.Model)
-                           .ThenInclude(m => m.ProductBrand)
-                           .ThenInclude(m => m.Product)
-                           .Include(m => m.Model)
-                           .ThenInclude(m => m.ProductBrand)
-                           .ThenInclude(m => m.Brand)
-                           .FirstOrDefaultAsync();
+        public async override Task<ReadyProduct> FindAsync(Expression<Func<ReadyProduct, bool>> expression)
+        {
+            return await _context.ReadyProducts
+                                .FromSqlRaw("SELECT * FROM dbo.ReadyProducts WITH (UPDLOCK)")
+                                .Where(expression)
+                                .Include(m => m.Model)
+                                .ThenInclude(m => m.ProductBrand)
+                                .ThenInclude(m => m.Product)
+                                .Include(m => m.Model)
+                                .ThenInclude(m => m.ProductBrand)
+                                .ThenInclude(m => m.Brand)
+                                .FirstOrDefaultAsync();
+        }
+                           
 
         public async override Task<IEnumerable<ReadyProduct>> GetAllAsync()
         {

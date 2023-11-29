@@ -46,20 +46,5 @@ namespace SMT.Access.Repository.Base
         {
             return await DbSet.Where(expression).FirstOrDefaultAsync();
         }
-
-        public async Task BeginTransactionAsync()
-        {
-           await  _context.Database.BeginTransactionAsync(IsolationLevel.Serializable);
-        }
-
-        public async Task CommitTransactionAsync()
-        {
-            await _context.Database.CommitTransactionAsync();
-        }
-
-        public async Task RollBackTransactionAsync()
-        {
-            await _context.Database.RollbackTransactionAsync();
-        }
     }
 }

@@ -12,5 +12,9 @@ namespace SMT.Access.Repository.Interfaces
         Task<IEnumerable<ReadyProductTransaction>> GetByAsync(Expression<Func<ReadyProductTransaction, bool>> expression);
 
         Task<IEnumerable<ReadyProductTransaction>> GetGroupByModelAsync(Expression<Func<ReadyProductTransaction, bool>> expression);
+
+        Task<IEnumerable<ReadyProductTransaction>> GetGroupByModelAsync();
+
+        Task<int> FindSumAsync(Expression<Func<ReadyProductTransaction, bool>> expression);
     }
 }
