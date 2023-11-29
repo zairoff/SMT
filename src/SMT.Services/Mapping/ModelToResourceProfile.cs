@@ -22,6 +22,7 @@ using SMT.ViewModel.Dto.PlanDto;
 using SMT.ViewModel.Dto.PlanActivityDto;
 using SMT.ViewModel.Dto.ReadyProductDto;
 using SMT.ViewModel.Dto.ProductTransactionDto;
+using System;
 
 namespace SMT.Services.Mapping
 {
@@ -73,7 +74,8 @@ namespace SMT.Services.Mapping
 
             CreateMap<ReadyProductTransaction, ReadyProductTransactionResponse>()
                .ForMember(m => m.Date, s => s.MapFrom(s => s.Date.ToString("yyyy-MM-dd HH:mm:ss")))
-               .ForMember(m => m.Status, s => s.MapFrom(s => s.Status.ToString()));
+               .ForMember(m => m.Status, s => s.MapFrom(s => s.Status.ToString()))
+               .ForMember(x => x.Count, s => s.MapFrom(s => Math.Abs(s.Count)));
         }
     }
 }
