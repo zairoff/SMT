@@ -108,6 +108,11 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateReport([FromBody] ReportCreate reportCreate)
         {
+            if (reportCreate.Barcode.Length != 7)
+            {
+                return new BadRequestObjectResult("Barcode noto'g'ri");
+            }
+
             var result = await _service.AddAsync(reportCreate);
 
             return CreatedAtAction(nameof(Get), new { id = result.Id }, result);

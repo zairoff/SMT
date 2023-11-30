@@ -9,7 +9,6 @@ using SMT.ViewModel.Dto.PcbReportDto;
 using SMT.ViewModel.Dto.ProductBrandDto;
 using SMT.ViewModel.Dto.ProductDto;
 using SMT.Domain;
-using SMT.ViewModel.Dto.UserDto;
 using SMT.ViewModel.Dto.LineDto;
 using SMT.ViewModel.Dto.LineDefectDto;
 using SMT.ViewModel.Dto.ReportDto;
@@ -75,7 +74,7 @@ namespace SMT.Services.Mapping
             CreateMap<ReadyProductTransaction, ReadyProductTransactionResponse>()
                .ForMember(m => m.Date, s => s.MapFrom(s => s.Date.ToString("yyyy-MM-dd HH:mm:ss")))
                .ForMember(m => m.Status, s => s.MapFrom(s => s.Status.ToString()))
-               .ForMember(x => x.Count, s => s.MapFrom(s => Math.Abs(s.Count)));
+               .ForMember(m => m.Count, s => s.MapFrom(s => Math.Abs(s.Count)));
         }
     }
 }
