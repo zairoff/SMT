@@ -214,6 +214,8 @@ namespace SMT.Services
 
             if (exports.Any())
             {
+                exports.ToList().ForEach(x => Math.Abs(x.Count));
+
                 await NotifyTransactions(exports, $"{DateTime.Now:yyyy:MM:dd} SANADA OMBORDAN CHIQGAN MAHSULOTLAR");
             }
 
