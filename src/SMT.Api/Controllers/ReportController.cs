@@ -125,6 +125,16 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateReport(int id, [FromBody] ReportUpdate reportUpdate)
         {
+            if (string.IsNullOrEmpty(reportUpdate.Action) || string.IsNullOrEmpty(reportUpdate.Condition))
+            {
+                return new BadRequestResult();
+            }
+
+            if (reportUpdate.Action.Length  < 2 || reportUpdate.Condition.Length < 2)
+            {
+                return new BadRequestResult();
+            }
+
             var result = await _service.UpdateAsync(id, reportUpdate);
 
             return Ok(result);
