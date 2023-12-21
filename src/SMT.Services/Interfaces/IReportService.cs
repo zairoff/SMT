@@ -13,6 +13,8 @@ namespace SMT.Services.Interfaces
 
         Task<IEnumerable<ReportResponse>> GetByModelAndLineIdAsync(int mdoelId, int lineId, string shift, DateTime date);
 
+        Task<IEnumerable<ReportResponse>> GetByLineAndDefectAsync(int lineId, string line, string shift, DateTime from, DateTime to);
+
         Task<ReportResponse> AddAsync(ReportCreate reportCreate);
 
         Task<ReportResponse> DeleteAsync(int id);

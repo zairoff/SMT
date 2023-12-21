@@ -136,6 +136,14 @@ namespace SMT.Services
             return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
         }
 
+        public async Task<IEnumerable<ReportResponse>> GetByLineAndDefectAsync(int lineId, string defect, string shift, DateTime from, DateTime to)
+        {
+            IEnumerable<Report> reports = await _repository.GetByAsync(p => p.CreatedDate.Date >= from.Date && p.CreatedDate.Date <= to.Date &&
+                                        p.LineId == lineId && p.LineId == lineId && p.Shift == shift);
+
+            return _mapper.Map<IEnumerable<Report>, IEnumerable<ReportResponse>>(reports);
+        }
+
         public async Task<IEnumerable<ReportResponse>> GetByModelAndLineIdAsync(int modelId, int lineId, string shift, DateTime date)
         {
             IEnumerable<Report> reports = Enumerable.Empty<Report>();

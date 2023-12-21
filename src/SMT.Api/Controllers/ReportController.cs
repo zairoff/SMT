@@ -50,6 +50,15 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
+        [Route("GetByLineAndDefect")]
+        public async Task<IActionResult> GetByLineAndDefect(int lineId, string defect, string shift, DateTime from, DateTime to)
+        {
+            var result = await _service.GetByLineAndDefectAsync(lineId, defect, shift, from, to);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
         [Route("GetBy")]
         public async Task<IActionResult> GetBy(int modelId, int lineId, string shift, DateTime from, DateTime to)
         {
