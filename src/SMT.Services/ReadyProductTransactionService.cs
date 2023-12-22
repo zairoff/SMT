@@ -214,7 +214,7 @@ namespace SMT.Services
 
             if (exports.Any())
             {
-                exports.ToList().ForEach(x => x.Count *= (-1));
+                exports.OrderBy(i => i).ToList().ForEach(x => x.Count *= (-1));
 
                 await NotifyTransactions(exports, $"{DateTime.Now:yyyy:MM:dd} SANADA OMBORDAN CHIQGAN MAHSULOTLAR");
             }
@@ -293,7 +293,7 @@ namespace SMT.Services
 
             var memoryStream = ConvertHtmlToImage(html);
 
-            await _notificationService.NotifyAsync(memoryStream, "OMBORDA MAVJUD MODELLAR");
+            await _notificationService.NotifyAsync(memoryStream, "OMBORDA MAVJUD MAHSULOTLAR");
         }
 
         private static string BuildReadyProductsNotificationBody(IEnumerable<ReadyProductTransaction> readyProductTransactions)
