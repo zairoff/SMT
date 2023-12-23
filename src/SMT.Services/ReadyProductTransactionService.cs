@@ -209,14 +209,15 @@ namespace SMT.Services
 
             if (imports.Any())
             {
-                await NotifyTransactions(imports, $"{DateTime.Now:yyyy:MM:dd} SANADA OMBORGA KIRGAN MAHSULOTLAR");
+                //await NotifyTransactions(imports, $"{DateTime.Now:yyyy:MM:dd} SANADA OMBORGA KIRGAN MAHSULOTLAR");
             }
 
             if (exports.Any())
             {
-                exports.OrderBy(i => i).ToList().ForEach(x => x.Count *= (-1));
+                var sortedExports = exports.OrderBy(i => i.Count).ToList();
+                sortedExports.ForEach(x => x.Count *= (-1));
 
-                await NotifyTransactions(exports, $"{DateTime.Now:yyyy:MM:dd} SANADA OMBORDAN CHIQGAN MAHSULOTLAR");
+                await NotifyTransactions(sortedExports, $"{DateTime.Now:yyyy:MM:dd} SANADA OMBORDAN CHIQGAN MAHSULOTLAR");
             }
 
             if (filteredProducts.Any() && (imports.Any() || exports.Any()))
