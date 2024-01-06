@@ -7,6 +7,7 @@ using SMT.Services.Interfaces;
 using SMT.ViewModel.Dto.PlanActivityDto;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SMT.Services
@@ -53,6 +54,8 @@ namespace SMT.Services
         {
             var plans = await _repository.GetAllAsync();
 
+            plans = plans.OrderByDescending(p => p.Id);
+
             return _mapper.Map<IEnumerable<PlanActivity>, IEnumerable<PlanActivityResponse>>(plans);
         }
 
@@ -66,6 +69,13 @@ namespace SMT.Services
         public async Task<IEnumerable<PlanActivityResponse>> GetByDate(DateTime date)
         {
             var plans = await _repository.GetByAsync(p => p.Date.Date == date.Date);
+
+            return _mapper.Map<IEnumerable<PlanActivity>, IEnumerable<PlanActivityResponse>>(plans);
+        }
+
+        public async Task<IEnumerable<PlanActivityResponse>> GetByDateRange(DateTime from, DateTime to)
+        {
+            var plans = await _repository.GetByAsync(p => p.Date.Date >= from.Date && p.Date.Date <= to.Date);
 
             return _mapper.Map<IEnumerable<PlanActivity>, IEnumerable<PlanActivityResponse>>(plans);
         }

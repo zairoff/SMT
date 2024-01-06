@@ -209,7 +209,7 @@ namespace SMT.Services
 
             if (imports.Any())
             {
-                //await NotifyTransactions(imports, $"{DateTime.Now:yyyy:MM:dd} SANADA OMBORGA KIRGAN MAHSULOTLAR");
+                await NotifyTransactions(imports, $"{DateTime.Now:yyyy:MM:dd} SANADA OMBORGA KIRGAN MAHSULOTLAR");
             }
 
             if (exports.Any())
