@@ -57,6 +57,14 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetByDateRangeAndStatus")]
+        public async Task<IActionResult> GetByDateRangeAndStatus(DateTime from, DateTime to, string status)
+        {
+            var result = await _service.GetByDateRange(from, to, status);
+
+            return Ok(result);
+        }
+
         [HttpGet("GetByLineAndDate")]
         public async Task<IActionResult> GetByLineAndDate(int lineId, DateTime date)
         {

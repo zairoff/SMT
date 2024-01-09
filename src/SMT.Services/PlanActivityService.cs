@@ -80,6 +80,13 @@ namespace SMT.Services
             return _mapper.Map<IEnumerable<PlanActivity>, IEnumerable<PlanActivityResponse>>(plans);
         }
 
+        public async Task<IEnumerable<PlanActivityResponse>> GetByDateRange(DateTime from, DateTime to, string status)
+        {
+            var plans = await _repository.GetByAsync(p => p.Date.Date >= from.Date && p.Date.Date <= to.Date && p.Status == status);
+
+            return _mapper.Map<IEnumerable<PlanActivity>, IEnumerable<PlanActivityResponse>>(plans);
+        }
+
         public async Task<IEnumerable<PlanActivityResponse>> GetByLineAndDate(int lineId, DateTime date)
         {
             var plans = await _repository.GetByAsync(p => p.Date.Date == date.Date && p.LineId == lineId);
