@@ -12,6 +12,8 @@
 
         public string NameInBarcode { get; set; }
 
+        public string Barcode { get; set; }
+
         public string SapCode { get; set; }
 
         public bool IsActive { get; set; } = true;
