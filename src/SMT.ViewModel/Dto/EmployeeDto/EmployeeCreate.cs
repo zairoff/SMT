@@ -14,6 +14,8 @@ namespace SMT.ViewModel.Dto.EmployeeDto
 
         public string Details { get; set; }
 
+        public DateTime Birthday { get; set; }
+
         public bool IsActive { get; set; }
     }
 }

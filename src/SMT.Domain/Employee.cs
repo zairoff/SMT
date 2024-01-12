@@ -18,6 +18,8 @@ namespace SMT.Domain
 
         public string Details { get; set; }
 
+        public DateTime Birthday { get; set; }
+
         public bool IsActive { get; set; }
     }
 }

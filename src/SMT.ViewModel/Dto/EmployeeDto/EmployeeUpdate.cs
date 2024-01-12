@@ -12,6 +12,8 @@ namespace SMT.ViewModel.Dto.EmployeeDto
 
         public string Phone { get; set; }
 
+        public DateTime Birthday { get; set; }
+
         public string Details { get; set; }
     }
 }

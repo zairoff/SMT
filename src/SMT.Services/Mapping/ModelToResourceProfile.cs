@@ -49,7 +49,8 @@ namespace SMT.Services.Mapping
             CreateMap<Report, ReportResponse>();
 
             CreateMap<Employee, EmployeeResponse>()
-                .ForMember(e => e.ImageUrl, o => o.MapFrom(s => s.ImagePath));
+                .ForMember(e => e.ImageUrl, o => o.MapFrom(s => s.ImagePath))
+                .ForMember(e => e.Birthday, o => o.MapFrom(s => s.Birthday.ToString("yyyy-MM-dd")));
 
             CreateMap<PcbRepairer, RepairerResponse>();
 

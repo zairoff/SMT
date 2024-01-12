@@ -108,6 +108,7 @@ namespace SMT.Services
             employee.Details = employeeUpdate.Details;
             employee.ImagePath = employeeUpdate.ImagePath;
             employee.Phone = employeeUpdate.Phone;
+            employee.Birthday = employeeUpdate.Birthday;
 
             _repository.Update(employee);
             await _unitOfWork.SaveAsync();
