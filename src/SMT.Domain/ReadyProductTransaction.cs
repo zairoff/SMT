@@ -12,7 +12,7 @@ namespace SMT.Domain
 
         public int Count { get; set; }
 
-        public TransactionType Status { get; set; }
+        public ReadyProductTransactionType Status { get; set; }
 
         public DateTime Date { get; set; }
     }

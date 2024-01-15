@@ -62,11 +62,11 @@ namespace SMT.Services
 
         public async Task<IEnumerable<ReadyProductTransactionResponse>> GetBySapCodeDateRange(string sapCode, DateTime from, DateTime to, ViewModel.Dto.ProductTransactionDto.TransactionType transactionType)
         {
-            var productTransactionType = (Domain.TransactionType)transactionType;
+            var productTransactionType = (Domain.ReadyProductTransactionType)transactionType;
 
             IEnumerable<ReadyProductTransaction> readyProducts;
 
-            if (productTransactionType == Domain.TransactionType.All)
+            if (productTransactionType == Domain.ReadyProductTransactionType.All)
             {
                 readyProducts = await _transactionRepository.GetByAsync(x => x.Model.SapCode == sapCode && x.Date.Date >= from.Date && x.Date.Date <= to);
             }
@@ -88,7 +88,7 @@ namespace SMT.Services
             }
 
             transaction.Count = 0;
-            transaction.Status = Domain.TransactionType.Deleted;
+            transaction.Status = Domain.ReadyProductTransactionType.Deleted;
 
             _transactionRepository.Update(transaction);
 
@@ -110,7 +110,7 @@ namespace SMT.Services
             {
                 ModelId = readyProductTransactionExport.ModelId,
                 Count = -readyProductTransactionExport.Count,
-                Status = Domain.TransactionType.Export,
+                Status = Domain.ReadyProductTransactionType.Export,
                 Date = DateTime.Now,
             };
 
@@ -134,7 +134,7 @@ namespace SMT.Services
             {
                 ModelId = readyProductTransactionImport.ModelId,
                 Count = readyProductTransactionImport.Count,
-                Status = Domain.TransactionType.Import,
+                Status = Domain.ReadyProductTransactionType.Import,
                 Date = DateTime.Now,
             };
 
@@ -147,11 +147,11 @@ namespace SMT.Services
 
         public async Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateAsync(DateTime date, ViewModel.Dto.ProductTransactionDto.TransactionType transactionType)
         {
-            var productTransactionType = (Domain.TransactionType)transactionType;
+            var productTransactionType = (Domain.ReadyProductTransactionType)transactionType;
 
             IEnumerable<ReadyProductTransaction> readyProducts;
 
-            if (productTransactionType == Domain.TransactionType.All)
+            if (productTransactionType == Domain.ReadyProductTransactionType.All)
             {
                 readyProducts = await _transactionRepository.GetByAsync(x => x.Date.Date == date.Date);
             }
@@ -165,7 +165,7 @@ namespace SMT.Services
 
         public async Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateGroupByAsync(DateTime date, ViewModel.Dto.ProductTransactionDto.TransactionType transactionType)
         {
-            var productTransactionType = (Domain.TransactionType)transactionType;
+            var productTransactionType = (Domain.ReadyProductTransactionType)transactionType;
 
             IEnumerable<ReadyProductTransaction> readyProducts = await _transactionRepository.GetGroupByModelAsync(x => x.Date.Date == date.Date && x.Status == productTransactionType);
 
@@ -174,11 +174,11 @@ namespace SMT.Services
 
         public async Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateRangeAsync(DateTime from, DateTime to, ViewModel.Dto.ProductTransactionDto.TransactionType transactionType)
         {
-            var productTransactionType = (Domain.TransactionType)transactionType;
+            var productTransactionType = (Domain.ReadyProductTransactionType)transactionType;
 
             IEnumerable<ReadyProductTransaction> readyProducts;
 
-            if (productTransactionType == Domain.TransactionType.All)
+            if (productTransactionType == Domain.ReadyProductTransactionType.All)
             {
                 readyProducts = await _transactionRepository.GetByAsync(x => x.Date.Date >= from.Date && x.Date.Date <= to);
             }
@@ -192,7 +192,7 @@ namespace SMT.Services
 
         public async Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateRangeGroupByAsync(DateTime from, DateTime to, ViewModel.Dto.ProductTransactionDto.TransactionType transactionType)
         {
-            var productTransactionType = (Domain.TransactionType)transactionType;
+            var productTransactionType = (Domain.ReadyProductTransactionType)transactionType;
 
             var readyProducts = await _transactionRepository.GetGroupByModelAsync(x => x.Date.Date >= from.Date && x.Date.Date <= to && x.Status == productTransactionType);
 
@@ -202,8 +202,8 @@ namespace SMT.Services
 
         public async Task GroupByNotifyAsync()
         {
-            var imports = await _transactionRepository.GetGroupByModelAsync(x => x.Status == Domain.TransactionType.Import && x.Date.Date == DateTime.Now.Date);
-            var exports = await _transactionRepository.GetGroupByModelAsync(x => x.Status == Domain.TransactionType.Export && x.Date.Date == DateTime.Now.Date);
+            var imports = await _transactionRepository.GetGroupByModelAsync(x => x.Status == Domain.ReadyProductTransactionType.Import && x.Date.Date == DateTime.Now.Date);
+            var exports = await _transactionRepository.GetGroupByModelAsync(x => x.Status == Domain.ReadyProductTransactionType.Export && x.Date.Date == DateTime.Now.Date);
             var readyProducts = await _transactionRepository.GetGroupByModelAsync();
             var filteredProducts = readyProducts.Where(x => x.Count > 0);
 

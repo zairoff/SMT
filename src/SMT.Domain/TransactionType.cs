@@ -1,6 +1,6 @@
 ﻿namespace SMT.Domain
 {
-    public enum TransactionType
+    public enum ReadyProductTransactionType
     {
         All = 0,
         Import = 1,
