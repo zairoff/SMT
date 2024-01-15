@@ -91,7 +91,7 @@ namespace SMT.Services
             {
                 ModelId = readyProductCreate.ModelId,
                 Count = readyProductCreate.Count,
-                Status = ReadyProductTransactionType.Import,
+                Status = Domain.TransactionType.Import,
                 Date = DateTime.Now,
             };
 
@@ -132,7 +132,7 @@ namespace SMT.Services
                 ModelId = readyProduct.ModelId,
                 Model = readyProduct.Model,
                 Count = readyProductUpdate.Count,
-                Status = ReadyProductTransactionType.Export,
+                Status = Domain.TransactionType.Export,
                 Date = DateTime.Now,
             };
 
@@ -152,13 +152,13 @@ namespace SMT.Services
 
         }
 
-        public async Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateAsync(DateTime date, TransactionType transactionType)
+        public async Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateAsync(DateTime date, ViewModel.Dto.ProductTransactionDto.TransactionType transactionType)
         {
-            var productTransactionType = (ReadyProductTransactionType)transactionType;
+            var productTransactionType = (Domain.TransactionType)transactionType;
 
             IEnumerable<ReadyProductTransaction> readyProducts;
 
-            if (productTransactionType == ReadyProductTransactionType.All)
+            if (productTransactionType == Domain.TransactionType.All)
             {
                 readyProducts = await _transactionRepository.GetByAsync(x => x.Date.Date == date.Date);
             }
@@ -170,22 +170,22 @@ namespace SMT.Services
             return _mapper.Map<IEnumerable<ReadyProductTransaction>, IEnumerable<ReadyProductTransactionResponse>>(readyProducts);
         }
 
-        public async Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateGroupByAsync(DateTime date, TransactionType transactionType)
+        public async Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateGroupByAsync(DateTime date, ViewModel.Dto.ProductTransactionDto.TransactionType transactionType)
         {
-            var productTransactionType = (ReadyProductTransactionType)transactionType;
+            var productTransactionType = (Domain.TransactionType)transactionType;
 
             IEnumerable<ReadyProductTransaction> readyProducts = await _transactionRepository.GetGroupByModelAsync(x => x.Date.Date == date.Date && x.Status == productTransactionType);
 
             return _mapper.Map<IEnumerable<ReadyProductTransaction>, IEnumerable<ReadyProductTransactionResponse>>(readyProducts);
         }
 
-        public async Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateRangeAsync(DateTime from, DateTime to, TransactionType transactionType)
+        public async Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateRangeAsync(DateTime from, DateTime to, ViewModel.Dto.ProductTransactionDto.TransactionType transactionType)
         {
-            var productTransactionType = (ReadyProductTransactionType)transactionType;
+            var productTransactionType = (Domain.TransactionType)transactionType;
 
             IEnumerable<ReadyProductTransaction> readyProducts;
 
-            if (productTransactionType == ReadyProductTransactionType.All)
+            if (productTransactionType == Domain.TransactionType.All)
             {
                 readyProducts = await _transactionRepository.GetByAsync(x => x.Date.Date >= from.Date && x.Date.Date <= to);
             }
@@ -197,13 +197,13 @@ namespace SMT.Services
             return _mapper.Map<IEnumerable<ReadyProductTransaction>, IEnumerable<ReadyProductTransactionResponse>>(readyProducts);
         }
 
-        public async Task<IEnumerable<ReadyProductTransactionResponse>> GetBySapCodeDateRange(string sapCode, DateTime from, DateTime to, TransactionType transactionType)
+        public async Task<IEnumerable<ReadyProductTransactionResponse>> GetBySapCodeDateRange(string sapCode, DateTime from, DateTime to, ViewModel.Dto.ProductTransactionDto.TransactionType transactionType)
         {
-            var productTransactionType = (ReadyProductTransactionType)transactionType;
+            var productTransactionType = (Domain.TransactionType)transactionType;
 
             IEnumerable<ReadyProductTransaction> readyProducts;
 
-            if (productTransactionType == ReadyProductTransactionType.All)
+            if (productTransactionType == Domain.TransactionType.All)
             {
                 readyProducts = await _transactionRepository.GetByAsync(x => x.Model.SapCode == sapCode && x.Date.Date >= from.Date && x.Date.Date <= to);
             }
@@ -215,9 +215,9 @@ namespace SMT.Services
             return _mapper.Map<IEnumerable<ReadyProductTransaction>, IEnumerable<ReadyProductTransactionResponse>>(readyProducts);
         }
 
-        public async Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateRangeGroupByAsync(DateTime from, DateTime to, TransactionType transactionType)
+        public async Task<IEnumerable<ReadyProductTransactionResponse>> GetByDateRangeGroupByAsync(DateTime from, DateTime to, ViewModel.Dto.ProductTransactionDto.TransactionType transactionType)
         {
-            var productTransactionType = (ReadyProductTransactionType)transactionType;
+            var productTransactionType = (Domain.TransactionType)transactionType;
 
             var readyProducts = await _transactionRepository.GetGroupByModelAsync(x => x.Date.Date >= from.Date && x.Date.Date <= to && x.Status == productTransactionType);
 
@@ -232,7 +232,7 @@ namespace SMT.Services
             if (readyProductTransaction == null)
                 throw new NotFoundException("Transaction not found");
 
-            readyProductTransaction.Status = ReadyProductTransactionType.Deleted;
+            readyProductTransaction.Status = Domain.TransactionType.Deleted;
             _transactionRepository.Update(readyProductTransaction);
 
             var readyProduct = await _readyProductRepository.FindAsync(x => x.ModelId == readyProductTransaction.ModelId);
@@ -257,8 +257,8 @@ namespace SMT.Services
 
         public async Task NotifyAsync()
         {
-            var imports = await _transactionRepository.GetByAsync(x => x.Status == ReadyProductTransactionType.Import && x.Date >= DateTime.Now.AddMinutes(-30) && x.Date <= DateTime.Now);
-            var exports = await _transactionRepository.GetByAsync(x => x.Status == ReadyProductTransactionType.Export && x.Date >= DateTime.Now.AddMinutes(-30) && x.Date <= DateTime.Now);
+            var imports = await _transactionRepository.GetByAsync(x => x.Status == Domain.TransactionType.Import && x.Date >= DateTime.Now.AddMinutes(-30) && x.Date <= DateTime.Now);
+            var exports = await _transactionRepository.GetByAsync(x => x.Status == Domain.TransactionType.Export && x.Date >= DateTime.Now.AddMinutes(-30) && x.Date <= DateTime.Now);
             var readyProducts = await _readyProductRepository.GetByAsync(x => x.Count > 0);
 
             if (imports.Any())
@@ -285,8 +285,8 @@ namespace SMT.Services
         {
             try
             {
-                var imports = await _transactionRepository.GetGroupByModelAsync(x => x.Status == ReadyProductTransactionType.Import && x.Date.Date == DateTime.Now.Date);
-                var exports = await _transactionRepository.GetGroupByModelAsync(x => x.Status == ReadyProductTransactionType.Export && x.Date.Date == DateTime.Now.Date);
+                var imports = await _transactionRepository.GetGroupByModelAsync(x => x.Status == Domain.TransactionType.Import && x.Date.Date == DateTime.Now.Date);
+                var exports = await _transactionRepository.GetGroupByModelAsync(x => x.Status == Domain.TransactionType.Export && x.Date.Date == DateTime.Now.Date);
                 var readyProducts = await _readyProductRepository.GetByAsync(x => x.Count > 0);
 
                 if (imports.Any())
@@ -326,12 +326,12 @@ namespace SMT.Services
 
         private static string BuilTitle(ReadyProductTransaction transaction)
         {
-            if (transaction.Status == ReadyProductTransactionType.Import)
+            if (transaction.Status == Domain.TransactionType.Import)
             {
                 return "OMBORGA KIRDI";
             }
 
-            if (transaction.Status == ReadyProductTransactionType.Export)
+            if (transaction.Status == Domain.TransactionType.Export)
             {
                 return "OMBORDAN CHIQDI";
             }
