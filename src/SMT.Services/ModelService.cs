@@ -25,7 +25,8 @@ namespace SMT.Services
 
         public async Task<ModelResponse> AddAsync(ModelCreate modelCreate)
         {
-            var model = await _repository.FindAsync(p => p.Name == modelCreate.Name || p.SapCode == modelCreate.SapCode || p.Barcode == modelCreate.Barcode);
+            var model = await _repository.FindAsync(p => p.Name == modelCreate.Name || p.SapCode == modelCreate.SapCode || 
+            (p.Barcode == modelCreate.Barcode && !string.IsNullOrEmpty(modelCreate.Barcode)));
 
             if (model != null)
                 throw new ConflictException($"{modelCreate.Name} already exist");
@@ -88,7 +89,7 @@ namespace SMT.Services
             _ = modelUpdate.SapCode?.Trim();
             _ = modelUpdate.Barcode?.Trim();
 
-            var model = await _repository.FindAsync(x => (x.SapCode == modelUpdate.SapCode || x.Barcode == modelUpdate.Barcode) && x.Id != id);
+            var model = await _repository.FindAsync(x => (x.SapCode == modelUpdate.SapCode || (x.Barcode == modelUpdate.Barcode && !string.IsNullOrEmpty(modelUpdate.Barcode)) && x.Id != id));
 
             if (model != null)
                 throw new ConflictException($"{modelUpdate.SapCode} already existed");
