@@ -85,8 +85,8 @@ namespace SMT.Services
 
         public async Task<ModelResponse> UpdateAsync(int id, ModelUpdate modelUpdate)
         {
-            _ = modelUpdate.SapCode.Trim();
-            _ = modelUpdate.Barcode.Trim();
+            _ = modelUpdate.SapCode?.Trim();
+            _ = modelUpdate.Barcode?.Trim();
 
             var model = await _repository.FindAsync(x => (x.SapCode == modelUpdate.SapCode || x.Barcode == modelUpdate.Barcode) && x.Id != id);
 
