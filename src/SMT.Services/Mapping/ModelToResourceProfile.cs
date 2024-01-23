@@ -22,6 +22,8 @@ using SMT.ViewModel.Dto.PlanActivityDto;
 using SMT.ViewModel.Dto.ReadyProductDto;
 using SMT.ViewModel.Dto.ProductTransactionDto;
 using System;
+using SMT.Domain.ReturnedProducts;
+using SMT.ViewModel.Dto.ReturnedProductTransactionDto;
 
 namespace SMT.Services.Mapping
 {
@@ -75,6 +77,20 @@ namespace SMT.Services.Mapping
             CreateMap<ReadyProductTransaction, ReadyProductTransactionResponse>()
                .ForMember(m => m.Date, s => s.MapFrom(s => s.Date.ToString("yyyy-MM-dd HH:mm:ss")))
                .ForMember(m => m.Status, s => s.MapFrom(s => s.Status.ToString()))
+               .ForMember(m => m.Count, s => s.MapFrom(s => Math.Abs(s.Count)));
+
+            CreateMap<ReturnedProductTransaction, ReturnedProductTransactionResponse>()
+               .ForMember(m => m.Date, s => s.MapFrom(s => s.Date.ToString("yyyy-MM-dd HH:mm:ss")))
+               .ForMember(m => m.TransactionType, s => s.MapFrom(s => s.TransactionType.ToString()))
+               .ForMember(m => m.Count, s => s.MapFrom(s => Math.Abs(s.Count)));
+
+            CreateMap<ReturnedProductStore, ReturnedProductTransactionResponse>()
+               .ForMember(m => m.Count, s => s.MapFrom(s => Math.Abs(s.Count)));
+
+            CreateMap<ReturnedProductRepair, ReturnedProductTransactionResponse>()
+               .ForMember(m => m.Count, s => s.MapFrom(s => Math.Abs(s.Count)));
+
+            CreateMap<ReturnedProductUtilize, ReturnedProductTransactionResponse>()
                .ForMember(m => m.Count, s => s.MapFrom(s => Math.Abs(s.Count)));
         }
     }

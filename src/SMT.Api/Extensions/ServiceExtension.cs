@@ -10,6 +10,8 @@ using SMT.Access.Identity;
 using SMT.Access.Repository;
 using SMT.Access.Repository.Base;
 using SMT.Access.Repository.Interfaces;
+using SMT.Access.Repository.Interfaces.ReturnedProducts;
+using SMT.Access.Repository.ReturnedProducts;
 using SMT.Access.Repository.Statics;
 using SMT.Access.Unit;
 using SMT.Notification;
@@ -17,7 +19,9 @@ using SMT.Security;
 using SMT.Services;
 using SMT.Services.Interfaces;
 using SMT.Services.Interfaces.FileSystem;
+using SMT.Services.Interfaces.ReturnedProducts;
 using SMT.Services.Mapping;
+using SMT.Services.ReturnedProducts;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -130,6 +134,11 @@ namespace SMT.Api.Extensions
             services.AddScoped<IReadyProductRepository, ReadyProductRepository>();
             services.AddScoped<IReadyProductTransactionRepository, ReadyProductTransactionRepository>();
 
+            services.AddScoped<IReturnedProductRepairRepository, ReturnedProductRepairRepository>();
+            services.AddScoped<IReturnedProductStoreRepository, ReturnedProductStoreRepository>();
+            services.AddScoped<IReturnedProductUtilizeRepository, ReturnedProductUtilizeRepository>();
+            services.AddScoped<IReturnedProductTransactionRepository, ReturnedProductTransactionRepository>();
+
             /*************   Services  ************/
 
             services.AddScoped<IBrandService, BrandService>();
@@ -151,6 +160,8 @@ namespace SMT.Api.Extensions
             services.AddScoped<IPlanActivityService, PlanActivityService>();
             services.AddScoped<IReadyProductService, ReadyProductService>();
             services.AddScoped<IReadyProductTransactionService, ReadyProductTransactionService>();
+
+            services.AddScoped<IReturnedProductTransactionService, ReturnedProductTransactionService>();
 
             /*************   Security  ************/
             services.AddScoped<IUserService, UserService>();

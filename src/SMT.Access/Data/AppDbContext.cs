@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using SMT.Domain;
+using SMT.Domain.ReturnedProducts;
 
 namespace SMT.Access.Data
 {
@@ -31,6 +32,10 @@ namespace SMT.Access.Data
         public DbSet<PlanActivity> PlanActivities { get; set; }
         public DbSet<ReadyProduct> ReadyProducts { get; set; }
         public DbSet<ReadyProductTransaction> ReadyProductTransactions { get; set; }
+        public DbSet<ReturnedProductStore> ReturnedProductStores { get; set; }
+        public DbSet<ReturnedProductRepair> ReturnedProductRepairs { get; set; }
+        public DbSet<ReturnedProductUtilize> ReturnedProductUtilizes { get; set; }
+        public DbSet<ReturnedProductTransaction> ReturnedProductTransactions { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
