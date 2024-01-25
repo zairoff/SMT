@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SMT.Services.Interfaces;
-using SMT.ViewModel.Dto.ProductTransactionDto;
 using System.Threading.Tasks;
 using System;
 using SMT.Services.Interfaces.ReturnedProducts;
@@ -19,6 +17,33 @@ namespace SMT.Api.Controllers
         public ReturnedProductTransactionController(IReturnedProductTransactionService service)
         {
             _service = service;
+        }
+
+        [HttpGet]
+        [Route("GetStoreState")]
+        public async Task<IActionResult> GetStoreState()
+        {
+            var result = await _service.GetStoreStateAsync();
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("GetRepairState")]
+        public async Task<IActionResult> GetRepairState()
+        {
+            var result = await _service.GetStoreStateAsync();
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("GetUtilizeState")]
+        public async Task<IActionResult> GetUtilizeState()
+        {
+            var result = await _service.GetUtilizeStateAsync();
+
+            return Ok(result);
         }
 
         [HttpGet]
