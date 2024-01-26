@@ -49,15 +49,9 @@ namespace SMT.Services.ReturnedProducts
                 throw new InvalidOperationException("Not found");
             }
 
-            var storeTask = _returnedProductStoreRepository.FindAsync(x => x.ReturnedProductTransactionId == transaction.Id);
-            var repairTask = _returnedProductRepairRepository.FindAsync(x => x.ReturnedProductTransactionId == transaction.Id);
-            var utilizeTask = _returnedProductUtilizeRepository.FindAsync(x => x.ReturnedProductTransactionId == transaction.Id);
-
-            await Task.WhenAll(storeTask, repairTask, utilizeTask);
-
-            var store = await storeTask;
-            var repair = await repairTask;
-            var utilize = await utilizeTask;
+            var store = await _returnedProductStoreRepository.FindAsync(x => x.ReturnedProductTransactionId == transaction.Id);
+            var repair = await _returnedProductRepairRepository.FindAsync(x => x.ReturnedProductTransactionId == transaction.Id);
+            var utilize = await _returnedProductUtilizeRepository.FindAsync(x => x.ReturnedProductTransactionId == transaction.Id);
 
             if (store != null)
             {
