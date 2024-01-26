@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Design;
 using SMT.Domain;
 using SMT.Domain.ReturnedProducts;
+using System.Drawing;
 
 namespace SMT.Access.Data
 {
@@ -31,7 +32,7 @@ namespace SMT.Access.Data
         public DbSet<MachineRepairer> MachineRepairers { get; set; }
         public DbSet<PlanActivity> PlanActivities { get; set; }
         public DbSet<ReadyProduct> ReadyProducts { get; set; }
-        public DbSet<ReadyProductTransaction> ReadyProductTransactions { get; set; }
+        public DbSet<ReadyProductTransaction> ReadyProductsTransactions { get; set; }
         public DbSet<ReturnedProductStore> ReturnedProductStores { get; set; }
         public DbSet<ReturnedProductRepair> ReturnedProductRepairs { get; set; }
         public DbSet<ReturnedProductUtilize> ReturnedProductUtilizes { get; set; }
@@ -44,7 +45,7 @@ namespace SMT.Access.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+           
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)

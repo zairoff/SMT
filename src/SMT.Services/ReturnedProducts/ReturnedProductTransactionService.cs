@@ -49,9 +49,9 @@ namespace SMT.Services.ReturnedProducts
                 throw new InvalidOperationException("Not found");
             }
 
-            var storeTask = _returnedProductStoreRepository.FindAsync(x => x.ReturnedProductionTransactionId == transaction.Id);
-            var repairTask = _returnedProductRepairRepository.FindAsync(x => x.ReturnedProductionTransactionId == transaction.Id);
-            var utilizeTask = _returnedProductUtilizeRepository.FindAsync(x => x.ReturnedProductionTransactionId == transaction.Id);
+            var storeTask = _returnedProductStoreRepository.FindAsync(x => x.ReturnedProductTransactionId == transaction.Id);
+            var repairTask = _returnedProductRepairRepository.FindAsync(x => x.ReturnedProductTransactionId == transaction.Id);
+            var utilizeTask = _returnedProductUtilizeRepository.FindAsync(x => x.ReturnedProductTransactionId == transaction.Id);
 
             await Task.WhenAll(storeTask, repairTask, utilizeTask);
 
@@ -85,26 +85,34 @@ namespace SMT.Services.ReturnedProducts
 
         public async Task<ReturnedProductTransactionResponse> ImportFromFactoryAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate)
         {
-            var transaction = new ReturnedProductTransaction
+            try
             {
-                Barcode = returnedProductTransactionCreate.Barcode,
-                ModelId = returnedProductTransactionCreate.ModelId,
-                Count = returnedProductTransactionCreate.Count,
-                TransactionType = ReturnedProductTransactionType.Import,
-                Date = DateTime.Now,
-            };
+                var transaction = new ReturnedProductTransaction
+                {
+                    Barcode = returnedProductTransactionCreate.Barcode,
+                    ModelId = returnedProductTransactionCreate.ModelId,
+                    Count = returnedProductTransactionCreate.Count,
+                    TransactionType = returnedProductTransactionCreate.TransactionType,
+                    Date = DateTime.Now,
+                };
 
-            await _returnedProductTransactionRepository.AddAsync(transaction);
+                await _returnedProductTransactionRepository.AddAsync(transaction);
 
-            await _unitOfWork.SaveAsync();
+                await _unitOfWork.SaveAsync();
 
-            var returnedStore = _mapper.Map<ReturnedProductTransaction, ReturnedProductStore>(transaction);
+                var returnedStore = _mapper.Map<ReturnedProductTransaction, ReturnedProductStore>(transaction);
 
-            await _returnedProductStoreRepository.AddAsync(returnedStore);
+                await _returnedProductStoreRepository.AddAsync(returnedStore);
 
-            await _unitOfWork.SaveAsync();
+                await _unitOfWork.SaveAsync();
 
-            return _mapper.Map<ReturnedProductTransaction, ReturnedProductTransactionResponse>(transaction);
+                return _mapper.Map<ReturnedProductTransaction, ReturnedProductTransactionResponse>(transaction);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         public async Task<ReturnedProductTransactionResponse> ImportFromRepairAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate)
@@ -128,7 +136,7 @@ namespace SMT.Services.ReturnedProducts
                 Barcode = returnedProductTransactionCreate.Barcode,
                 ModelId = returnedProductTransactionCreate.ModelId,
                 Count = returnedProductTransactionCreate.Count,
-                TransactionType = ReturnedProductTransactionType.ImportFromRepair,
+                TransactionType = returnedProductTransactionCreate.TransactionType,
                 Date = DateTime.Now,
             };
 
@@ -170,7 +178,7 @@ namespace SMT.Services.ReturnedProducts
                 Barcode = returnedProductTransactionCreate.Barcode,
                 ModelId = returnedProductTransactionCreate.ModelId,
                 Count = returnedProductTransactionCreate.Count,
-                TransactionType = ReturnedProductTransactionType.ImportUtilize,
+                TransactionType = returnedProductTransactionCreate.TransactionType,
                 Date = DateTime.Now,
             };
 

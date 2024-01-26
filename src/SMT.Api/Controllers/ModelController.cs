@@ -50,6 +50,15 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
+        [Route("GetByBarcode")]
+        public async Task<IActionResult> GetByBarcode(string barcode, bool? isActive)
+        {
+            var result = await _service.GetByBarcodeAsync(barcode, isActive ?? true);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
         [Route("GetByProductBrandId")]
         public async Task<IActionResult> GetByProductBrandId([FromQuery]int productBrandId, [FromQuery] bool? isActive)
         {

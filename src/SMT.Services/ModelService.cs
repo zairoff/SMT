@@ -120,5 +120,17 @@ namespace SMT.Services
 
             return _mapper.Map<Model, ModelResponse>(model);
         }
+
+        public async Task<ModelResponse> GetByBarcodeAsync(string barcode, bool isActive)
+        {
+            if (string.IsNullOrEmpty(barcode))
+            {
+                return null;
+            }
+
+            var model = await _repository.FindAsync(p => p.Barcode == barcode && p.IsActive == isActive);
+
+            return _mapper.Map<Model, ModelResponse>(model);
+        }
     }
 }

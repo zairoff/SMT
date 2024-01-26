@@ -82,62 +82,48 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("ImportFromFactory")]
+        [HttpPost("import")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ImportFromFactory([FromBody] ReturnedProductTransactionCreate returnedProductTransactionCreate)
+        public async Task<IActionResult> Import([FromBody] ReturnedProductTransactionCreate returnedProductTransactionCreate)
         {
-            await _service.ImportFromFactoryAsync(returnedProductTransactionCreate);
+            switch (returnedProductTransactionCreate.TransactionType)
+            {
+                case ReturnedProductTransactionType.Import:
+                    await _service.ImportFromFactoryAsync(returnedProductTransactionCreate);
+                    break;
+                case ReturnedProductTransactionType.ImportFromRepair:
+                    await _service.ImportFromRepairAsync(returnedProductTransactionCreate);
+                    break;
+                case ReturnedProductTransactionType.ImportUtilize:
+                    await _service.ImportFromRepairToUtilizeAsync(returnedProductTransactionCreate);
+                    break;
+                default:
+                    break;
+            }
 
             return new OkResult();
         }
 
-        [HttpPost("ImportFromRepair")]
+        [HttpPost("export")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ImportFromRepair([FromBody] ReturnedProductTransactionCreate returnedProductTransactionCreate)
+        public async Task<IActionResult> Export([FromBody] ReturnedProductTransactionCreate returnedProductTransactionCreate)
         {
-            await _service.ImportFromRepairAsync(returnedProductTransactionCreate);
-
-            return new OkResult();
-        }
-
-        [HttpPost("ImportFromRepairToUtilize")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ImportFromRepairToUtilize([FromBody] ReturnedProductTransactionCreate returnedProductTransactionCreate)
-        {
-            await _service.ImportFromRepairToUtilizeAsync(returnedProductTransactionCreate);
-
-            return new OkResult();
-        }
-
-        [HttpPost("ExportToFactory")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ExportToFactory([FromBody] ReturnedProductTransactionCreate returnedProductTransactionCreate)
-        {
-            await _service.ExportToFactoryAsync(returnedProductTransactionCreate);
-
-            return new OkResult();
-        }
-
-        [HttpPost("ExportToRepair")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ExportToRepair([FromBody] ReturnedProductTransactionCreate returnedProductTransactionCreate)
-        {
-            await _service.ExportToRepairAsync(returnedProductTransactionCreate);
-
-            return new OkResult();
-        }
-
-        [HttpPost("ExportToUtilize")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ExportToUtilize([FromBody] ReturnedProductTransactionCreate returnedProductTransactionCreate)
-        {
-            await _service.ExportToUtilizeAsync(returnedProductTransactionCreate);
+            switch (returnedProductTransactionCreate.TransactionType)
+            {
+                case ReturnedProductTransactionType.Export:
+                    await _service.ExportToFactoryAsync(returnedProductTransactionCreate);
+                    break;
+                case ReturnedProductTransactionType.ExportToRepair:
+                    await _service.ExportToRepairAsync(returnedProductTransactionCreate);
+                    break;
+                case ReturnedProductTransactionType.ExportUtilize:
+                    await _service.ExportToUtilizeAsync(returnedProductTransactionCreate);
+                    break;
+                default:
+                    break;
+            }
 
             return new OkResult();
         }

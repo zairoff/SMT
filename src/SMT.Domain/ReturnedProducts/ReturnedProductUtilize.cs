@@ -4,9 +4,9 @@
     {
         public int Id { get; set; }
 
-        public int ReturnedProductionTransactionId { get; set; }
+        public int ReturnedProductTransactionId { get; set; }
 
-        public ReturnedProductRepair ReturnedProductTransaction { get; set; }
+        public virtual ReturnedProductTransaction ReturnedProductTransaction { get; set; }
 
         public string Barcode { get; set; }
 

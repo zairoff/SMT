@@ -14,6 +14,8 @@ namespace SMT.Services.Interfaces
 
         Task<ModelResponse> GetBySapCodeAsync(string sapCode, bool isActive);
 
+        Task<ModelResponse> GetByBarcodeAsync(string barcode, bool isActive);
+
         Task<IEnumerable<ModelResponse>> GetByProductBrandId(int productBrandId, bool? isActive);
 
         Task<ModelResponse> AddAsync(ModelCreate modelCreate);

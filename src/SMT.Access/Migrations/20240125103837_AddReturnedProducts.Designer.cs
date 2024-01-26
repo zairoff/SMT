@@ -10,8 +10,8 @@ using SMT.Access.Data;
 namespace SMT.Access.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240123102117_ReturnedProducts")]
-    partial class ReturnedProducts
+    [Migration("20240125103837_AddReturnedProducts")]
+    partial class AddReturnedProducts
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -574,7 +574,7 @@ namespace SMT.Access.Migrations
 
                     b.HasIndex("ModelId");
 
-                    b.ToTable("ReadyProductTransactions");
+                    b.ToTable("ReadyProductsTransactions");
                 });
 
             modelBuilder.Entity("SMT.Domain.Report", b =>
@@ -641,10 +641,7 @@ namespace SMT.Access.Migrations
                     b.Property<int>("ModelId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ReturnedProductTransactionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReturnedProductionTransactionId")
+                    b.Property<int>("ReturnedProductTransactionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -672,10 +669,7 @@ namespace SMT.Access.Migrations
                     b.Property<int>("ModelId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ReturnedProductTransactionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReturnedProductionTransactionId")
+                    b.Property<int>("ReturnedProductTransactionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -732,10 +726,7 @@ namespace SMT.Access.Migrations
                     b.Property<int>("ModelId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ReturnedProductTransactionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReturnedProductionTransactionId")
+                    b.Property<int>("ReturnedProductTransactionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -1037,9 +1028,11 @@ namespace SMT.Access.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SMT.Domain.ReturnedProducts.ReturnedProductRepair", "ReturnedProductTransaction")
+                    b.HasOne("SMT.Domain.ReturnedProducts.ReturnedProductTransaction", "ReturnedProductTransaction")
                         .WithMany()
-                        .HasForeignKey("ReturnedProductTransactionId");
+                        .HasForeignKey("ReturnedProductTransactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Model");
 
@@ -1054,9 +1047,11 @@ namespace SMT.Access.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SMT.Domain.ReturnedProducts.ReturnedProductRepair", "ReturnedProductTransaction")
+                    b.HasOne("SMT.Domain.ReturnedProducts.ReturnedProductTransaction", "ReturnedProductTransaction")
                         .WithMany()
-                        .HasForeignKey("ReturnedProductTransactionId");
+                        .HasForeignKey("ReturnedProductTransactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Model");
 
@@ -1082,9 +1077,11 @@ namespace SMT.Access.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SMT.Domain.ReturnedProducts.ReturnedProductRepair", "ReturnedProductTransaction")
+                    b.HasOne("SMT.Domain.ReturnedProducts.ReturnedProductTransaction", "ReturnedProductTransaction")
                         .WithMany()
-                        .HasForeignKey("ReturnedProductTransactionId");
+                        .HasForeignKey("ReturnedProductTransactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Model");
 
