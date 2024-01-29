@@ -12,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace SMT.Access.Repository.ReturnedProducts
 {
-    public class ReturnedProductRepairRepository : BaseRepository<ReturnedProductRepair>, IReturnedProductRepairRepository
+    public class ReturnedProductBufferRepository : BaseRepository<ReturnedProductBufferZone>, IReturnedProductBufferRepository
     {
-        public ReturnedProductRepairRepository(AppDbContext context) : base(context)
+        public ReturnedProductBufferRepository(AppDbContext context) : base(context)
         {
         }
 
-        public async override Task<ReturnedProductRepair> FindAsync(Expression<Func<ReturnedProductRepair, bool>> expression) =>
+        public async override Task<ReturnedProductBufferZone> FindAsync(Expression<Func<ReturnedProductBufferZone, bool>> expression) =>
                            await DbSet.Where(expression)
                            .Include(m => m.Model)
                            .ThenInclude(m => m.ProductBrand)
@@ -28,12 +28,12 @@ namespace SMT.Access.Repository.ReturnedProducts
                            .ThenInclude(m => m.Brand)
                            .FirstOrDefaultAsync();
 
-        public async Task<int> FindSumAsync(Expression<Func<ReturnedProductRepair, bool>> expression)
+        public async Task<int> FindSumAsync(Expression<Func<ReturnedProductBufferZone, bool>> expression)
         {
             return await DbSet.Where(expression).SumAsync(x => x.Count);
         }
 
-        public async override Task<IEnumerable<ReturnedProductRepair>> GetAllAsync()
+        public async override Task<IEnumerable<ReturnedProductBufferZone>> GetAllAsync()
         {
             return await DbSet.Include(m => m.Model)
                            .ThenInclude(m => m.ProductBrand)
@@ -44,12 +44,12 @@ namespace SMT.Access.Repository.ReturnedProducts
                            .ToListAsync();
         }
 
-        public async Task<IEnumerable<ReturnedProductRepair>> GetGroupByModelAsync()
+        public async Task<IEnumerable<ReturnedProductBufferZone>> GetGroupByModelAsync()
         {
             return await DbSet
                            .Select(m => new { m.Model, m.Count })
                            .GroupBy(x => new { x.Model.Id, x.Model.Name, x.Model.SapCode, x.Model.Barcode })
-                           .Select(x => new ReturnedProductRepair
+                           .Select(x => new ReturnedProductBufferZone
                            {
                                Model = new Model { Id = x.Key.Id, Name = x.Key.Name, SapCode = x.Key.SapCode, Barcode = x.Key.Barcode },
                                Count = x.Sum(x => x.Count),

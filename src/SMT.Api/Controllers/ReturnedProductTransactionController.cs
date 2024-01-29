@@ -32,7 +32,7 @@ namespace SMT.Api.Controllers
         [Route("GetRepairState")]
         public async Task<IActionResult> GetRepairState()
         {
-            var result = await _service.GetStoreStateAsync();
+            var result = await _service.GetRepairStateAsync();
 
             return Ok(result);
         }
@@ -42,6 +42,15 @@ namespace SMT.Api.Controllers
         public async Task<IActionResult> GetUtilizeState()
         {
             var result = await _service.GetUtilizeStateAsync();
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("GetBufferState")]
+        public async Task<IActionResult> GetBufferState()
+        {
+            var result = await _service.GetBufferStateAsync();
 
             return Ok(result);
         }
@@ -89,14 +98,8 @@ namespace SMT.Api.Controllers
         {
             switch (returnedProductTransactionCreate.TransactionType)
             {
-                case ReturnedProductTransactionType.Import:
-                    await _service.ImportFromFactoryAsync(returnedProductTransactionCreate);
-                    break;
-                case ReturnedProductTransactionType.ImportFromRepair:
-                    await _service.ImportFromRepairAsync(returnedProductTransactionCreate);
-                    break;
-                case ReturnedProductTransactionType.ImportUtilize:
-                    await _service.ImportFromRepairToUtilizeAsync(returnedProductTransactionCreate);
+                case ReturnedProductTransactionType.ImportFromFactoryToBuffer:
+                    await _service.ImportFromFactoryToBufferAsync(returnedProductTransactionCreate);
                     break;
                 default:
                     break;
@@ -112,14 +115,20 @@ namespace SMT.Api.Controllers
         {
             switch (returnedProductTransactionCreate.TransactionType)
             {
-                case ReturnedProductTransactionType.Export:
-                    await _service.ExportToFactoryAsync(returnedProductTransactionCreate);
+                case ReturnedProductTransactionType.ExportFromStoreToFactory:
+                    await _service.ExportFromStoreToFactoryAsync(returnedProductTransactionCreate);
                     break;
-                case ReturnedProductTransactionType.ExportToRepair:
-                    await _service.ExportToRepairAsync(returnedProductTransactionCreate);
+                case ReturnedProductTransactionType.ExportFromBufferToRepair:
+                    await _service.ExportFromBufferToRepairAsync(returnedProductTransactionCreate);
                     break;
-                case ReturnedProductTransactionType.ExportUtilize:
-                    await _service.ExportToUtilizeAsync(returnedProductTransactionCreate);
+                case ReturnedProductTransactionType.ExportFromStoreToUtilize:
+                    await _service.ExportFromStoreToUtilizeAsync(returnedProductTransactionCreate);
+                    break;
+                case ReturnedProductTransactionType.ExportFromRepairToStore:
+                    await _service.ImportFromRepairToStoreAsync(returnedProductTransactionCreate);
+                    break;
+                case ReturnedProductTransactionType.ExportFromRepairToUtilize:
+                    await _service.ImportFromRepairToUtilizeAsync(returnedProductTransactionCreate);
                     break;
                 default:
                     break;

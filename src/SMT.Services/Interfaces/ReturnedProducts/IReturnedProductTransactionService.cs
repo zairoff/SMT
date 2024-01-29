@@ -10,17 +10,17 @@ namespace SMT.Services.Interfaces.ReturnedProducts
     {
         Task<ReturnedProductTransactionResponse> DeleteTransactionAsync(int id);
 
-        Task<ReturnedProductTransactionResponse> ImportFromFactoryAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate);
+        Task<ReturnedProductTransactionResponse> ImportFromFactoryToBufferAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate);
 
-        Task<ReturnedProductTransactionResponse> ImportFromRepairAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate);
+        Task<ReturnedProductTransactionResponse> ImportFromRepairToStoreAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate);
 
         Task<ReturnedProductTransactionResponse> ImportFromRepairToUtilizeAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate);
 
-        Task<ReturnedProductTransactionResponse> ExportToUtilizeAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate);
+        Task<ReturnedProductTransactionResponse> ExportFromStoreToUtilizeAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate);
 
-        Task<ReturnedProductTransactionResponse> ExportToRepairAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate);
+        Task<ReturnedProductTransactionResponse> ExportFromBufferToRepairAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate);
 
-        Task<ReturnedProductTransactionResponse> ExportToFactoryAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate);
+        Task<ReturnedProductTransactionResponse> ExportFromStoreToFactoryAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate);
 
         Task<IEnumerable<ReturnedProductTransactionResponse>> GetByDateAsync(DateTime date, ReturnedProductTransactionType transactionType);
 
@@ -29,6 +29,8 @@ namespace SMT.Services.Interfaces.ReturnedProducts
         Task<IEnumerable<ReturnedProductTransactionResponse>> GetByDateRangeAsync(DateTime from, DateTime to, ReturnedProductTransactionType transactionType);
 
         Task<IEnumerable<ReturnedProductTransactionResponse>> GetByDateRangeGroupByAsync(DateTime from, DateTime to, ReturnedProductTransactionType transactionType);
+
+        Task<IEnumerable<ReturnedProductTransactionResponse>> GetBufferStateAsync();
 
         Task<IEnumerable<ReturnedProductTransactionResponse>> GetStoreStateAsync();
 

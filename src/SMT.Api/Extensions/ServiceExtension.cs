@@ -138,6 +138,7 @@ namespace SMT.Api.Extensions
             services.AddScoped<IReturnedProductStoreRepository, ReturnedProductStoreRepository>();
             services.AddScoped<IReturnedProductUtilizeRepository, ReturnedProductUtilizeRepository>();
             services.AddScoped<IReturnedProductTransactionRepository, ReturnedProductTransactionRepository>();
+            services.AddScoped<IReturnedProductBufferRepository, ReturnedProductBufferRepository>();
 
             /*************   Services  ************/
 

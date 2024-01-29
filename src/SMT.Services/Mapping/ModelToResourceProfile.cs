@@ -92,6 +92,9 @@ namespace SMT.Services.Mapping
 
             CreateMap<ReturnedProductUtilize, ReturnedProductTransactionResponse>()
                .ForMember(m => m.Count, s => s.MapFrom(s => Math.Abs(s.Count)));
+
+            CreateMap<ReturnedProductBufferZone, ReturnedProductTransactionResponse>()
+               .ForMember(m => m.Count, s => s.MapFrom(s => Math.Abs(s.Count)));
         }
     }
 }

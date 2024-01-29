@@ -3,12 +3,12 @@
     public enum ReturnedProductTransactionType
     {
         All = 0,
-        Import = 1,
-        ImportFromRepair = 2,
-        ImportUtilize = 3,
-        Export = 4,
-        ExportToRepair = 5,
-        ExportUtilize = 6,
+        ImportFromFactoryToBuffer = 1,
+        ExportFromRepairToStore = 2,
+        ExportFromRepairToUtilize = 3,
+        ExportFromStoreToFactory = 4,
+        ExportFromBufferToRepair = 5,
+        ExportFromStoreToUtilize = 6,
         Deleted = 7,
     }
 }

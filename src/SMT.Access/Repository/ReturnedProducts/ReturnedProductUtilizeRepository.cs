@@ -48,10 +48,10 @@ namespace SMT.Access.Repository.ReturnedProducts
         {
             return await DbSet
                            .Select(m => new { m.Model, m.Count })
-                           .GroupBy(x => new { x.Model.Id, x.Model.Name, x.Model.SapCode })
+                           .GroupBy(x => new { x.Model.Id, x.Model.Name, x.Model.SapCode, x.Model.Barcode })
                            .Select(x => new ReturnedProductUtilize
                            {
-                               Model = new Model { Id = x.Key.Id, Name = x.Key.Name, SapCode = x.Key.SapCode },
+                               Model = new Model { Id = x.Key.Id, Name = x.Key.Name, SapCode = x.Key.SapCode, Barcode = x.Key.Barcode },
                                Count = x.Sum(x => x.Count),
                            })
                            .OrderByDescending(x => x.Count)

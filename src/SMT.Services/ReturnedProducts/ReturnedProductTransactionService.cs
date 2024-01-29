@@ -8,6 +8,7 @@ using SMT.Services.Interfaces.ReturnedProducts;
 using SMT.ViewModel.Dto.ReturnedProductTransactionDto;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SMT.Services.ReturnedProducts
@@ -19,6 +20,7 @@ namespace SMT.Services.ReturnedProducts
         private readonly IReturnedProductRepairRepository _returnedProductRepairRepository;
         private readonly IReturnedProductStoreRepository _returnedProductStoreRepository;
         private readonly IReturnedProductUtilizeRepository _returnedProductUtilizeRepository;
+        private readonly IReturnedProductBufferRepository _returnedProductBufferRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
@@ -29,7 +31,8 @@ namespace SMT.Services.ReturnedProducts
             IReturnedProductTransactionRepository returnedProductTransactionRepository,
             IReturnedProductRepairRepository returnedProductRepairRepository,
             IReturnedProductStoreRepository returnedProductStoreRepository,
-            IReturnedProductUtilizeRepository returnedProductUtilizeRepository)
+            IReturnedProductUtilizeRepository returnedProductUtilizeRepository,
+            IReturnedProductBufferRepository returnedProductBufferRepository)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -38,6 +41,7 @@ namespace SMT.Services.ReturnedProducts
             _returnedProductRepairRepository = returnedProductRepairRepository;
             _returnedProductStoreRepository = returnedProductStoreRepository;
             _returnedProductUtilizeRepository = returnedProductUtilizeRepository;
+            _returnedProductBufferRepository = returnedProductBufferRepository;
         }
 
         public async Task<ReturnedProductTransactionResponse> DeleteTransactionAsync(int id)
@@ -49,9 +53,15 @@ namespace SMT.Services.ReturnedProducts
                 throw new InvalidOperationException("Not found");
             }
 
+            var buffer = await _returnedProductBufferRepository.FindAsync(x => x.ReturnedProductTransactionId == transaction.Id);
             var store = await _returnedProductStoreRepository.FindAsync(x => x.ReturnedProductTransactionId == transaction.Id);
             var repair = await _returnedProductRepairRepository.FindAsync(x => x.ReturnedProductTransactionId == transaction.Id);
             var utilize = await _returnedProductUtilizeRepository.FindAsync(x => x.ReturnedProductTransactionId == transaction.Id);
+
+            if (buffer != null)
+            {
+                _returnedProductBufferRepository.Delete(buffer);
+            }
 
             if (store != null)
             {
@@ -77,8 +87,15 @@ namespace SMT.Services.ReturnedProducts
             return _mapper.Map<ReturnedProductTransaction, ReturnedProductTransactionResponse>(transaction);
         }
 
-        public async Task<ReturnedProductTransactionResponse> ImportFromFactoryAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate)
+        public async Task<ReturnedProductTransactionResponse> ImportFromFactoryToBufferAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate)
         {
+            var model = await _modelRepository.FindAsync(x => x.Id == returnedProductTransactionCreate.ModelId);
+
+            if (model == null)
+            {
+                throw new NotFoundException("Model not found");
+            }
+
             try
             {
                 var transaction = new ReturnedProductTransaction
@@ -94,9 +111,9 @@ namespace SMT.Services.ReturnedProducts
 
                 await _unitOfWork.SaveAsync();
 
-                var returnedStore = _mapper.Map<ReturnedProductTransaction, ReturnedProductStore>(transaction);
+                var returnedBuffer = _mapper.Map<ReturnedProductTransaction, ReturnedProductBufferZone>(transaction);
 
-                await _returnedProductStoreRepository.AddAsync(returnedStore);
+                await _returnedProductBufferRepository.AddAsync(returnedBuffer);
 
                 await _unitOfWork.SaveAsync();
 
@@ -109,7 +126,7 @@ namespace SMT.Services.ReturnedProducts
             }
         }
 
-        public async Task<ReturnedProductTransactionResponse> ImportFromRepairAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate)
+        public async Task<ReturnedProductTransactionResponse> ImportFromRepairToStoreAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate)
         {
             var model = await _modelRepository.FindAsync(x => x.Id == returnedProductTransactionCreate.ModelId);
 
@@ -193,7 +210,7 @@ namespace SMT.Services.ReturnedProducts
             return _mapper.Map<ReturnedProductTransaction, ReturnedProductTransactionResponse>(transaction);
         }
 
-        public async Task<ReturnedProductTransactionResponse> ExportToUtilizeAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate)
+        public async Task<ReturnedProductTransactionResponse> ExportFromStoreToUtilizeAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate)
         {
             var model = await _modelRepository.FindAsync(x => x.Id == returnedProductTransactionCreate.ModelId);
 
@@ -214,7 +231,7 @@ namespace SMT.Services.ReturnedProducts
                 Barcode = returnedProductTransactionCreate.Barcode,
                 ModelId = returnedProductTransactionCreate.ModelId,
                 Count = returnedProductTransactionCreate.Count,
-                TransactionType = ReturnedProductTransactionType.ExportUtilize,
+                TransactionType = returnedProductTransactionCreate.TransactionType,
                 Date = DateTime.Now,
             };
 
@@ -232,7 +249,7 @@ namespace SMT.Services.ReturnedProducts
             return _mapper.Map<ReturnedProductTransaction, ReturnedProductTransactionResponse>(transaction);
         }
 
-        public async Task<ReturnedProductTransactionResponse> ExportToRepairAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate)
+        public async Task<ReturnedProductTransactionResponse> ExportFromBufferToRepairAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate)
         {
             var model = await _modelRepository.FindAsync(x => x.Id == returnedProductTransactionCreate.ModelId);
 
@@ -241,11 +258,11 @@ namespace SMT.Services.ReturnedProducts
                 throw new NotFoundException("Model not found");
             }
 
-            var countInStore = await _returnedProductStoreRepository.FindSumAsync(x => x.ModelId == returnedProductTransactionCreate.ModelId);
+            var countInBuffer = await _returnedProductBufferRepository.FindSumAsync(x => x.ModelId == returnedProductTransactionCreate.ModelId);
 
-            if (countInStore < returnedProductTransactionCreate.Count)
+            if (countInBuffer < returnedProductTransactionCreate.Count)
             {
-                throw new Exception($"Not enough count in table. Count: {countInStore}");
+                throw new Exception($"Not enough count in table. Count: {countInBuffer}");
             }
 
             var transaction = new ReturnedProductTransaction
@@ -253,7 +270,7 @@ namespace SMT.Services.ReturnedProducts
                 Barcode = returnedProductTransactionCreate.Barcode,
                 ModelId = returnedProductTransactionCreate.ModelId,
                 Count = returnedProductTransactionCreate.Count,
-                TransactionType = ReturnedProductTransactionType.ExportToRepair,
+                TransactionType = returnedProductTransactionCreate.TransactionType,
                 Date = DateTime.Now,
             };
 
@@ -261,12 +278,12 @@ namespace SMT.Services.ReturnedProducts
 
             await _unitOfWork.SaveAsync();
 
-            var returnedProductStore = _mapper.Map<ReturnedProductTransaction, ReturnedProductStore>(transaction);
-            returnedProductStore.Count *= -1;
+            var returnedProductBuffer = _mapper.Map<ReturnedProductTransaction, ReturnedProductBufferZone>(transaction);
+            returnedProductBuffer.Count *= -1;
 
             var returnedProductRepair = _mapper.Map<ReturnedProductTransaction, ReturnedProductRepair>(transaction);
 
-            await _returnedProductStoreRepository.AddAsync(returnedProductStore);
+            await _returnedProductBufferRepository.AddAsync(returnedProductBuffer);
             await _returnedProductRepairRepository.AddAsync(returnedProductRepair);
 
             await _unitOfWork.SaveAsync();
@@ -274,7 +291,7 @@ namespace SMT.Services.ReturnedProducts
             return _mapper.Map<ReturnedProductTransaction, ReturnedProductTransactionResponse>(transaction);
         }
 
-        public async Task<ReturnedProductTransactionResponse> ExportToFactoryAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate)
+        public async Task<ReturnedProductTransactionResponse> ExportFromStoreToFactoryAsync(ReturnedProductTransactionCreate returnedProductTransactionCreate)
         {
             var model = await _modelRepository.FindAsync(x => x.Id == returnedProductTransactionCreate.ModelId);
 
@@ -295,7 +312,7 @@ namespace SMT.Services.ReturnedProducts
                 Barcode = returnedProductTransactionCreate.Barcode,
                 ModelId = returnedProductTransactionCreate.ModelId,
                 Count = returnedProductTransactionCreate.Count,
-                TransactionType = ReturnedProductTransactionType.Export,
+                TransactionType = returnedProductTransactionCreate.TransactionType,
                 Date = DateTime.Now,
             };
 
@@ -363,21 +380,36 @@ namespace SMT.Services.ReturnedProducts
         {
             var returnedProductsStore = await _returnedProductStoreRepository.GetGroupByModelAsync();
 
-            return _mapper.Map<IEnumerable<ReturnedProductStore>, IEnumerable<ReturnedProductTransactionResponse>>(returnedProductsStore);
+            var filtered = returnedProductsStore.Where(x => x.Count > 0);
+
+            return _mapper.Map<IEnumerable<ReturnedProductStore>, IEnumerable<ReturnedProductTransactionResponse>>(filtered);
         }
 
         public async Task<IEnumerable<ReturnedProductTransactionResponse>> GetRepairStateAsync()
         {
             var returnedProductsRepair = await _returnedProductRepairRepository.GetGroupByModelAsync();
 
-            return _mapper.Map<IEnumerable<ReturnedProductRepair>, IEnumerable<ReturnedProductTransactionResponse>>(returnedProductsRepair);
+            var filtered = returnedProductsRepair.Where(x => x.Count > 0);
+
+            return _mapper.Map<IEnumerable<ReturnedProductRepair>, IEnumerable<ReturnedProductTransactionResponse>>(filtered);
         }
 
         public async Task<IEnumerable<ReturnedProductTransactionResponse>> GetUtilizeStateAsync()
         {
             var returnedProductsUtilize = await _returnedProductUtilizeRepository.GetGroupByModelAsync();
 
-            return _mapper.Map<IEnumerable<ReturnedProductUtilize>, IEnumerable<ReturnedProductTransactionResponse>>(returnedProductsUtilize);
+            var filtered = returnedProductsUtilize.Where(x => x.Count > 0);
+
+            return _mapper.Map<IEnumerable<ReturnedProductUtilize>, IEnumerable<ReturnedProductTransactionResponse>>(filtered);
+        }
+
+        public async Task<IEnumerable<ReturnedProductTransactionResponse>> GetBufferStateAsync()
+        {
+            var returnedProductsBuffer = await _returnedProductBufferRepository.GetGroupByModelAsync();
+
+            var filtered = returnedProductsBuffer.Where(x => x.Count > 0);
+
+            return _mapper.Map<IEnumerable<ReturnedProductBufferZone>, IEnumerable<ReturnedProductTransactionResponse>>(filtered);
         }
     }
 }

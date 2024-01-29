@@ -18,6 +18,10 @@ namespace SMT.Services.Mapping
             CreateMap<ReturnedProductTransaction, ReturnedProductUtilize>()
                .ForMember(m => m.ReturnedProductTransactionId, s => s.MapFrom(s => s.Id))
                .ForMember(m => m.Id, s => s.Ignore());
+
+            CreateMap<ReturnedProductTransaction, ReturnedProductBufferZone>()
+               .ForMember(m => m.ReturnedProductTransactionId, s => s.MapFrom(s => s.Id))
+               .ForMember(m => m.Id, s => s.Ignore());
         }
     }
 }
