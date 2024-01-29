@@ -32,7 +32,7 @@ namespace SMT.Access.Data
         public DbSet<MachineRepairer> MachineRepairers { get; set; }
         public DbSet<PlanActivity> PlanActivities { get; set; }
         public DbSet<ReadyProduct> ReadyProducts { get; set; }
-        public DbSet<ReadyProductTransaction> ReadyProductsTransactions { get; set; }
+        public DbSet<ReadyProductTransaction> ReadyProductTransactions { get; set; }
         public DbSet<ReturnedProductStore> ReturnedProductStores { get; set; }
         public DbSet<ReturnedProductRepair> ReturnedProductRepairs { get; set; }
         public DbSet<ReturnedProductUtilize> ReturnedProductUtilizes { get; set; }
