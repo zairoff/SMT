@@ -89,7 +89,7 @@ namespace SMT.Services
             _ = modelUpdate.SapCode?.Trim();
             _ = modelUpdate.Barcode?.Trim();
 
-            var model = await _repository.FindAsync(x => (x.SapCode == modelUpdate.SapCode || (x.Barcode == modelUpdate.Barcode && !string.IsNullOrEmpty(modelUpdate.Barcode)) && x.Id != id));
+            var model = await _repository.FindAsync(x => (x.SapCode == modelUpdate.SapCode || (x.Barcode == modelUpdate.Barcode && !string.IsNullOrEmpty(modelUpdate.Barcode))) && x.Id != id);
 
             if (model != null)
                 throw new ConflictException($"{modelUpdate.SapCode} already existed");
