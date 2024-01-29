@@ -5,6 +5,8 @@ using System;
 using SMT.Services.Interfaces.ReturnedProducts;
 using SMT.Domain.ReturnedProducts;
 using SMT.ViewModel.Dto.ReturnedProductTransactionDto;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace SMT.Api.Controllers
 {
@@ -51,6 +53,35 @@ namespace SMT.Api.Controllers
         public async Task<IActionResult> GetBufferState()
         {
             var result = await _service.GetBufferStateAsync();
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("GetState")]
+        public async Task<IActionResult> GetState(ReturnedProductTransactionType transactionType)
+        {
+            IEnumerable<ReturnedProductTransactionResponse> result = null;
+
+            switch (transactionType)
+            {
+                case ReturnedProductTransactionType.ExportFromBufferToRepair:
+                    result = await _service.GetBufferStateAsync();
+                    break;
+                case ReturnedProductTransactionType.ExportFromRepairToStore:
+                case ReturnedProductTransactionType.ExportFromRepairToUtilize:
+                    result = await _service.GetRepairStateAsync();
+                    break;
+                case ReturnedProductTransactionType.ExportFromStoreToUtilize:
+                    result = await _service.GetUtilizeStateAsync();
+                    break;
+                case ReturnedProductTransactionType.ExportFromStoreToFactory:
+                    result = await _service.GetStoreStateAsync();
+                    break;
+
+                default:
+                    break;
+            }
 
             return Ok(result);
         }
