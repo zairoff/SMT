@@ -37,5 +37,7 @@ namespace SMT.Services.Interfaces.ReturnedProducts
         Task<IEnumerable<ReturnedProductTransactionResponse>> GetRepairStateAsync();
 
         Task<IEnumerable<ReturnedProductTransactionResponse>> GetUtilizeStateAsync();
+
+        Task GroupByNotifyAsync();
     }
 }

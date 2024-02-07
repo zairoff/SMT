@@ -1,14 +1,18 @@
 ﻿using AutoMapper;
+using CoreHtmlToImage;
 using SMT.Access.Repository.Interfaces;
 using SMT.Access.Repository.Interfaces.ReturnedProducts;
 using SMT.Access.Unit;
 using SMT.Domain.ReturnedProducts;
+using SMT.Notification;
 using SMT.Services.Exceptions;
 using SMT.Services.Interfaces.ReturnedProducts;
 using SMT.ViewModel.Dto.ReturnedProductTransactionDto;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SMT.Services.ReturnedProducts
@@ -23,6 +27,7 @@ namespace SMT.Services.ReturnedProducts
         private readonly IReturnedProductBufferRepository _returnedProductBufferRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly INotificationService _notificationService;
 
         public ReturnedProductTransactionService(
             IMapper mapper,
@@ -32,7 +37,8 @@ namespace SMT.Services.ReturnedProducts
             IReturnedProductRepairRepository returnedProductRepairRepository,
             IReturnedProductStoreRepository returnedProductStoreRepository,
             IReturnedProductUtilizeRepository returnedProductUtilizeRepository,
-            IReturnedProductBufferRepository returnedProductBufferRepository)
+            IReturnedProductBufferRepository returnedProductBufferRepository,
+            INotificationService notificationService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -42,6 +48,7 @@ namespace SMT.Services.ReturnedProducts
             _returnedProductStoreRepository = returnedProductStoreRepository;
             _returnedProductUtilizeRepository = returnedProductUtilizeRepository;
             _returnedProductBufferRepository = returnedProductBufferRepository;
+            _notificationService = notificationService;
         }
 
         public async Task<ReturnedProductTransactionResponse> DeleteTransactionAsync(int id)
@@ -410,6 +417,222 @@ namespace SMT.Services.ReturnedProducts
             var filtered = returnedProductsBuffer.Where(x => x.Count > 0);
 
             return _mapper.Map<IEnumerable<ReturnedProductBufferZone>, IEnumerable<ReturnedProductTransactionResponse>>(filtered);
+        }
+
+        public async Task GroupByNotifyAsync()
+        {
+            var from = DateTime.Now.AddDays(-7).Date;
+            var to = DateTime.Now.Date;
+
+            // Buffer
+            var importFromFactoryToBuffer = await _returnedProductTransactionRepository.GetGroupByModelAsync(
+                x => x.TransactionType == ReturnedProductTransactionType.ImportFromFactoryToBuffer && x.Date.Date >= from && x.Date.Date <= to);
+
+            var exportFromBufferToRepair = await _returnedProductTransactionRepository.GetGroupByModelAsync(
+                x => x.TransactionType == ReturnedProductTransactionType.ExportFromBufferToRepair && x.Date.Date >= from && x.Date.Date <= to);
+
+            var bufferState = await _returnedProductBufferRepository.GetGroupByModelAsync();
+            bufferState = bufferState.Where(x => x.Count > 0);
+
+            // Repair
+            var exportFromRepairToStore = await _returnedProductTransactionRepository.GetGroupByModelAsync(
+               x => x.TransactionType == ReturnedProductTransactionType.ExportFromRepairToStore && x.Date.Date >= from && x.Date.Date <= to);
+
+            var exportFromRepairToUtilize = await _returnedProductTransactionRepository.GetGroupByModelAsync(
+               x => x.TransactionType == ReturnedProductTransactionType.ExportFromRepairToUtilize && x.Date.Date >= from && x.Date.Date <= to);
+
+            var reapirState = await _returnedProductRepairRepository.GetGroupByModelAsync();
+            reapirState = reapirState.Where(x => x.Count > 0);
+
+            // Store
+            var exportFromStoreToFactory = await _returnedProductTransactionRepository.GetGroupByModelAsync(
+               x => x.TransactionType == ReturnedProductTransactionType.ExportFromStoreToFactory && x.Date.Date >= from && x.Date.Date <= to);
+
+            var exportFromStoreToUtilize = await _returnedProductTransactionRepository.GetGroupByModelAsync(
+               x => x.TransactionType == ReturnedProductTransactionType.ExportFromStoreToUtilize && x.Date.Date >= from && x.Date.Date <= to);
+
+            var storeState = await _returnedProductStoreRepository.GetGroupByModelAsync();
+            storeState = storeState.Where(x => x.Count > 0);
+
+            var utilizeState = await _returnedProductUtilizeRepository.GetGroupByModelAsync();
+            utilizeState = utilizeState.Where(x => x.Count > 0);
+
+            if (importFromFactoryToBuffer.Any())
+            {
+                await NotifyTransactions(importFromFactoryToBuffer, $"{from:yyyy-MM-dd} / {to:yyyy-MM-dd} OXANGARON > BUFFER");
+            }
+
+            if (exportFromBufferToRepair.Any())
+            {
+                await NotifyTransactions(exportFromBufferToRepair, $"{from:yyyy-MM-dd} / {to:yyyy-MM-dd} BUFFER > REMONT");
+            }
+
+            if (bufferState.Any())
+            {
+                await NotifProductState(bufferState, $"BUFFERDA MAVJUD MAHSULOTLAR");
+            }
+
+            // REPAIR
+            if (exportFromRepairToStore.Any())
+            {
+                await NotifyTransactions(exportFromRepairToStore, $"{from:yyyy-MM-dd} / {to:yyyy-MM-dd} REMONT > OMBOR");
+            }
+
+            if (exportFromRepairToUtilize.Any())
+            {
+                await NotifyTransactions(exportFromRepairToUtilize, $"{from:yyyy-MM-dd} / {to:yyyy-MM-dd} REMONT > OMBOR (UTILIZATSIYA)");
+            }
+
+            if (reapirState.Any())
+            {
+                await NotifProductState(reapirState, $"REMONTDA MAVJUD MAHSULOTLAR");
+            }
+
+            // STORE
+            if (exportFromStoreToFactory.Any())
+            {
+                await NotifyTransactions(exportFromStoreToFactory, $"{from:yyyy-MM-dd} / {to:yyyy-MM-dd} OMBOR > OXANGARON");
+            }
+
+            if (exportFromStoreToUtilize.Any())
+            {
+                await NotifyTransactions(exportFromStoreToUtilize, $"{from:yyyy-MM-dd} / {to:yyyy-MM-dd} OMBOR > UTILIZATSIYA");
+            }
+
+            if (storeState.Any())
+            {
+                await NotifProductState(storeState, $"OMBORDA MAVJUD MAHSULOTLAR");
+            }
+
+            if (utilizeState.Any())
+            {
+                await NotifProductState(utilizeState, $"OMBORDA MAVJUD MAHSULOTLAR (UTILIZATSIYA)");
+            }
+        }
+
+        private async Task NotifyTransactions(IEnumerable<ReturnedProductTransaction> transactions, string title)
+        {
+            if (transactions == null || !transactions.Any())
+            {
+                return;
+            }
+
+            var html = BuildNotificationTransactionsBody(transactions, title);
+
+            var memoryStream = ConvertHtmlToImage(html);
+
+            await _notificationService.NotifyAsync(memoryStream, title);
+        }
+
+        private static string BuildNotificationTransactionsBody(IEnumerable<ReturnedProductTransaction> transactions, string title)
+        {
+            var builder = new StringBuilder();
+            foreach (var readyProduct in transactions)
+            {
+                builder.AppendLine("<tr>");
+                builder.AppendLine($"<td>{readyProduct.Model.Name}</td>");
+                builder.AppendLine($"<td>{readyProduct.Model.SapCode}</td>");
+                builder.AppendLine($"<td>{readyProduct.Model.Barcode}</td>");
+                builder.AppendLine($"<td>{readyProduct.Count}</td>");
+                builder.AppendLine("</tr>");
+            }
+
+            return $@"<!DOCTYPE html>
+                        <html>
+                        <head>
+                        <style>
+                        table {{
+                          font-family: arial, sans-serif;
+                          border-collapse: collapse;
+                          width: 100%;
+                        }}
+
+                        td, th {{
+                          border: 1px solid #dddddd;
+                          text-align: left;
+                          padding: 8px;
+                        }}
+                        </style>
+                        </head>
+                            <body>
+                                <h2>{title}</h2>
+                                <table>
+                                  <tr>
+                                    <th>MODEL</th>
+                                    <th>SAP CODE</th>
+                                    <th>BAR CODE</th>
+                                    <th>SONI</th>
+                                  </tr>
+                                  {builder}
+                                </table>
+                            </body>
+                        </html>";
+        }
+
+        private async Task NotifProductState(IEnumerable<ReturnedProduct> returnedProducts, string title)
+        {
+            if (returnedProducts == null || !returnedProducts.Any())
+            {
+                return;
+            }
+
+            var html = BuildReturnedProductsNotificationBody(returnedProducts, title);
+
+            var memoryStream = ConvertHtmlToImage(html);
+
+            await _notificationService.NotifyAsync(memoryStream, title);
+        }
+
+        private static string BuildReturnedProductsNotificationBody(IEnumerable<ReturnedProduct> readyProductTransactions, string title)
+        {
+            var builder = new StringBuilder();
+            foreach (var readyProduct in readyProductTransactions)
+            {
+                builder.AppendLine("<tr>");
+                builder.AppendLine($"<td>{readyProduct.Model.Name}</td>");
+                builder.AppendLine($"<td>{readyProduct.Model.SapCode}</td>");
+                builder.AppendLine($"<td>{readyProduct.Model.Barcode}</td>");
+                builder.AppendLine($"<td>{readyProduct.Count}</td>");
+                builder.AppendLine("</tr>");
+            }
+
+            return $@"<!DOCTYPE html>
+                        <html>
+                        <head>
+                        <style>
+                        table {{
+                          font-family: arial, sans-serif;
+                          border-collapse: collapse;
+                          width: 100%;
+                        }}
+
+                        td, th {{
+                          border: 1px solid #dddddd;
+                          text-align: left;
+                          padding: 8px;
+                        }}
+                        </style>
+                        </head>
+                            <body>
+                                <h2>{title}</h2>
+                                <table>
+                                  <tr>
+                                    <th>MODEL</th>
+                                    <th>SAP CODE</th>
+                                    <th>BAR CODE</th>
+                                    <th>SONI</th>
+                                  </tr>
+                                  {builder}
+                                </table>
+                            </body>
+                        </html>";
+        }
+
+        private static MemoryStream ConvertHtmlToImage(string html)
+        {
+            var converter = new HtmlConverter();
+            var bytes = converter.FromHtmlString(html);
+            return new MemoryStream(bytes);
         }
     }
 }
