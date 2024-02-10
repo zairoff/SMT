@@ -123,7 +123,7 @@ namespace SMT.Api.Controllers
         }
 
         [HttpPost]
-        [Route("Returned/Notify/GroupBy")]
+        [Route("Notify/GroupBy")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GroupByNotify()

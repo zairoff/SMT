@@ -30,5 +30,7 @@ namespace SMT.Services.Interfaces
         Task<ReadyProductTransactionResponse> ImportAsync(ReadyProductTransactionImport readyProductTransactionImport);
 
         Task<ReadyProductTransactionResponse> ExportAsync(ReadyProductTransactionExport readyProductTransactionExport);
+
+        Task<ReadyProductTransactionResponse> ChangesAsync(int id, int count);
     }
 }

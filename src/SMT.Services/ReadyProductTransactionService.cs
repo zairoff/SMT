@@ -226,6 +226,24 @@ namespace SMT.Services
             }
         }
 
+        public async Task<ReadyProductTransactionResponse> ChangesAsync(int id, int count)
+        {
+            var transaction = await _transactionRepository.FindAsync(p => p.Id == id);
+
+            if (transaction == null)
+            {
+                throw new InvalidOperationException("Not found");
+            }
+
+            transaction.Count = count;
+
+            _transactionRepository.Update(transaction);
+
+            await _unitOfWork.SaveAsync();
+
+            return _mapper.Map<ReadyProductTransaction, ReadyProductTransactionResponse>(transaction);
+        }
+
         private async Task NotifyTransactions(IEnumerable<ReadyProductTransaction> transactions, string title)
         {
             if (transactions == null || !transactions.Any())

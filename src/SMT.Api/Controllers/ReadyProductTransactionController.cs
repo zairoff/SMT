@@ -120,6 +120,17 @@ namespace SMT.Api.Controllers
             return Ok();
         }
 
+        [HttpPut]
+        [Route("{id}/change")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Change([FromRoute] int id, [FromQuery] int count)
+        {
+            await _service.ChangesAsync(id, count);
+
+            return Ok();
+        }
+
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
