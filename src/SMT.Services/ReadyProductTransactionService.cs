@@ -235,6 +235,8 @@ namespace SMT.Services
                 throw new InvalidOperationException("Not found");
             }
 
+            count = transaction.Count < 0 ? -count : count;
+
             transaction.Count = count;
 
             _transactionRepository.Update(transaction);
