@@ -24,6 +24,7 @@ using SMT.ViewModel.Dto.ProductTransactionDto;
 using System;
 using SMT.Domain.ReturnedProducts;
 using SMT.ViewModel.Dto.ReturnedProductTransactionDto;
+using SMT.ViewModel.Dto.HourlyPlanDto;
 
 namespace SMT.Services.Mapping
 {
@@ -95,6 +96,10 @@ namespace SMT.Services.Mapping
 
             CreateMap<ReturnedProductBufferZone, ReturnedProductTransactionResponse>()
                .ForMember(m => m.Count, s => s.MapFrom(s => Math.Abs(s.Count)));
+
+
+            CreateMap<HourlyPlan, HourlyPlanResponse>()
+               .ForMember(m => m.Time, s => s.MapFrom(s => s.Time.ToString("yyyy-MM-dd HH:mm:ss")));
         }
     }
 }

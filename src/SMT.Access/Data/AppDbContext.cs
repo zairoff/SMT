@@ -38,6 +38,7 @@ namespace SMT.Access.Data
         public DbSet<ReturnedProductUtilize> ReturnedProductUtilizes { get; set; }
         public DbSet<ReturnedProductTransaction> ReturnedProductTransactions { get; set; }
         public DbSet<ReturnedProductBufferZone> ReturnedProductBufferZones { get; set; }
+        public DbSet<HourlyPlan> HourlyPlans { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {

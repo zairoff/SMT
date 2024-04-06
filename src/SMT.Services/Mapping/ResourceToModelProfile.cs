@@ -22,6 +22,7 @@ using SMT.ViewModel.Dto.PlanDto;
 using SMT.ViewModel.Dto.PlanActivityDto;
 using SMT.ViewModel.Dto.ReadyProductDto;
 using SMT.ViewModel.Dto.ProductTransactionDto;
+using SMT.ViewModel.Dto.HourlyPlanDto;
 
 namespace SMT.Services.Mapping
 {
@@ -90,6 +91,11 @@ namespace SMT.Services.Mapping
             CreateMap<ReadyProductUpdate, ReadyProduct>();
 
             CreateMap<ReadyProductTransactionImport, ReadyProductTransaction>();
+
+            CreateMap<HourlyPlanCreate, HourlyPlan>()
+                .ForMember(x => x.Time, s => s.MapFrom(s => DateTime.Now));
+
+            CreateMap<HourlyPlanUpdate, HourlyPlan>();
         }
     }
 }

@@ -140,6 +140,8 @@ namespace SMT.Api.Extensions
             services.AddScoped<IReturnedProductTransactionRepository, ReturnedProductTransactionRepository>();
             services.AddScoped<IReturnedProductBufferRepository, ReturnedProductBufferRepository>();
 
+            services.AddScoped<IHourlyPlanRepository, HourlyPlanRepository>();
+
             /*************   Services  ************/
 
             services.AddScoped<IBrandService, BrandService>();
@@ -161,8 +163,8 @@ namespace SMT.Api.Extensions
             services.AddScoped<IPlanActivityService, PlanActivityService>();
             services.AddScoped<IReadyProductService, ReadyProductService>();
             services.AddScoped<IReadyProductTransactionService, ReadyProductTransactionService>();
-
             services.AddScoped<IReturnedProductTransactionService, ReturnedProductTransactionService>();
+            services.AddScoped<IHourlyPlanService, HourlyPlanService>();
 
             /*************   Security  ************/
             services.AddScoped<IUserService, UserService>();
