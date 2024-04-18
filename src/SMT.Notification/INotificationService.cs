@@ -11,5 +11,7 @@ namespace SMT.Notification
         Task NotifyAsync(List<Report> reports);
         Task NotifyRepairAsync(MachineRepair repair);
         Task NotifyAsync(MemoryStream memoryStream, string title);
+
+        Task NotifyAsync(MemoryStream memoryStream, string title, long chatId);
     }
 }

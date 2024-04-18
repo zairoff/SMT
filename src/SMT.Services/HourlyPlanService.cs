@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CoreHtmlToImage;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Configuration;
 using SMT.Access.Migrations;
 using SMT.Access.Repository.Interfaces;
 using SMT.Access.Unit;
@@ -24,13 +25,16 @@ namespace SMT.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly INotificationService _notificationService;
+        private readonly long _chatId;
 
-        public HourlyPlanService(IMapper mapper, IUnitOfWork unitOfWork, IHourlyPlanRepository repository, INotificationService notificationService)
+        public HourlyPlanService(IMapper mapper, IUnitOfWork unitOfWork, IHourlyPlanRepository repository, INotificationService notificationService, IConfiguration configuration)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _repository = repository;
             _notificationService = notificationService;
+
+            _chatId = Convert.ToInt64(configuration["AppSettings:HourlyPlanChatId"]);
         }
 
         public async Task<HourlyPlanResponse> AddAsync(HourlyPlanCreate hourlyPlanCreate)
@@ -150,7 +154,7 @@ namespace SMT.Services
 
             var memory = ConvertHtmlToImage(html);
 
-            await _notificationService.NotifyAsync(memory, title);
+            await _notificationService.NotifyAsync(memory, title, _chatId);
         }
 
         private static StringBuilder BuildColumns(IEnumerable<HourlyPlan> hourlyPlans)

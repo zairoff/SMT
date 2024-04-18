@@ -1,11 +1,9 @@
 ﻿using SMT.Domain;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 
 namespace SMT.Notification
 {
@@ -60,6 +58,14 @@ namespace SMT.Notification
         {
             await _botClient.SendPhotoAsync(
                     chatId: _readyProductChatId,
+                    photo: InputFile.FromStream(memoryStream),
+                    caption: title);
+        }
+
+        public async Task NotifyAsync(MemoryStream memoryStream, string title, long chatId)
+        {
+            await _botClient.SendPhotoAsync(
+                    chatId: chatId,
                     photo: InputFile.FromStream(memoryStream),
                     caption: title);
         }
