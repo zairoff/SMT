@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace SMT.ViewModel.Dto.MachineDto
+﻿namespace SMT.ViewModel.Dto.MachineDto
 {
     public class MachineCreate
     {

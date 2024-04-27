@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using CoreHtmlToImage;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
-using SMT.Access.Migrations;
 using SMT.Access.Repository.Interfaces;
 using SMT.Access.Unit;
 using SMT.Domain;
@@ -14,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 

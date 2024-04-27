@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SMT.ViewModel.Dto.MachineRepairDto
+﻿namespace SMT.ViewModel.Dto.MachineRepairDto
 {
     public class MachineRepairCreate
     {

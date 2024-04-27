@@ -1,5 +1,4 @@
 ﻿using SMT.ViewModel.Dto.DefectDto;
-using SMT.ViewModel.Dto.EmployeeDto;
 using SMT.ViewModel.Dto.LineDto;
 using SMT.ViewModel.Dto.ModelDto;
 using System;

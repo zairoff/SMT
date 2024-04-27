@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using SMT.Access.Data;
 using SMT.Access.Repository.Base;
 using SMT.Access.Repository.Interfaces;

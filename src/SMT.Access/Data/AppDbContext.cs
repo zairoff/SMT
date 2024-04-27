@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Design;
 using SMT.Domain;
 using SMT.Domain.ReturnedProducts;
-using System.Drawing;
 
 namespace SMT.Access.Data
 {
@@ -39,6 +38,7 @@ namespace SMT.Access.Data
         public DbSet<ReturnedProductTransaction> ReturnedProductTransactions { get; set; }
         public DbSet<ReturnedProductBufferZone> ReturnedProductBufferZones { get; set; }
         public DbSet<HourlyPlan> HourlyPlans { get; set; }
+        public DbSet<Component> Components { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SMT.ViewModel.Dto.ReportDto
+﻿namespace SMT.ViewModel.Dto.ReportDto
 {
     public class ReportUpdate
     {

@@ -1,5 +1,4 @@
-﻿using System;
-using SMT.ViewModel.Dto.DepartmentDto;
+﻿using SMT.ViewModel.Dto.DepartmentDto;
 
 namespace SMT.ViewModel.Dto.EmployeeDto
 {

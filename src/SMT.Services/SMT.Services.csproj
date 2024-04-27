@@ -18,4 +18,16 @@
     <ProjectReference Include="..\SMT.ViewModel\SMT.ViewModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Seagull.BarTender.Print">
+      <HintPath>C:\Program Files\Seagull\BarTender 2019\SDK\Assemblies\Seagull.BarTender.Print.dll</HintPath>
+    </Reference>
+    <Reference Include="Seagull.Services.PrintScheduler">
+      <HintPath>C:\Program Files\Seagull\BarTender 2019\SDK\Assemblies\Seagull.Services.PrintScheduler.dll</HintPath>
+    </Reference>
+    <Reference Include="Seagull.Services.PrintScheduler.Contracts">
+      <HintPath>C:\Program Files\Seagull\BarTender 2019\SDK\Assemblies\Seagull.Services.PrintScheduler.Contracts.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

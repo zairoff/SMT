@@ -5,7 +5,6 @@ using System;
 using SMT.Services.Interfaces.ReturnedProducts;
 using SMT.Domain.ReturnedProducts;
 using SMT.ViewModel.Dto.ReturnedProductTransactionDto;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace SMT.Api.Controllers

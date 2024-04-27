@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SMT.Services.Interfaces;
-using SMT.ViewModel.Dto.MachineRepairDto;
+using SMT.ViewModel.Dto.ComponentDto;
 using System.Threading.Tasks;
 
 namespace SMT.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MachineRepairController : ControllerBase
+    public class ComponentController : ControllerBase
     {
-        private readonly IMachineRepairService _service;
+        private readonly IComponentService _service;
 
-        public MachineRepairController(IMachineRepairService service)
+        public ComponentController(IComponentService service)
         {
             _service = service;
         }
@@ -33,26 +33,29 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("GetByMachine")]
-        public async Task<IActionResult> GetByMachine(int machineId)
+        [HttpGet]
+        [Route("GetByPartNumber")]
+        public async Task<IActionResult> GetByPartNumber(string partNumber)
         {
-            var result = await _service.GetByMachineIdAsync(machineId);
+            var result = await _service.GetByPartNumberAsync(partNumber);
 
             return Ok(result);
         }
 
-        [HttpGet("GetByMonth")]
-        public async Task<IActionResult> GetByMonth(string month)
+        [HttpGet]
+        [Route("GetByRcode")]
+        public async Task<IActionResult> GetByRcode(string rcode)
         {
-            var result = await _service.GetByMonthAsync(month);
+            var result = await _service.GetByRcodeAsync(rcode);
 
             return Ok(result);
         }
 
-        [HttpGet("ByMachineIdAndDate")]
-        public async Task<IActionResult> GetByMachineIdAndDate(int machineId, string date)
+        [HttpGet]
+        [Route("GetByStorePlace")]
+        public async Task<IActionResult> GetByStorePlace(string storePlace)
         {
-            var result = await _service.GetByMachineIdAndDateAsync(machineId, date);
+            var result = await _service.GetByStorePlaceAsync(storePlace);
 
             return Ok(result);
         }
@@ -60,9 +63,9 @@ namespace SMT.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateReport([FromBody] MachineRepairCreate machineRepairCreate)
+        public async Task<IActionResult> CreateComponent([FromBody] ComponentCreate componentCreate)
         {
-            var result = await _service.AddAsync(machineRepairCreate);
+            var result = await _service.AddAsync(componentCreate);
 
             return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }
@@ -72,9 +75,9 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateEmployee(int id, [FromBody] MachineRepairUpdate machineRepairUpdate)
+        public async Task<IActionResult> UpdateComponent(int id, [FromBody] ComponentUpdate componentUpdate)
         {
-            var result = await _service.UpdateAsync(id, machineRepairUpdate);
+            var result = await _service.UpdateAsync(id, componentUpdate);
 
             return Ok(result);
         }

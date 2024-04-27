@@ -1,6 +1,5 @@
 ﻿using SMT.ViewModel.Dto.LineDto;
 using SMT.ViewModel.Dto.ModelDto;
-using System;
 
 namespace SMT.ViewModel.Dto.PlanDto
 {
