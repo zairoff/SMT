@@ -25,6 +25,7 @@ using System;
 using SMT.Domain.ReturnedProducts;
 using SMT.ViewModel.Dto.ReturnedProductTransactionDto;
 using SMT.ViewModel.Dto.HourlyPlanDto;
+using SMT.ViewModel.Dto.ComponentDto;
 
 namespace SMT.Services.Mapping
 {
@@ -100,6 +101,8 @@ namespace SMT.Services.Mapping
 
             CreateMap<HourlyPlan, HourlyPlanResponse>()
                .ForMember(m => m.Time, s => s.MapFrom(s => s.Time.ToString("yyyy-MM-dd HH:mm:ss")));
+
+            CreateMap<Component, ComponentResponse>();
         }
     }
 }

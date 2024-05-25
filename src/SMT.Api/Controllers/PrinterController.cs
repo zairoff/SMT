@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SMT.Services.Interfaces;
+using SMT.ViewModel.Dto.PrinterDto;
 using System.Threading.Tasks;
 
 namespace SMT.Api.Controllers
@@ -19,9 +20,9 @@ namespace SMT.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Print([FromQuery] string partNumber)
+        public async Task<IActionResult> Print([FromBody] Print print)
         {
-            await _service.Print(partNumber);
+            await _service.Print(print.PartNumber);
 
             return new OkResult();
         }

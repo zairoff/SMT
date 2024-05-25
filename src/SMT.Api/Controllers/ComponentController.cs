@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SMT.Services.Interfaces;
 using SMT.ViewModel.Dto.ComponentDto;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SMT.Api.Controllers
@@ -11,10 +13,12 @@ namespace SMT.Api.Controllers
     public class ComponentController : ControllerBase
     {
         private readonly IComponentService _service;
+        private readonly ILogger<ComponentController> _logger;
 
-        public ComponentController(IComponentService service)
+        public ComponentController(IComponentService service, ILogger<ComponentController> logger)
         {
             _service = service;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -68,6 +72,26 @@ namespace SMT.Api.Controllers
             var result = await _service.AddAsync(componentCreate);
 
             return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
+        }
+
+        [HttpPost("bulk")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> BulkUpload([FromBody] List<ComponentCreate> components)
+        {
+            try
+            {
+                foreach (var component in components)
+                {
+                    var result = await _service.AddAsync(component);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return new OkResult();
         }
 
         [HttpPut("{id}")]

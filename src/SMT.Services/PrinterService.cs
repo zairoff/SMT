@@ -24,16 +24,20 @@ namespace SMT.Services
             {
                 var compnent = await _componentRepository.FindAsync(x => x.PartNumber == partNumber);
 
+                if (compnent == null)
+                {
+                    _logger.LogError($"component couldn't be found for PartNumber: {partNumber}");
+                    return;
+                }
+
                 using var engine = new Engine(true);
                 engine.Start();
 
                 LabelFormatDocument btformate = engine.Documents.Open(@"d:\bmw.btw", "Xprinter XP-370B");
 
-                btformate.SubStrings["QR"].Value = $"{compnent.PartNumber}@{compnent.RCode}@{compnent.StorePlaceNumber}@{compnent.SapPlace}@{compnent.PlaceCode}";
+                btformate.SubStrings["QR"].Value = $"{compnent.PartNumber}@{compnent.RCode}@{compnent.StorePlaceNumber}@{compnent.SapPlace}@{compnent.PlaceCode}@{DateTime.Now}";
                 btformate.SubStrings["PartNumber"].Value = compnent.PartNumber;
                 btformate.SubStrings["Rcode"].Value = compnent.RCode;
-                btformate.SubStrings["PlaceCode"].Value = compnent.PlaceCode;
-                btformate.SubStrings["SapPlace"].Value = compnent.SapPlace;
                 btformate.SubStrings["StorePlace"].Value = compnent.StorePlaceNumber;
                 btformate.SubStrings["Spec"].Value = compnent.Specification;
 
