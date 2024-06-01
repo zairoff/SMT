@@ -39,6 +39,7 @@ namespace SMT.Access.Data
         public DbSet<ReturnedProductBufferZone> ReturnedProductBufferZones { get; set; }
         public DbSet<HourlyPlan> HourlyPlans { get; set; }
         public DbSet<Component> Components { get; set; }
+        public DbSet<PcbInstruction> PcbInstructions { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {

@@ -24,6 +24,7 @@ using SMT.ViewModel.Dto.ReadyProductDto;
 using SMT.ViewModel.Dto.ProductTransactionDto;
 using SMT.ViewModel.Dto.HourlyPlanDto;
 using SMT.ViewModel.Dto.ComponentDto;
+using SMT.ViewModel.Dto.PcbInstructionDto;
 
 namespace SMT.Services.Mapping
 {
@@ -100,6 +101,8 @@ namespace SMT.Services.Mapping
 
             CreateMap<ComponentCreate, Component>();
             CreateMap<ComponentUpdate, Component>();
+
+            CreateMap<PcbInstructionCreate, PcbInstruction>();
         }
     }
 }

@@ -142,6 +142,7 @@ namespace SMT.Api.Extensions
 
             services.AddScoped<IHourlyPlanRepository, HourlyPlanRepository>();
             services.AddScoped<IComponentRepository, ComponentRepository>();
+            services.AddScoped<IPcbInstructionRepository, PcbInstructionRepository>();
 
             /*************   Services  ************/
 
@@ -168,6 +169,7 @@ namespace SMT.Api.Extensions
             services.AddScoped<IHourlyPlanService, HourlyPlanService>();
             services.AddScoped<IComponentService, ComponentService>();
             services.AddScoped<IPrinterService, PrinterService>();
+            services.AddScoped<IPcbInstructionService, PcbInstructionService>();
 
             /*************   Security  ************/
             services.AddScoped<IUserService, UserService>();
