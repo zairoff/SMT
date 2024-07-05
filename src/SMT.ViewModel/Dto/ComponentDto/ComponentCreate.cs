@@ -10,7 +10,7 @@
 
         public string SapPlace { get; set; }
 
-        public double PlaceCode { get; set; }
+        public double? PlaceCode { get; set; }
 
         public string Specification { get; set; }
     }

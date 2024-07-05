@@ -8,6 +8,8 @@ namespace SMT.Services.Interfaces
     {
         Task<IEnumerable<ComponentResponse>> GetAllAsync();
 
+        Task<IEnumerable<ComponentResponse>> GetAsync(int page, int pageSize);
+
         Task<ComponentResponse> GetAsync(int id);
 
         Task<ComponentResponse> GetByPartNumberAsync(string partNumber);

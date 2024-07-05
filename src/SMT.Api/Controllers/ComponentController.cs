@@ -29,6 +29,14 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{page}/{pageSize}")]
+        public async Task<IActionResult> Get([FromRoute] int page, [FromRoute] int pageSize)
+        {
+            var result = await _service.GetAsync(page, pageSize);
+
+            return Ok(result);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {

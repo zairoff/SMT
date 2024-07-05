@@ -31,6 +31,7 @@ namespace SMT.Services
                 throw new ConflictException($"Component {componentCreate.PartNumber} already exists");
 
             component = _mapper.Map<ComponentCreate, Component>(componentCreate);
+            component.IsActive = true;
 
             await _repository.AddAsync(component);
             await _unitOfWork.SaveAsync();
@@ -65,6 +66,13 @@ namespace SMT.Services
             var component = await _repository.FindAsync(p => p.Id == id);
 
             return _mapper.Map<Component, ComponentResponse>(component);
+        }
+
+        public async Task<IEnumerable<ComponentResponse>> GetAsync(int page, int pageSize)
+        {
+            var components = await _repository.GetComponentsAsync(page, pageSize);
+
+            return _mapper.Map<IEnumerable<Component>, IEnumerable<ComponentResponse>>(components);
         }
 
         public async Task<ComponentResponse> GetByPartNumberAsync(string partNumber)
