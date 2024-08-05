@@ -6,7 +6,6 @@ using SMT.Services.Exceptions;
 using SMT.Services.Interfaces;
 using SMT.ViewModel.Dto.ComponentDto;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SMT.Services
@@ -26,7 +25,7 @@ namespace SMT.Services
 
         public async Task<ComponentResponse> AddAsync(ComponentCreate componentCreate)
         {
-            var component = await _repository.FindAsync(p => p.PartNumber.Any(x => x == componentCreate.PartNumber) && p.IsActive == true);
+            var component = await _repository.GetByPartNumberAsync(componentCreate.PartNumber);
 
             if (component != null)
                 throw new ConflictException($"Component {componentCreate.PartNumber} already exists");
@@ -108,7 +107,7 @@ namespace SMT.Services
 
         public async Task<ComponentResponse> GetByPartNumberAsync(string partNumber)
         {
-            var component = await _repository.FindAsync(p => p.PartNumber.Any(x => x == partNumber) && p.IsActive == true);
+            var component = await _repository.GetByPartNumberAsync(partNumber);
 
             return _mapper.Map<Component, ComponentResponse>(component);
         }

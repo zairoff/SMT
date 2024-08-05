@@ -8,5 +8,7 @@ namespace SMT.Access.Repository.Interfaces
     public interface IComponentRepository : IBaseRepository<Component>
     {
         Task<IEnumerable<Component>> GetComponentsAsync(int page, int pageSize);
+
+        Task<Component> GetByPartNumberAsync(string partNumber);
     }
 }
