@@ -102,6 +102,26 @@ namespace SMT.Api.Controllers
             return new OkResult();
         }
 
+        [HttpPost("connect")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ComponentConnectToExistedOne([FromBody] List<ComponentConnect> components)
+        {
+            try
+            {
+                foreach (var component in components)
+                {
+                    var result = await _service.ConnectAsync(component.RCode, component.PartNumber);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return new OkResult();
+        }
+
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

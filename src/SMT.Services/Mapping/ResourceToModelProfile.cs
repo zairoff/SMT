@@ -25,6 +25,8 @@ using SMT.ViewModel.Dto.ProductTransactionDto;
 using SMT.ViewModel.Dto.HourlyPlanDto;
 using SMT.ViewModel.Dto.ComponentDto;
 using SMT.ViewModel.Dto.PcbInstructionDto;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SMT.Services.Mapping
 {
@@ -99,7 +101,9 @@ namespace SMT.Services.Mapping
 
             CreateMap<HourlyPlanUpdate, HourlyPlan>();
 
-            CreateMap<ComponentCreate, Component>();
+            CreateMap<ComponentCreate, Component>()
+                .ForMember(dest => dest.PartNumber, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.PartNumber) ? new List<string>() { src.PartNumber } : new List<string>()));
+
             CreateMap<ComponentUpdate, Component>();
 
             CreateMap<PcbInstructionCreate, PcbInstruction>();

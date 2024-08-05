@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Newtonsoft.Json;
 using SMT.Domain;
 using SMT.Domain.ReturnedProducts;
+using System.Collections.Generic;
 
 namespace SMT.Access.Data
 {
@@ -48,7 +50,12 @@ namespace SMT.Access.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-           
+            modelBuilder.Entity<Component>()
+            .Property(e => e.PartNumber)
+            .HasConversion(
+                v => JsonConvert.SerializeObject(v), // Convert List<string> to JSON string
+                v => JsonConvert.DeserializeObject<List<string>>(v) // Convert JSON string to List<string>
+            );
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)

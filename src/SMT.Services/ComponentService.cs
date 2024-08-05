@@ -6,6 +6,7 @@ using SMT.Services.Exceptions;
 using SMT.Services.Interfaces;
 using SMT.ViewModel.Dto.ComponentDto;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SMT.Services
@@ -25,7 +26,7 @@ namespace SMT.Services
 
         public async Task<ComponentResponse> AddAsync(ComponentCreate componentCreate)
         {
-            var component = await _repository.FindAsync(p => p.PartNumber == componentCreate.PartNumber && p.IsActive == true);
+            var component = await _repository.FindAsync(p => p.PartNumber.Any(x => x == componentCreate.PartNumber) && p.IsActive == true);
 
             if (component != null)
                 throw new ConflictException($"Component {componentCreate.PartNumber} already exists");
@@ -34,6 +35,36 @@ namespace SMT.Services
             component.IsActive = true;
 
             await _repository.AddAsync(component);
+            await _unitOfWork.SaveAsync();
+
+            return _mapper.Map<Component, ComponentResponse>(component);
+        }
+
+        public async Task<ComponentResponse> ConnectAsync(string rcode, string partNumber)
+        {
+            var component = await _repository.FindAsync(p => p.RCode == rcode && p.IsActive == true);
+
+            if (component == null)
+            {
+                component = new Component
+                {
+                    IsActive = true,
+                    RCode = rcode,
+                    PartNumber = new List<string> { partNumber },
+                    PlaceCode = "XXX",
+                    SapPlace = "XXX",
+                    Specification = "XXX",
+                    StorePlaceNumber = "XXX"
+                };
+                await _repository.AddAsync(component);
+            }
+            else
+            {
+                component.PartNumber.Add(partNumber);
+
+                _repository.Update(component);
+            }
+           
             await _unitOfWork.SaveAsync();
 
             return _mapper.Map<Component, ComponentResponse>(component);
@@ -77,7 +108,7 @@ namespace SMT.Services
 
         public async Task<ComponentResponse> GetByPartNumberAsync(string partNumber)
         {
-            var component = await _repository.FindAsync(p => p.PartNumber == partNumber && p.IsActive == true);
+            var component = await _repository.FindAsync(p => p.PartNumber.Any(x => x == partNumber) && p.IsActive == true);
 
             return _mapper.Map<Component, ComponentResponse>(component);
         }
@@ -103,7 +134,6 @@ namespace SMT.Services
             if (component == null)
                 throw new NotFoundException("Not found");
 
-            component.PartNumber = componentUpdate.PartNumber;
             component.RCode = componentUpdate.RCode;
             component.SapPlace = componentUpdate.SapPlace;
             component.StorePlaceNumber = componentUpdate.StorePlaceNumber;

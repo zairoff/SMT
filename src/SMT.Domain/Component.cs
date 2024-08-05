@@ -1,10 +1,12 @@
-﻿namespace SMT.Domain
+﻿using System.Collections.Generic;
+
+namespace SMT.Domain
 {
     public class Component
     {
         public int Id { get; set; }
 
-        public string PartNumber { get; set; }
+        public List<string> PartNumber { get; set; }
 
         public string RCode { get; set; }
 

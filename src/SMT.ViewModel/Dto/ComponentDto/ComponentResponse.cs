@@ -1,10 +1,12 @@
-﻿namespace SMT.ViewModel.Dto.ComponentDto
+﻿using System.Collections.Generic;
+
+namespace SMT.ViewModel.Dto.ComponentDto
 {
     public class ComponentResponse
     {
         public int Id { get; set; }
 
-        public string PartNumber { get; set; }
+        public List<string> PartNumber { get; set; }
 
         public string RCode { get; set; }
 

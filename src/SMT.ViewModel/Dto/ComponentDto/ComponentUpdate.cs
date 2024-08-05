@@ -2,8 +2,6 @@
 {
     public class ComponentUpdate
     {
-        public string PartNumber { get; set; }
-
         public string RCode { get; set; }
 
         public string StorePlaceNumber { get; set; }
