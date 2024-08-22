@@ -28,12 +28,24 @@ namespace SMT.Services
             var component = await _repository.GetByPartNumberAsync(componentCreate.PartNumber);
 
             if (component != null)
-                throw new ConflictException($"Component {componentCreate.PartNumber} already exists");
+            {
+                component.SapPlace = componentCreate.SapPlace;
+                component.StorePlaceNumber = componentCreate.StorePlaceNumber;
+                component.PlaceCode = componentCreate.PlaceCode;
+                component.RCode = componentCreate.RCode;
+                component.Specification = componentCreate.Specification;
+                component.IsActive = true;
 
-            component = _mapper.Map<ComponentCreate, Component>(componentCreate);
-            component.IsActive = true;
+                _repository.Update(component);
+            }
+            else
+            {
+                component = _mapper.Map<ComponentCreate, Component>(componentCreate);
+                component.IsActive = true;
 
-            await _repository.AddAsync(component);
+                await _repository.AddAsync(component);
+            }
+            
             await _unitOfWork.SaveAsync();
 
             return _mapper.Map<Component, ComponentResponse>(component);
