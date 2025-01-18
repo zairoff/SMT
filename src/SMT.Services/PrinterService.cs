@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using Seagull.BarTender.Print;
 using SMT.Access.Repository.Interfaces;
 using SMT.Services.Interfaces;
-using System;
 using System.Threading.Tasks;
 
 namespace SMT.Services

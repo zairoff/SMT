@@ -3,11 +3,8 @@ using SMT.Access.Data;
 using SMT.Access.Repository.Base;
 using SMT.Access.Repository.Interfaces;
 using SMT.Domain;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace SMT.Access.Repository
@@ -29,6 +26,7 @@ namespace SMT.Access.Repository
         {
             return await _context.Components
                     .FromSqlRaw("SELECT * FROM Components WHERE IsActive = 1 AND JSON_VALUE(PartNumber, '$[0]') = {0}", partNumber)
+                    .OrderBy(c => c.Id)
                     .FirstOrDefaultAsync();
         }
     }

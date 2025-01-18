@@ -26,7 +26,6 @@ using SMT.ViewModel.Dto.HourlyPlanDto;
 using SMT.ViewModel.Dto.ComponentDto;
 using SMT.ViewModel.Dto.PcbInstructionDto;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SMT.Services.Mapping
 {

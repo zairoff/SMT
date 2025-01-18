@@ -96,7 +96,7 @@ namespace SMT.Api.Controllers
             }
             catch (System.Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogError(ex.ToString());
             }
 
             return new OkResult();
