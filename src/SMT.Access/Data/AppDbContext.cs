@@ -1,9 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Design;
 using Newtonsoft.Json;
 using SMT.Domain;
 using SMT.Domain.ReturnedProducts;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 
 namespace SMT.Access.Data
 {
@@ -51,11 +55,14 @@ namespace SMT.Access.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Component>()
-            .Property(e => e.PartNumber)
+            .Property(c => c.PartNumber)
             .HasConversion(
-                v => JsonConvert.SerializeObject(v), // Convert List<string> to JSON string
-                v => JsonConvert.DeserializeObject<List<string>>(v) // Convert JSON string to List<string>
-            );
+                v => JsonConvert.SerializeObject(v),        // Serialize to JSON
+                v => JsonConvert.DeserializeObject<List<string>>(v)) // Deserialize to List<string>
+            .Metadata.SetValueComparer(new ValueComparer<List<string>>(
+                (c1, c2) => c1.SequenceEqual(c2),          // Compare equality
+                c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())), // Generate hash code
+                c => c.ToList()));
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
