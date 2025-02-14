@@ -16,6 +16,8 @@
 
         public string SapCode { get; set; }
 
+        public string BoardId { get; set; }
+
         public bool IsActive { get; set; } = true;
     }
 }

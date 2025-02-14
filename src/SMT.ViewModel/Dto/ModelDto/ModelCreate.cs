@@ -9,5 +9,7 @@
         public string Barcode { get; set; }
 
         public string SapCode { get; set; }
+
+        public string BoardId { get; set; }
     }
 }

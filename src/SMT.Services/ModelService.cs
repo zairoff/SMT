@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SMT.Access.Repository.Interfaces;
 using SMT.Services.Exceptions;
+using System;
 
 namespace SMT.Services
 {
@@ -25,8 +26,21 @@ namespace SMT.Services
 
         public async Task<ModelResponse> AddAsync(ModelCreate modelCreate)
         {
-            var model = await _repository.FindAsync(p => p.Name == modelCreate.Name || p.SapCode == modelCreate.SapCode || 
-            (p.Barcode == modelCreate.Barcode && !string.IsNullOrEmpty(modelCreate.Barcode)));
+            _ = modelCreate.Name?.Trim();
+            _ = modelCreate.SapCode?.Trim();
+            _ = modelCreate.Barcode?.Trim();
+            _ = modelCreate.BoardId?.Trim();
+
+            if (string.IsNullOrEmpty(modelCreate.Barcode) || string.IsNullOrEmpty(modelCreate.BoardId) || string.IsNullOrEmpty(modelCreate.SapCode))
+            {
+                throw new InvalidOperationException($"Barcode, sap code and boar id is required");
+            }
+
+            var model = await _repository.FindAsync(p =>
+                p.Name == modelCreate.Name ||
+                p.SapCode == modelCreate.SapCode ||
+                p.Barcode == modelCreate.Barcode ||
+                p.BoardId == modelCreate.BoardId);
 
             if (model != null)
                 throw new ConflictException($"{modelCreate.Name} already exist");
@@ -86,8 +100,10 @@ namespace SMT.Services
 
         public async Task<ModelResponse> UpdateAsync(int id, ModelUpdate modelUpdate)
         {
+            _ = modelUpdate.Name?.Trim();
             _ = modelUpdate.SapCode?.Trim();
             _ = modelUpdate.Barcode?.Trim();
+            _ = modelUpdate.BoardId?.Trim();
 
             var model = await _repository.FindAsync(x => (x.SapCode == modelUpdate.SapCode || (x.Barcode == modelUpdate.Barcode && !string.IsNullOrEmpty(modelUpdate.Barcode))) && x.Id != id);
 
@@ -102,6 +118,7 @@ namespace SMT.Services
             model.Name = modelUpdate.Name;
             model.Barcode = modelUpdate.Barcode;
             model.SapCode = modelUpdate.SapCode;
+            model.BoardId = modelUpdate.BoardId;
 
             _repository.Update(model);
             await _unitOfWork.SaveAsync();

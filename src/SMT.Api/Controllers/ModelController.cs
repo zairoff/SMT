@@ -70,7 +70,7 @@ namespace SMT.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateReport([FromBody] ModelCreate modelCreate)
+        public async Task<IActionResult> CreateModel([FromBody] ModelCreate modelCreate)
         {
             var result = await _service.AddAsync(modelCreate);
 
@@ -82,7 +82,7 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateReport(int id, [FromBody] ModelUpdate modelUpdate)
+        public async Task<IActionResult> UpdateModel(int id, [FromBody] ModelUpdate modelUpdate)
         {
             var result = await _service.UpdateAsync(id, modelUpdate);
 
