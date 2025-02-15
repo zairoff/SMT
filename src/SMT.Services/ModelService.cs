@@ -29,9 +29,8 @@ namespace SMT.Services
             _ = modelCreate.Name?.Trim();
             _ = modelCreate.SapCode?.Trim();
             _ = modelCreate.Barcode?.Trim();
-            _ = modelCreate.BoardId?.Trim();
 
-            if (string.IsNullOrEmpty(modelCreate.Barcode) || string.IsNullOrEmpty(modelCreate.BoardId) || string.IsNullOrEmpty(modelCreate.SapCode))
+            if (string.IsNullOrEmpty(modelCreate.Barcode) || string.IsNullOrEmpty(modelCreate.SapCode))
             {
                 throw new InvalidOperationException($"Barcode, sap code and boar id is required");
             }
@@ -39,8 +38,7 @@ namespace SMT.Services
             var model = await _repository.FindAsync(p =>
                 p.Name == modelCreate.Name ||
                 p.SapCode == modelCreate.SapCode ||
-                p.Barcode == modelCreate.Barcode ||
-                p.BoardId == modelCreate.BoardId);
+                p.Barcode == modelCreate.Barcode);
 
             if (model != null)
                 throw new ConflictException($"{modelCreate.Name} already exist");
@@ -103,7 +101,6 @@ namespace SMT.Services
             _ = modelUpdate.Name?.Trim();
             _ = modelUpdate.SapCode?.Trim();
             _ = modelUpdate.Barcode?.Trim();
-            _ = modelUpdate.BoardId?.Trim();
 
             var model = await _repository.FindAsync(x => (x.SapCode == modelUpdate.SapCode || (x.Barcode == modelUpdate.Barcode && !string.IsNullOrEmpty(modelUpdate.Barcode))) && x.Id != id);
 
@@ -118,7 +115,6 @@ namespace SMT.Services
             model.Name = modelUpdate.Name;
             model.Barcode = modelUpdate.Barcode;
             model.SapCode = modelUpdate.SapCode;
-            model.BoardId = modelUpdate.BoardId;
 
             _repository.Update(model);
             await _unitOfWork.SaveAsync();

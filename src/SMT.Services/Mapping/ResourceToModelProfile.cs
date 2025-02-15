@@ -26,6 +26,8 @@ using SMT.ViewModel.Dto.HourlyPlanDto;
 using SMT.ViewModel.Dto.ComponentDto;
 using SMT.ViewModel.Dto.PcbInstructionDto;
 using System.Collections.Generic;
+using SMT.ViewModel.Dto.QrReaderDto;
+using SMT.Domain.BoardFlow;
 
 namespace SMT.Services.Mapping
 {
@@ -106,6 +108,9 @@ namespace SMT.Services.Mapping
             CreateMap<ComponentUpdate, Component>();
 
             CreateMap<PcbInstructionCreate, PcbInstruction>();
+
+            CreateMap<QrReaderCreate, QrReader>();
+            CreateMap<QrReaderUpdate, QrReader>();
         }
     }
 }

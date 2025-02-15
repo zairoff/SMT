@@ -17,6 +17,7 @@ using SMT.Access.Unit;
 using SMT.Notification;
 using SMT.Security;
 using SMT.Services;
+using SMT.Services.BoardFlow;
 using SMT.Services.Interfaces;
 using SMT.Services.Interfaces.FileSystem;
 using SMT.Services.Interfaces.ReturnedProducts;
@@ -102,9 +103,9 @@ namespace SMT.Api.Extensions
 
             services.AddControllers();
             services.AddAutoMapper(typeof(ModelToResourceProfile), typeof(ResourceToModelProfile));
-            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-            services.AddScoped<ITelegramBotClient>(conf => new TelegramBotClient(configuration.GetValue<string>("AppSettings:BotToken")));
-            services.AddScoped<INotificationService>(conf => new NotificationService(conf.GetRequiredService<ITelegramBotClient>(),
+            services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            services.AddTransient<ITelegramBotClient>(conf => new TelegramBotClient(configuration.GetValue<string>("AppSettings:BotToken")));
+            services.AddTransient<INotificationService>(conf => new NotificationService(conf.GetRequiredService<ITelegramBotClient>(),
                 Convert.ToInt64(configuration["AppSettings:QCChatId"]),
                 Convert.ToInt64(configuration["AppSettings:ReapirChatID"]),
                 Convert.ToInt64(configuration["AppSettings:ReadyProductsChatId"])));
@@ -112,72 +113,77 @@ namespace SMT.Api.Extensions
 
             /*************   Repository  ************/
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IBrandRepository, BrandRepository>();
-            services.AddScoped<IDefectRepository, DefectRepository>();
-            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            services.AddScoped<IModelRepository, ModelRepository>();
-            services.AddScoped<IPcbReportRepository, PcbReportRepository>();
-            services.AddScoped<IProductBrandRepository, ProductBrandRepository>();
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<ILineRepository, LineRepository>();
-            services.AddScoped<ILineDefectRepository, LineDefectRepository>();
-            services.AddScoped<IReportRepository, ReportRepository>();
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            services.AddScoped<IPcbRepairerRepository, PcbRepairerRepository>();
-            services.AddScoped<IMachineRepository, MachineRepository>();
-            services.AddScoped<IMachineRepairRepository, MachineRepairRepository>();
-            services.AddScoped<IMachineRepairerRepository, MachineRepairerRepository>();
-            services.AddScoped<IStaticsRepository, StaticsRepository>();
-            services.AddScoped<IPlanRepository, PlanRepository>();
-            services.AddScoped<IPlanActivityRepository, PlanActivityRepository>();
-            services.AddScoped<IReadyProductRepository, ReadyProductRepository>();
-            services.AddScoped<IReadyProductTransactionRepository, ReadyProductTransactionRepository>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IBrandRepository, BrandRepository>();
+            services.AddTransient<IDefectRepository, DefectRepository>();
+            services.AddTransient<IDepartmentRepository, DepartmentRepository>();
+            services.AddTransient<IModelRepository, ModelRepository>();
+            services.AddTransient<IPcbReportRepository, PcbReportRepository>();
+            services.AddTransient<IProductBrandRepository, ProductBrandRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<ILineRepository, LineRepository>();
+            services.AddTransient<ILineDefectRepository, LineDefectRepository>();
+            services.AddTransient<IReportRepository, ReportRepository>();
+            services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+            services.AddTransient<IPcbRepairerRepository, PcbRepairerRepository>();
+            services.AddTransient<IMachineRepository, MachineRepository>();
+            services.AddTransient<IMachineRepairRepository, MachineRepairRepository>();
+            services.AddTransient<IMachineRepairerRepository, MachineRepairerRepository>();
+            services.AddTransient<IStaticsRepository, StaticsRepository>();
+            services.AddTransient<IPlanRepository, PlanRepository>();
+            services.AddTransient<IPlanActivityRepository, PlanActivityRepository>();
+            services.AddTransient<IReadyProductRepository, ReadyProductRepository>();
+            services.AddTransient<IReadyProductTransactionRepository, ReadyProductTransactionRepository>();
 
-            services.AddScoped<IReturnedProductRepairRepository, ReturnedProductRepairRepository>();
-            services.AddScoped<IReturnedProductStoreRepository, ReturnedProductStoreRepository>();
-            services.AddScoped<IReturnedProductUtilizeRepository, ReturnedProductUtilizeRepository>();
-            services.AddScoped<IReturnedProductTransactionRepository, ReturnedProductTransactionRepository>();
-            services.AddScoped<IReturnedProductBufferRepository, ReturnedProductBufferRepository>();
+            services.AddTransient<IReturnedProductRepairRepository, ReturnedProductRepairRepository>();
+            services.AddTransient<IReturnedProductStoreRepository, ReturnedProductStoreRepository>();
+            services.AddTransient<IReturnedProductUtilizeRepository, ReturnedProductUtilizeRepository>();
+            services.AddTransient<IReturnedProductTransactionRepository, ReturnedProductTransactionRepository>();
+            services.AddTransient<IReturnedProductBufferRepository, ReturnedProductBufferRepository>();
 
-            services.AddScoped<IHourlyPlanRepository, HourlyPlanRepository>();
-            services.AddScoped<IComponentRepository, ComponentRepository>();
-            services.AddScoped<IPcbInstructionRepository, PcbInstructionRepository>();
+            services.AddTransient<IHourlyPlanRepository, HourlyPlanRepository>();
+            services.AddTransient<IComponentRepository, ComponentRepository>();
+            services.AddTransient<IPcbInstructionRepository, PcbInstructionRepository>();
+            services.AddTransient<IQrReaderRepository, QrReaderRepository>();
+            services.AddTransient<IBoardReportRepository, BoardReportRepository>();
 
             /*************   Services  ************/
 
-            services.AddScoped<IBrandService, BrandService>();
-            services.AddScoped<IDefectService, DefectService>();
-            services.AddScoped<IDepartmentService, DepartmentService>();
-            services.AddScoped<IModelService, ModelService>();
-            services.AddScoped<IPcbReportService, PcbReportService>();
-            services.AddScoped<IProductBrandService, ProductBrandService>();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<ILineService, LineService>();
-            services.AddScoped<ILineDefectService, LineDefectService>();
-            services.AddScoped<IReportService, ReportService>();
-            services.AddScoped<IEmployeeService, EmployeeService>();
-            services.AddScoped<IPcbRepairerService, PcbRepairerService>();
-            services.AddScoped<IMachineService, MachineService>();
-            services.AddScoped<IMachineRepairService, MachineRepairService>();
-            services.AddScoped<IMachineRepairerService, MachineRepairerService>();
-            services.AddScoped<IPlanService, PlanService>();
-            services.AddScoped<IPlanActivityService, PlanActivityService>();
-            services.AddScoped<IReadyProductService, ReadyProductService>();
-            services.AddScoped<IReadyProductTransactionService, ReadyProductTransactionService>();
-            services.AddScoped<IReturnedProductTransactionService, ReturnedProductTransactionService>();
-            services.AddScoped<IHourlyPlanService, HourlyPlanService>();
-            services.AddScoped<IComponentService, ComponentService>();
-            services.AddScoped<IPrinterService, PrinterService>();
-            services.AddScoped<IPcbInstructionService, PcbInstructionService>();
+            services.AddTransient<IBrandService, BrandService>();
+            services.AddTransient<IDefectService, DefectService>();
+            services.AddTransient<IDepartmentService, DepartmentService>();
+            services.AddTransient<IModelService, ModelService>();
+            services.AddTransient<IPcbReportService, PcbReportService>();
+            services.AddTransient<IProductBrandService, ProductBrandService>();
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<ILineService, LineService>();
+            services.AddTransient<ILineDefectService, LineDefectService>();
+            services.AddTransient<IReportService, ReportService>();
+            services.AddTransient<IEmployeeService, EmployeeService>();
+            services.AddTransient<IPcbRepairerService, PcbRepairerService>();
+            services.AddTransient<IMachineService, MachineService>();
+            services.AddTransient<IMachineRepairService, MachineRepairService>();
+            services.AddTransient<IMachineRepairerService, MachineRepairerService>();
+            services.AddTransient<IPlanService, PlanService>();
+            services.AddTransient<IPlanActivityService, PlanActivityService>();
+            services.AddTransient<IReadyProductService, ReadyProductService>();
+            services.AddTransient<IReadyProductTransactionService, ReadyProductTransactionService>();
+            services.AddTransient<IReturnedProductTransactionService, ReturnedProductTransactionService>();
+            services.AddTransient<IHourlyPlanService, HourlyPlanService>();
+            services.AddTransient<IComponentService, ComponentService>();
+            services.AddTransient<IPrinterService, PrinterService>();
+            services.AddTransient<IPcbInstructionService, PcbInstructionService>();
+            services.AddTransient<IPcbInstructionService, PcbInstructionService>();
+            services.AddTransient<IQrReaderService, QrReaderService>();
+            services.AddTransient<IBoardReportService, BoardReportService>();
 
             /*************   Security  ************/
-            services.AddScoped<IUserService, UserService>();
+            services.AddTransient<IUserService, UserService>();
 
 
             /*************  Other  **************/
-            services.AddScoped<IImageService, ImageService>();
-            services.AddSingleton<IFileSystem, FileSystem>();
+            services.AddTransient<IImageService, ImageService>();
+            services.AddTransient<IFileSystem, FileSystem>();
 
             //AddServices(services);
 

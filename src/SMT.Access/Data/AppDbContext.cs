@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Design;
 using Newtonsoft.Json;
 using SMT.Domain;
+using SMT.Domain.BoardFlow;
 using SMT.Domain.ReturnedProducts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 
 namespace SMT.Access.Data
 {
@@ -46,6 +46,8 @@ namespace SMT.Access.Data
         public DbSet<HourlyPlan> HourlyPlans { get; set; }
         public DbSet<Component> Components { get; set; }
         public DbSet<PcbInstruction> PcbInstructions { get; set; }
+        public DbSet<QrReader> QrReaders { get; set; }
+        public DbSet<BoardReport> BoardReports { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {

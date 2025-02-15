@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMT.Access.Data;
 
 namespace SMT.Access.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250215093127_RemoveBoardIdAndReaderAndBoardReport")]
+    partial class RemoveBoardIdAndReaderAndBoardReport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,61 +39,6 @@ namespace SMT.Access.Migrations
                     b.HasIndex("ModelId");
 
                     b.ToTable("Barcodes");
-                });
-
-            modelBuilder.Entity("SMT.Domain.BoardFlow.BoardReport", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ModelId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("QrCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("QrReaderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ModelId");
-
-                    b.HasIndex("QrReaderId");
-
-                    b.ToTable("BoardReports");
-                });
-
-            modelBuilder.Entity("SMT.Domain.BoardFlow.QrReader", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Position")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PreviousReaderId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("QrReaders");
                 });
 
             modelBuilder.Entity("SMT.Domain.Brand", b =>
@@ -939,25 +886,6 @@ namespace SMT.Access.Migrations
                         .IsRequired();
 
                     b.Navigation("Model");
-                });
-
-            modelBuilder.Entity("SMT.Domain.BoardFlow.BoardReport", b =>
-                {
-                    b.HasOne("SMT.Domain.Model", "Model")
-                        .WithMany()
-                        .HasForeignKey("ModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SMT.Domain.BoardFlow.QrReader", "QrReader")
-                        .WithMany()
-                        .HasForeignKey("QrReaderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Model");
-
-                    b.Navigation("QrReader");
                 });
 
             modelBuilder.Entity("SMT.Domain.Employee", b =>

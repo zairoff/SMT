@@ -26,6 +26,8 @@ using SMT.Domain.ReturnedProducts;
 using SMT.ViewModel.Dto.ReturnedProductTransactionDto;
 using SMT.ViewModel.Dto.HourlyPlanDto;
 using SMT.ViewModel.Dto.ComponentDto;
+using SMT.ViewModel.Dto.QrReaderDto;
+using SMT.Domain.BoardFlow;
 
 namespace SMT.Services.Mapping
 {
@@ -103,6 +105,8 @@ namespace SMT.Services.Mapping
                .ForMember(m => m.Time, s => s.MapFrom(s => s.Time.ToString("yyyy-MM-dd HH:mm:ss")));
 
             CreateMap<Component, ComponentResponse>();
+
+            CreateMap<QrReader, QrReaderResponse>();
         }
     }
 }
