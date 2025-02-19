@@ -54,7 +54,7 @@ namespace SMT.Services.BoardFlow
             }
             else
             {
-                boardReport = await _repository.FindAsync(x => x.QrCode == boardReportCreate.QrCode && x.QrReader.Position == boardReportCreate.QrReaderPreviousPositionId);
+                boardReport = await _repository.FindAsync(x => x.QrCode == boardReportCreate.QrCode && x.QrReader.Position == boardReportCreate.QrReaderPositionId - 1);
 
                 if (boardReport == null)
                 {

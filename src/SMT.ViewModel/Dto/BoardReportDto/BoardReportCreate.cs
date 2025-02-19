@@ -7,7 +7,5 @@
         public int QrReaderId { get; set; }
 
         public int QrReaderPositionId { get; set; }
-
-        public int QrReaderPreviousPositionId { get; set; }
     }
 }

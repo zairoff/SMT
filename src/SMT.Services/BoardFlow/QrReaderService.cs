@@ -28,12 +28,7 @@ namespace SMT.Services.BoardFlow
             var qrReader = await _repository.FindAsync(p => (p.Name == qrReaderCreate.Name || p.Position == qrReaderCreate.Position) && p.IsActive);
 
             if (qrReader != null)
-                throw new ConflictException($"{qrReaderCreate.Name} or {qrReaderCreate.Position} already exists");
-
-            qrReader = await _repository.FindAsync(x => x.PreviousReaderId == qrReaderCreate.PreviousReaderId && x.IsActive);
-
-            if (qrReader != null)
-                throw new ConflictException($"Previous reader id {qrReaderCreate.PreviousReaderId} already assigned to other reader");
+                throw new ConflictException($"Name: {qrReaderCreate.Name} or Position: {qrReaderCreate.Position} already exists");
 
             qrReader = _mapper.Map<QrReaderCreate, QrReader>(qrReaderCreate);
 
@@ -86,14 +81,13 @@ namespace SMT.Services.BoardFlow
             if (qrReader == null)
                 throw new NotFoundException("Not found");
 
-            qrReader = await _repository.FindAsync(x => x.Position == qrReaderUpdate.Position || x.PreviousReaderId == qrReaderUpdate.PreviousReaderId);
+            qrReader = await _repository.FindAsync(x => (x.Position == qrReaderUpdate.Position || x.Name == qrReaderUpdate.Name) && x.IsActive);
 
             if (qrReader != null)
-                throw new ConflictException($"Previous reader id {qrReaderUpdate.PreviousReaderId} already assigned to other reader or position already occupied");
+                throw new ConflictException($"Name or Position already occupied");
 
             qrReader.Name = qrReaderUpdate.Name;
             qrReader.Position = qrReaderUpdate.Position;
-            qrReader.PreviousReaderId = qrReaderUpdate.PreviousReaderId;
 
             _repository.Update(qrReader);
             await _unitOfWork.SaveAsync();

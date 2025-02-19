@@ -4,10 +4,10 @@
     {
         public int Id { get; set; }
 
-        public int PreviousReaderId { get; set; }
-
         public string Name { get; set; }
 
         public int Position { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

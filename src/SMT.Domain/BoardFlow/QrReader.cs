@@ -4,8 +4,6 @@
     {
         public int Id { get; set; }
 
-        public int PreviousReaderId { get; set; }
-
         public int Position { get; set; }
 
         public string Name { get; set; }
