@@ -14,16 +14,18 @@ namespace SMT.Services.BoardFlow
     public class BoardReportService : IBoardReportService
     {
         private readonly IBoardReportRepository _repository;
+        private readonly IQrReaderRepository _qrReaderRepository;
         private readonly IModelRepository _modelRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public BoardReportService(IBoardReportRepository repository, IMapper mapper, IUnitOfWork unitOfWork, IModelRepository modelRepository)
+        public BoardReportService(IBoardReportRepository repository, IMapper mapper, IUnitOfWork unitOfWork, IModelRepository modelRepository, IQrReaderRepository qrReaderRepository)
         {
             _mapper = mapper;
             _repository = repository;
             _unitOfWork = unitOfWork;
             _modelRepository = modelRepository;
+            _qrReaderRepository = qrReaderRepository;
         }
 
         public async Task<BoardReportResponse> AddAsync(BoardReportCreate boardReportCreate)
@@ -33,7 +35,7 @@ namespace SMT.Services.BoardFlow
                 throw new InvalidOperationException("Invalid QR code");
             }
 
-            var barcode = boardReportCreate.QrCode[..6];
+            var barcode = boardReportCreate.QrCode[..5];
 
             var model = await _modelRepository.FindAsync(x => x.Barcode == barcode);
 
@@ -42,8 +44,10 @@ namespace SMT.Services.BoardFlow
                 throw new NotFoundException("Model not found");
             }
 
+            var reader = await _qrReaderRepository.FindAsync(x => x.Id == boardReportCreate.QrReaderId);
+
             BoardReport boardReport;
-            if (boardReportCreate.QrReaderPositionId == 1)
+            if (reader.Position == 1)
             {
                 boardReport = await _repository.FindAsync(x => x.QrCode == boardReportCreate.QrCode);
 
@@ -54,7 +58,7 @@ namespace SMT.Services.BoardFlow
             }
             else
             {
-                boardReport = await _repository.FindAsync(x => x.QrCode == boardReportCreate.QrCode && x.QrReader.Position == boardReportCreate.QrReaderPositionId - 1);
+                boardReport = await _repository.FindAsync(x => x.QrCode == boardReportCreate.QrCode && x.QrReader.Position == reader.Position - 1);
 
                 if (boardReport == null)
                 {
@@ -126,6 +130,21 @@ namespace SMT.Services.BoardFlow
             var component = await _repository.GetByAsync(p => p.QrReaderId == readerId && p.DateTime.Date >= from.Date && p.DateTime.Date <= to.Date);
 
             return _mapper.Map<IEnumerable<BoardReportResponse>>(component);
+        }
+
+        public Task<IReadOnlyCollection<BoardFlowReport>> GetBoardFlowReportsAsync(DateTime from, DateTime to)
+        {
+            return _repository.GetBoardFlowReportsAsync(from, to);
+        }
+
+        public Task<IReadOnlyCollection<BoardReport>> GetMissingAsync(int readerId, DateTime from, DateTime to)
+        {
+            return _repository.GetMissingAsync(readerId, from, to);
+        }
+        
+        public Task<IReadOnlyCollection<BoardReport>> GetPassedAsync(int readerId, DateTime from, DateTime to)
+        {
+            return _repository.GetPassedAsync(readerId, from, to);
         }
     }
 }

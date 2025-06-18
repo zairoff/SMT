@@ -5,7 +5,5 @@
         public string QrCode { get; set; }
 
         public int QrReaderId { get; set; }
-
-        public int QrReaderPositionId { get; set; }
     }
 }

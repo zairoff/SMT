@@ -10,5 +10,11 @@ namespace SMT.Access.Repository.Interfaces
     public interface IBoardReportRepository : IBaseRepository<BoardReport>
     {
         Task<IEnumerable<BoardReport>> GetByAsync(Expression<Func<BoardReport, bool>> expression);
+
+        Task<IReadOnlyCollection<BoardFlowReport>> GetBoardFlowReportsAsync(DateTime from, DateTime to);
+
+        Task<IReadOnlyCollection<BoardReport>> GetMissingAsync(int readerId, DateTime from, DateTime to);
+
+        Task<IReadOnlyCollection<BoardReport>> GetPassedAsync(int readerId, DateTime from, DateTime to);
     }
 }

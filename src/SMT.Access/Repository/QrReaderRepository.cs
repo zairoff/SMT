@@ -19,7 +19,7 @@ namespace SMT.Access.Repository
 
         public async Task<IEnumerable<QrReader>> GetByAsync(Expression<Func<QrReader, bool>> expression)
         {
-            return await DbSet.Where(expression).OrderBy(x => x.Name).ToListAsync();
+            return await DbSet.Where(expression).OrderBy(x => x.Position).ToListAsync();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SMT.ViewModel.Dto.ModelDto;
+﻿using SMT.Domain.BoardFlow;
+using SMT.ViewModel.Dto.ModelDto;
 using SMT.ViewModel.Dto.QrReaderDto;
 using System;
 
@@ -17,5 +18,7 @@ namespace SMT.ViewModel.Dto.BoardReportDto
         public QrReaderResponse QrReader { get; set; }
 
         public DateTime DateTime { get; set; }
+
+        public BoardPassStatus Status { get; set; }
     }
 }

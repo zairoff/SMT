@@ -28,6 +28,7 @@ using SMT.ViewModel.Dto.HourlyPlanDto;
 using SMT.ViewModel.Dto.ComponentDto;
 using SMT.ViewModel.Dto.QrReaderDto;
 using SMT.Domain.BoardFlow;
+using SMT.ViewModel.Dto.BoardReportDto;
 
 namespace SMT.Services.Mapping
 {
@@ -107,6 +108,8 @@ namespace SMT.Services.Mapping
             CreateMap<Component, ComponentResponse>();
 
             CreateMap<QrReader, QrReaderResponse>();
+            CreateMap<BoardReport, BoardReportResponse>()
+                .ForMember(m => m.DateTime, s => s.MapFrom(s => s.DateTime.ToString("yyyy-MM-dd HH:mm:ss"))); ;
         }
     }
 }

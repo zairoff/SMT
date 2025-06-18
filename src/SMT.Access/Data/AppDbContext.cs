@@ -65,6 +65,54 @@ namespace SMT.Access.Data
                 (c1, c2) => c1.SequenceEqual(c2),          // Compare equality
                 c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())), // Generate hash code
                 c => c.ToList()));
+
+            // Board flow
+            modelBuilder.Entity<BoardReport>()
+                .HasIndex(b => b.QrCode);
+
+            modelBuilder.Entity<BoardReport>()
+                .HasIndex(b => new { b.QrReaderId, b.DateTime });
+
+            modelBuilder.Entity<BoardReport>()
+                .HasIndex(b => b.DateTime);
+
+            modelBuilder.Entity<QrReader>()
+                .HasIndex(q => q.Position);
+
+            // Report
+            modelBuilder.Entity<Report>()
+                .HasIndex(r => new { r.Barcode, r.Status }); 
+
+            modelBuilder.Entity<Report>()
+                .HasIndex(r => new { r.CreatedDate, r.Status });
+
+            modelBuilder.Entity<Report>()
+                .HasIndex(r => new { r.ModelId, r.LineId, r.DefectId, r.CreatedDate });
+
+            modelBuilder.Entity<Report>()
+                .HasIndex(r => new { r.ModelId, r.LineId, r.Status, r.CreatedDate });
+
+            modelBuilder.Entity<Defect>()
+                .HasIndex(d => d.Name);
+
+            modelBuilder.Entity<Report>()
+                .HasIndex(r => new { r.LineId, r.Status, r.CreatedDate });
+
+            // Ready product transactions
+            modelBuilder.Entity<Model>()
+                .HasIndex(m => m.ProductBrandId);
+
+            modelBuilder.Entity<ProductBrand>()
+                .HasIndex(pb => pb.ProductId);
+
+            modelBuilder.Entity<Model>()
+                .HasIndex(m => m.SapCode);
+
+            modelBuilder.Entity<ReadyProductTransaction>()
+                .HasIndex(r => new { r.Date, r.Status });
+
+            modelBuilder.Entity<ReadyProductTransaction>()
+                .HasIndex(r => r.Date);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)

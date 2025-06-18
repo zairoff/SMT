@@ -28,6 +28,7 @@ using SMT.ViewModel.Dto.PcbInstructionDto;
 using System.Collections.Generic;
 using SMT.ViewModel.Dto.QrReaderDto;
 using SMT.Domain.BoardFlow;
+using SMT.ViewModel.Dto.BoardReportDto;
 
 namespace SMT.Services.Mapping
 {
@@ -111,6 +112,8 @@ namespace SMT.Services.Mapping
 
             CreateMap<QrReaderCreate, QrReader>();
             CreateMap<QrReaderUpdate, QrReader>();
+
+            CreateMap<BoardReportCreate, BoardReport>();
         }
     }
 }

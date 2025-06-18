@@ -1,4 +1,5 @@
-﻿using SMT.ViewModel.Dto.BoardReportDto;
+﻿using SMT.Domain.BoardFlow;
+using SMT.ViewModel.Dto.BoardReportDto;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,5 +17,11 @@ namespace SMT.Services.Interfaces
         Task<BoardReportResponse> AddAsync(BoardReportCreate boardReportCreate);
 
         Task<BoardReportResponse> DeleteAsync(int id);
+
+        Task<IReadOnlyCollection<BoardFlowReport>> GetBoardFlowReportsAsync(DateTime from, DateTime to);
+
+        Task<IReadOnlyCollection<BoardReport>> GetMissingAsync(int readerId, DateTime from, DateTime to);
+
+        Task<IReadOnlyCollection<BoardReport>> GetPassedAsync(int readerId, DateTime from, DateTime to);
     }
 }

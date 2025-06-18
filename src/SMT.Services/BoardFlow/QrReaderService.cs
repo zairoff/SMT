@@ -30,7 +30,12 @@ namespace SMT.Services.BoardFlow
             if (qrReader != null)
                 throw new ConflictException($"Name: {qrReaderCreate.Name} or Position: {qrReaderCreate.Position} already exists");
 
-            qrReader = _mapper.Map<QrReaderCreate, QrReader>(qrReaderCreate);
+            qrReader = new QrReader
+            {
+                Name = qrReaderCreate.Name,
+                Position = qrReaderCreate.Position,
+                IsActive = true,
+            };
 
             await _repository.AddAsync(qrReader);
             await _unitOfWork.SaveAsync();
