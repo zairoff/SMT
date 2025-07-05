@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using SMT.Domain;
 using SMT.Domain.BoardFlow;
 using SMT.Domain.ReturnedProducts;
+using SMT.Domain.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,6 +49,11 @@ namespace SMT.Access.Data
         public DbSet<PcbInstruction> PcbInstructions { get; set; }
         public DbSet<QrReader> QrReaders { get; set; }
         public DbSet<BoardReport> BoardReports { get; set; }
+        public DbSet<ServiceCenterRepairer> ServiceCenterRepairers { get; set; }
+        public DbSet<ServiceCenterRequest> ServiceCenterRequests { get; set; }
+        public DbSet<ServiceCenterResult> ServiceCenterResults { get; set; }
+        public DbSet<ServiceCenter> ServiceCenters { get; set; }
+        public DbSet<ServiceCenterRequestSender> ServiceCenterRequestSenders { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {

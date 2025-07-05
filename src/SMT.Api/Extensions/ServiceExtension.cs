@@ -11,7 +11,9 @@ using SMT.Access.Repository;
 using SMT.Access.Repository.Base;
 using SMT.Access.Repository.Interfaces;
 using SMT.Access.Repository.Interfaces.ReturnedProducts;
+using SMT.Access.Repository.Interfaces.Service;
 using SMT.Access.Repository.ReturnedProducts;
+using SMT.Access.Repository.Service;
 using SMT.Access.Repository.Statics;
 using SMT.Access.Unit;
 using SMT.Notification;
@@ -23,6 +25,7 @@ using SMT.Services.Interfaces.FileSystem;
 using SMT.Services.Interfaces.ReturnedProducts;
 using SMT.Services.Mapping;
 using SMT.Services.ReturnedProducts;
+using SMT.Services.Service;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -147,6 +150,12 @@ namespace SMT.Api.Extensions
             services.AddTransient<IQrReaderRepository, QrReaderRepository>();
             services.AddTransient<IBoardReportRepository, BoardReportRepository>();
 
+            services.AddTransient<IServiceCenterRepository, ServiceCenterRepository>();
+            services.AddTransient<IServiceCenterRepairerRepository, ServiceCenterRepairerRepository>();
+            services.AddTransient<IServiceCenterRequestRepository, ServiceCenterRequestRepository>();
+            services.AddTransient<IServiceCenterResultRepository, ServiceCenterResultRepository>();
+            services.AddTransient<IRequestSenderRepository, RequestSenderRepository>();
+
             /*************   Services  ************/
 
             services.AddTransient<IBrandService, BrandService>();
@@ -176,6 +185,12 @@ namespace SMT.Api.Extensions
             services.AddTransient<IPcbInstructionService, PcbInstructionService>();
             services.AddTransient<IQrReaderService, QrReaderService>();
             services.AddTransient<IBoardReportService, BoardReportService>();
+
+            services.AddTransient<IServiceCenterService, ServiceCenterService>();
+            services.AddTransient<IServiceCenterRepairerService, ServiceCenterRepairerService>();
+            services.AddTransient<IServiceCenterRequestService, ServiceCenterRequestService>();
+            services.AddTransient<IServiceCenterResultService, ServiceCenterResultService>();
+            services.AddTransient<IRequestSenderService, RequestSenderService>();
 
             /*************   Security  ************/
             services.AddTransient<IUserService, UserService>();

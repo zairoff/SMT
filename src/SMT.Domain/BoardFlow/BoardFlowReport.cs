@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SMT.Domain.BoardFlow
+﻿namespace SMT.Domain.BoardFlow
 {
     public class BoardFlowReport
     {

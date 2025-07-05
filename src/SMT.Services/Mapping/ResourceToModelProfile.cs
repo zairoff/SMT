@@ -29,6 +29,8 @@ using System.Collections.Generic;
 using SMT.ViewModel.Dto.QrReaderDto;
 using SMT.Domain.BoardFlow;
 using SMT.ViewModel.Dto.BoardReportDto;
+using SMT.ViewModel.Dto.ServiceCenterDto;
+using SMT.Domain.Service;
 
 namespace SMT.Services.Mapping
 {
@@ -114,6 +116,9 @@ namespace SMT.Services.Mapping
             CreateMap<QrReaderUpdate, QrReader>();
 
             CreateMap<BoardReportCreate, BoardReport>();
+
+            CreateMap<ServiceCenterCreate, ServiceCenter>();
+            CreateMap<ServiceCenterUpdate, ServiceCenter>();
         }
     }
 }
