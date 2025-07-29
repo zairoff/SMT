@@ -4,6 +4,8 @@
     {
         public int ReaderId { get; set; }
 
+        public string ReaderName { get; set; }
+
         public int Passed { get; set; }
 
         public int Missing { get; set; }

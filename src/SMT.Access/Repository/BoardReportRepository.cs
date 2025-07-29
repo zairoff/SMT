@@ -13,8 +13,11 @@ namespace SMT.Access.Repository
 {
     public class BoardReportRepository : BaseRepository<BoardReport>, IBoardReportRepository
     {
+        private readonly AppDbContext appDbContext;
+
         public BoardReportRepository(AppDbContext context) : base(context)
         {
+            appDbContext = context;
         }
 
         public async override Task<BoardReport> FindAsync(Expression<Func<BoardReport, bool>> expression)
@@ -52,14 +55,26 @@ namespace SMT.Access.Repository
                     ReaderId = g.Key.QrReaderId,
                     PassedBoards = g.Select(x => x.QrCode).Distinct().Count()
                 })
+                .Join(
+                    appDbContext.QrReaders,                             // Table to join
+                    br => br.ReaderId,                             // Key from first table
+                    qr => qr.Id,                                   // Key from second table
+                    (br, qr) => new                                // Result projection
+                    {
+                        br.ReaderId,
+                        ReaderName = qr.Name,
+                        br.PassedBoards
+                    }
+                )
                 .OrderBy(x => x.ReaderId)
                 .ToListAsync();
 
-            // Calculate the missing boards compared to the previous reader
+            // Calculate Missing and Previous Passed
             return boardReport
                 .Select((current, index) => new BoardFlowReport
                 {
                     ReaderId = current.ReaderId,
+                    ReaderName = current.ReaderName,  // Pass name here
                     Passed = current.PassedBoards,
                     PreviousPassed = index == 0 ? 0 : boardReport[index - 1].PassedBoards,
                     Missing = index == 0 ? 0 : boardReport[index - 1].PassedBoards - current.PassedBoards
@@ -71,6 +86,8 @@ namespace SMT.Access.Repository
         {
             var passedBoards = await DbSet
                 .Where(x => x.QrReaderId == readerId && x.DateTime.Date >= from.Date && x.DateTime.Date <= to.Date && x.Status == BoardPassStatus.Passed)
+                .Include(x => x.QrReader)
+                .Include(x => x.Model)
                 .Distinct()
                 .ToListAsync();
 
@@ -78,6 +95,8 @@ namespace SMT.Access.Repository
 
             var previousReaderBoards = await DbSet
                 .Where(x => x.QrReaderId == previousReaderId && x.DateTime.Date >= from.Date && x.DateTime.Date <= to.Date && x.Status == BoardPassStatus.Passed)
+                .Include(x => x.QrReader)
+                .Include(x => x.Model)
                 .Distinct()
                 .ToListAsync();
 
@@ -88,6 +107,8 @@ namespace SMT.Access.Repository
         {
             return await DbSet
                 .Where(x => x.QrReaderId == readerId && x.DateTime.Date >= from.Date && x.DateTime.Date <= to.Date && x.Status == BoardPassStatus.Passed)
+                .Include(x => x.QrReader)
+                .Include(x => x.Model)
                 .Distinct()
                 .ToListAsync();
         }

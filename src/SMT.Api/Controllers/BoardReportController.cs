@@ -4,6 +4,7 @@ using SMT.Services.Interfaces;
 using System.Threading.Tasks;
 using System;
 using SMT.ViewModel.Dto.BoardReportDto;
+using SMT.Domain.BoardFlow;
 
 namespace SMT.Api.Controllers
 {
@@ -39,6 +40,30 @@ namespace SMT.Api.Controllers
         public async Task<IActionResult> GetByReader(int readerId, DateTime from, DateTime to)
         {
             var result = await _service.GetByReaderAsync(readerId, from, to);
+
+            return Ok(result);
+        }
+
+        [HttpGet("GetBoardFlowReports")]
+        public async Task<IActionResult> GetBoardFlowReportsAsync(DateTime from, DateTime to)
+        {
+            var result = await _service.GetBoardFlowReportsAsync(from, to);
+
+            return Ok(result);
+        }
+
+        [HttpGet("GetMissingBoardFlowReports")]
+        public async Task<IActionResult> GetMissingAsync(int readerId, DateTime from, DateTime to)
+        {
+            var result = await _service.GetMissingAsync(readerId, from, to);
+
+            return Ok(result);
+        }
+
+        [HttpGet("GetPassedBoardFlowReports")]
+        public async Task<IActionResult> GetPassedAsync(int readerId, DateTime from, DateTime to)
+        {
+            var result = await _service.GetPassedAsync(readerId, from, to);
 
             return Ok(result);
         }

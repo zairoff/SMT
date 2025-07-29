@@ -49,12 +49,23 @@ namespace SMT.Services.BoardFlow
             BoardReport boardReport;
             if (reader.Position == 1)
             {
-                boardReport = await _repository.FindAsync(x => x.QrCode == boardReportCreate.QrCode);
+                boardReport = await _repository.FindAsync(x => x.QrCode == boardReportCreate.QrCode && x.Status == BoardPassStatus.Passed);
 
                 if (boardReport != null)
                 {
                     throw new ConflictException($"{boardReportCreate.QrCode} already exists");
                 }
+
+                boardReport = new BoardReport
+                {
+                    ModelId = model.Id,
+                    QrCode = boardReportCreate.QrCode,
+                    QrReaderId = boardReportCreate.QrReaderId,
+                    Status = BoardPassStatus.Passed,
+                    DateTime = DateTime.Now,
+                };
+
+                await _repository.AddAsync(boardReport);
             }
             else
             {
@@ -127,7 +138,7 @@ namespace SMT.Services.BoardFlow
 
         public async Task<IEnumerable<BoardReportResponse>> GetByReaderAsync(int readerId, DateTime from, DateTime to)
         {
-            var component = await _repository.GetByAsync(p => p.QrReaderId == readerId && p.DateTime.Date >= from.Date && p.DateTime.Date <= to.Date);
+            var component = await _repository.GetByAsync(p => p.QrReaderId == readerId && p.DateTime.Date >= from.Date && p.DateTime.Date <= to.Date && p.Status != BoardPassStatus.Deleted);
 
             return _mapper.Map<IEnumerable<BoardReportResponse>>(component);
         }
