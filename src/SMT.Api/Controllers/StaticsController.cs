@@ -80,5 +80,37 @@ namespace SMT.Api.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("Plan")]
+        public async Task<IActionResult> Plan(DateTime from, DateTime to, int? lineId = null)
+        {
+            var result = await _staticsRepository.GetPlanStaticsAsync(from, to, lineId);
+
+            return Ok(result);
+        }
+
+        [HttpGet("Quality")]
+        public async Task<IActionResult> Quality(DateTime from, DateTime to, int? lineId = null)
+        {
+            var result = await _staticsRepository.GetQualityStaticsAsync(from, to, lineId);
+
+            return Ok(result);
+        }
+
+        [HttpGet("PlanDetails")]
+        public async Task<IActionResult> PlanDetails(DateTime date, int? lineId = null)
+        {
+            var result = await _staticsRepository.GetPlanDetailsByDateAsync(date, lineId);
+
+            return Ok(result);
+        }
+
+        [HttpGet("QualityDetails")]
+        public async Task<IActionResult> QualityDetails(DateTime date, int? lineId = null)
+        {
+            var result = await _staticsRepository.GetQualityDetailsByDateAsync(date, lineId);
+
+            return Ok(result);
+        }
     }
 }

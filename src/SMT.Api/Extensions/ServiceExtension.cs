@@ -9,6 +9,7 @@ using SMT.Access.Data;
 using SMT.Access.Identity;
 using SMT.Access.Repository;
 using SMT.Access.Repository.Base;
+using SMT.Access.Repository.BoardFlowV2;
 using SMT.Access.Repository.Interfaces;
 using SMT.Access.Repository.Interfaces.ReturnedProducts;
 using SMT.Access.Repository.Interfaces.Service;
@@ -20,7 +21,9 @@ using SMT.Notification;
 using SMT.Security;
 using SMT.Services;
 using SMT.Services.BoardFlow;
+using SMT.Services.BoardFlowV2;
 using SMT.Services.Interfaces;
+using SMT.Services.Interfaces.BoardFlowV2;
 using SMT.Services.Interfaces.FileSystem;
 using SMT.Services.Interfaces.ReturnedProducts;
 using SMT.Services.Mapping;
@@ -149,6 +152,10 @@ namespace SMT.Api.Extensions
             services.AddTransient<IPcbInstructionRepository, PcbInstructionRepository>();
             services.AddTransient<IQrReaderRepository, QrReaderRepository>();
             services.AddTransient<IBoardReportRepository, BoardReportRepository>();
+            services.AddTransient<IQrReaderV2Repository, QrReaderV2Repository>();
+            services.AddTransient<IQrReaderV2LinkRepository, QrReaderV2LinkRepository>();
+            services.AddTransient<IBoardV2Repository, BoardV2Repository>();
+            services.AddTransient<IBoardMovementV2Repository, BoardMovementV2Repository>();
 
             services.AddTransient<IServiceCenterRepository, ServiceCenterRepository>();
             services.AddTransient<IServiceCenterRepairerRepository, ServiceCenterRepairerRepository>();
@@ -185,6 +192,8 @@ namespace SMT.Api.Extensions
             services.AddTransient<IPcbInstructionService, PcbInstructionService>();
             services.AddTransient<IQrReaderService, QrReaderService>();
             services.AddTransient<IBoardReportService, BoardReportService>();
+            services.AddTransient<IQrReaderV2Service, QrReaderV2Service>();
+            services.AddTransient<IBoardV2Service, BoardV2Service>();
 
             services.AddTransient<IServiceCenterService, ServiceCenterService>();
             services.AddTransient<IServiceCenterRepairerService, ServiceCenterRepairerService>();

@@ -15,5 +15,9 @@ namespace SMT.Access.Repository.Statics
         Task<IEnumerable<StaticsModel>> GroupByDefectAsync(int lineId, DateTime from, DateTime to);
         Task<StaticsModel> GroupByDefectAsync(int lineId, string name, bool status, DateTime from, DateTime to);
         Task<StaticsModel> GroupByDefectAsync(int lineId, string name, DateTime from, DateTime to);
+        Task<IEnumerable<PlanStaticsModel>> GetPlanStaticsAsync(DateTime from, DateTime to, int? lineId = null);
+        Task<IEnumerable<QualityStaticsModel>> GetQualityStaticsAsync(DateTime from, DateTime to, int? lineId = null);
+        Task<IEnumerable<PlanDetailStaticsModel>> GetPlanDetailsByDateAsync(DateTime date, int? lineId = null);
+        Task<IEnumerable<QualityDetailStaticsModel>> GetQualityDetailsByDateAsync(DateTime date, int? lineId = null);
     }
 }

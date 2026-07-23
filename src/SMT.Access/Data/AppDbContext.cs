@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Newtonsoft.Json;
 using SMT.Domain;
 using SMT.Domain.BoardFlow;
+using SMT.Domain.BoardFlow.V2;
 using SMT.Domain.ReturnedProducts;
 using SMT.Domain.Service;
 using System;
@@ -49,6 +50,10 @@ namespace SMT.Access.Data
         public DbSet<PcbInstruction> PcbInstructions { get; set; }
         public DbSet<QrReader> QrReaders { get; set; }
         public DbSet<BoardReport> BoardReports { get; set; }
+        public DbSet<QrReaderV2> QrReadersV2 { get; set; }
+        public DbSet<QrReaderV2Link> QrReaderV2Links { get; set; }
+        public DbSet<BoardV2> BoardsV2 { get; set; }
+        public DbSet<BoardMovementV2> BoardMovementsV2 { get; set; }
         public DbSet<ServiceCenterRepairer> ServiceCenterRepairers { get; set; }
         public DbSet<ServiceCenterRequest> ServiceCenterRequests { get; set; }
         public DbSet<ServiceCenterResult> ServiceCenterResults { get; set; }
@@ -84,6 +89,81 @@ namespace SMT.Access.Data
 
             modelBuilder.Entity<QrReader>()
                 .HasIndex(q => q.Position);
+
+            // Board flow V2
+            modelBuilder.Entity<BoardV2>()
+                .HasIndex(b => b.QrCode)
+                .IsUnique();
+
+            modelBuilder.Entity<BoardV2>()
+                .HasIndex(b => new { b.LineId, b.Status });
+
+            modelBuilder.Entity<BoardV2>()
+                .HasIndex(b => new { b.CurrentQrReaderId, b.Status });
+
+            modelBuilder.Entity<BoardV2>()
+                .HasOne(b => b.Line)
+                .WithMany()
+                .HasForeignKey(b => b.LineId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<BoardV2>()
+                .HasOne(b => b.Model)
+                .WithMany()
+                .HasForeignKey(b => b.ModelId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<BoardV2>()
+                .HasOne(b => b.CurrentQrReader)
+                .WithMany()
+                .HasForeignKey(b => b.CurrentQrReaderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<QrReaderV2>()
+                .HasIndex(q => new { q.LineId, q.Position });
+
+            modelBuilder.Entity<QrReaderV2>()
+                .HasOne(q => q.Line)
+                .WithMany()
+                .HasForeignKey(q => q.LineId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<QrReaderV2Link>()
+                .HasIndex(l => new { l.FromReaderId, l.ToReaderId })
+                .IsUnique();
+
+            modelBuilder.Entity<QrReaderV2Link>()
+                .HasIndex(l => l.ToReaderId);
+
+            modelBuilder.Entity<QrReaderV2Link>()
+                .HasOne(l => l.FromReader)
+                .WithMany()
+                .HasForeignKey(l => l.FromReaderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<QrReaderV2Link>()
+                .HasOne(l => l.ToReader)
+                .WithMany()
+                .HasForeignKey(l => l.ToReaderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<BoardMovementV2>()
+                .HasIndex(m => new { m.BoardId, m.DateTime });
+
+            modelBuilder.Entity<BoardMovementV2>()
+                .HasIndex(m => new { m.QrReaderId, m.DateTime });
+
+            modelBuilder.Entity<BoardMovementV2>()
+                .HasOne(m => m.Board)
+                .WithMany()
+                .HasForeignKey(m => m.BoardId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<BoardMovementV2>()
+                .HasOne(m => m.QrReader)
+                .WithMany()
+                .HasForeignKey(m => m.QrReaderId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Report
             modelBuilder.Entity<Report>()
