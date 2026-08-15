@@ -27,6 +27,15 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
+        [Route("GetByPosition")]
+        public async Task<IActionResult> GetByPosition(int positionId)
+        {
+            var result = await _service.GetByPositionAsync(positionId);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
         [Route("GetCurrentByPosition")]
         public async Task<IActionResult> GetCurrentByPosition(int positionId)
         {

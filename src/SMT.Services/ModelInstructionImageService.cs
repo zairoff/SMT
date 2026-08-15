@@ -78,6 +78,13 @@ namespace SMT.Services
             return _mapper.Map<IEnumerable<ModelInstructionImage>, IEnumerable<ModelInstructionImageResponse>>(instructionImages);
         }
 
+        public async Task<IEnumerable<ModelInstructionImageResponse>> GetByPositionAsync(int positionId)
+        {
+            var instructionImages = await _repository.GetByAsync(i => i.InstructionPositionId == positionId);
+
+            return _mapper.Map<IEnumerable<ModelInstructionImage>, IEnumerable<ModelInstructionImageResponse>>(instructionImages);
+        }
+
         public async Task<CurrentInstructionResponse> GetCurrentByPositionAsync(int positionId)
         {
             var position = await _positionRepository.FindAsync(p => p.Id == positionId);

@@ -8,6 +8,8 @@ namespace SMT.Services.Interfaces
     {
         Task<IEnumerable<ModelInstructionImageResponse>> GetByModelAsync(int modelId);
 
+        Task<IEnumerable<ModelInstructionImageResponse>> GetByPositionAsync(int positionId);
+
         Task<ModelInstructionImageResponse> AddOrUpdateAsync(ModelInstructionImageCreate instructionImageCreate);
 
         Task<CurrentInstructionResponse> GetCurrentByPositionAsync(int positionId);
