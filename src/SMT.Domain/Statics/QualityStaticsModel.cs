@@ -7,5 +7,7 @@ namespace SMT.Domain.Statics
         public DateTime Date { get; set; }
 
         public double Ftq { get; set; }
+
+        public int Produced { get; set; }
     }
 }

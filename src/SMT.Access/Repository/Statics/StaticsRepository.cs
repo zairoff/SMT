@@ -174,7 +174,7 @@ namespace SMT.Access.Repository.Statics
 
                 var ftq = producedCount > 0 ? 100 - (defectCount * 100.0 / producedCount) : 0;
 
-                result.Add(new QualityStaticsModel { Date = date, Ftq = Math.Round(ftq, 2) });
+                result.Add(new QualityStaticsModel { Date = date, Ftq = Math.Round(ftq, 2), Produced = producedCount });
             }
 
             return result;
