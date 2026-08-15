@@ -31,6 +31,9 @@ using SMT.Domain.BoardFlow;
 using SMT.ViewModel.Dto.BoardReportDto;
 using SMT.Domain.Service;
 using SMT.ViewModel.Dto.ServiceCenterDto;
+using SMT.ViewModel.Dto.InstructionPositionDto;
+using SMT.ViewModel.Dto.LineActiveModelDto;
+using SMT.ViewModel.Dto.ModelInstructionImageDto;
 
 namespace SMT.Services.Mapping
 {
@@ -114,6 +117,17 @@ namespace SMT.Services.Mapping
                 .ForMember(m => m.DateTime, s => s.MapFrom(s => s.DateTime.ToString("yyyy-MM-dd HH:mm:ss")));
 
             CreateMap<ServiceCenter, ServiceCenterResponse>();
+
+            CreateMap<InstructionPosition, InstructionPositionResponse>()
+                .ForMember(p => p.LineName, o => o.MapFrom(s => s.Line != null ? s.Line.Name : null));
+
+            CreateMap<LineActiveModel, LineActiveModelResponse>()
+                .ForMember(a => a.LineName, o => o.MapFrom(s => s.Line != null ? s.Line.Name : null))
+                .ForMember(a => a.ModelName, o => o.MapFrom(s => s.Model != null ? s.Model.Name : null));
+
+            CreateMap<ModelInstructionImage, ModelInstructionImageResponse>()
+                .ForMember(i => i.ModelName, o => o.MapFrom(s => s.Model != null ? s.Model.Name : null))
+                .ForMember(i => i.PositionName, o => o.MapFrom(s => s.InstructionPosition != null ? s.InstructionPosition.Name : null));
         }
     }
 }

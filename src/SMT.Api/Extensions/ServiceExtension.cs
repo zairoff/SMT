@@ -163,6 +163,10 @@ namespace SMT.Api.Extensions
             services.AddTransient<IServiceCenterResultRepository, ServiceCenterResultRepository>();
             services.AddTransient<IRequestSenderRepository, RequestSenderRepository>();
 
+            services.AddTransient<IInstructionPositionRepository, InstructionPositionRepository>();
+            services.AddTransient<ILineActiveModelRepository, LineActiveModelRepository>();
+            services.AddTransient<IModelInstructionImageRepository, ModelInstructionImageRepository>();
+
             /*************   Services  ************/
 
             services.AddTransient<IBrandService, BrandService>();
@@ -200,6 +204,10 @@ namespace SMT.Api.Extensions
             services.AddTransient<IServiceCenterRequestService, ServiceCenterRequestService>();
             services.AddTransient<IServiceCenterResultService, ServiceCenterResultService>();
             services.AddTransient<IRequestSenderService, RequestSenderService>();
+
+            services.AddTransient<IInstructionPositionService, InstructionPositionService>();
+            services.AddTransient<ILineActiveModelService, LineActiveModelService>();
+            services.AddTransient<IModelInstructionImageService, ModelInstructionImageService>();
 
             /*************   Security  ************/
             services.AddTransient<IUserService, UserService>();

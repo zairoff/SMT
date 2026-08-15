@@ -59,6 +59,9 @@ namespace SMT.Access.Data
         public DbSet<ServiceCenterResult> ServiceCenterResults { get; set; }
         public DbSet<ServiceCenter> ServiceCenters { get; set; }
         public DbSet<ServiceCenterRequestSender> ServiceCenterRequestSenders { get; set; }
+        public DbSet<InstructionPosition> InstructionPositions { get; set; }
+        public DbSet<LineActiveModel> LineActiveModels { get; set; }
+        public DbSet<ModelInstructionImage> ModelInstructionImages { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -199,6 +202,48 @@ namespace SMT.Access.Data
 
             modelBuilder.Entity<ReadyProductTransaction>()
                 .HasIndex(r => r.Date);
+
+            // Instruction positions / images
+            modelBuilder.Entity<InstructionPosition>()
+                .HasIndex(p => new { p.LineId, p.Order });
+
+            modelBuilder.Entity<InstructionPosition>()
+                .HasOne(p => p.Line)
+                .WithMany()
+                .HasForeignKey(p => p.LineId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<LineActiveModel>()
+                .HasIndex(a => a.LineId)
+                .IsUnique();
+
+            modelBuilder.Entity<LineActiveModel>()
+                .HasOne(a => a.Line)
+                .WithMany()
+                .HasForeignKey(a => a.LineId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<LineActiveModel>()
+                .HasOne(a => a.Model)
+                .WithMany()
+                .HasForeignKey(a => a.ModelId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ModelInstructionImage>()
+                .HasIndex(i => new { i.ModelId, i.InstructionPositionId })
+                .IsUnique();
+
+            modelBuilder.Entity<ModelInstructionImage>()
+                .HasOne(i => i.Model)
+                .WithMany()
+                .HasForeignKey(i => i.ModelId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ModelInstructionImage>()
+                .HasOne(i => i.InstructionPosition)
+                .WithMany()
+                .HasForeignKey(i => i.InstructionPositionId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)

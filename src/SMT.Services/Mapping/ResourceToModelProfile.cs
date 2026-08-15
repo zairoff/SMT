@@ -31,6 +31,8 @@ using SMT.Domain.BoardFlow;
 using SMT.ViewModel.Dto.BoardReportDto;
 using SMT.ViewModel.Dto.ServiceCenterDto;
 using SMT.Domain.Service;
+using SMT.ViewModel.Dto.InstructionPositionDto;
+using SMT.ViewModel.Dto.ModelInstructionImageDto;
 
 namespace SMT.Services.Mapping
 {
@@ -119,6 +121,9 @@ namespace SMT.Services.Mapping
 
             CreateMap<ServiceCenterCreate, ServiceCenter>();
             CreateMap<ServiceCenterUpdate, ServiceCenter>();
+
+            CreateMap<InstructionPositionCreate, InstructionPosition>();
+            CreateMap<ModelInstructionImageCreate, ModelInstructionImage>();
         }
     }
 }
