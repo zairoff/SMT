@@ -51,6 +51,76 @@ namespace SMT.Services
             return _mapper.Map<Component, ComponentResponse>(component);
         }
 
+        public async Task<IEnumerable<ComponentBulkImportResult>> BulkAddAsync(List<ComponentCreate> components)
+        {
+            var results = new List<ComponentBulkImportResult>();
+            var seenPartNumbers = new HashSet<string>();
+
+            for (var i = 0; i < components.Count; i++)
+            {
+                var row = i + 1;
+                var componentCreate = components[i];
+
+                if (string.IsNullOrWhiteSpace(componentCreate.PartNumber) ||
+                    string.IsNullOrWhiteSpace(componentCreate.RCode) ||
+                    string.IsNullOrWhiteSpace(componentCreate.Specification))
+                {
+                    results.Add(new ComponentBulkImportResult
+                    {
+                        Row = row,
+                        PartNumber = componentCreate.PartNumber,
+                        RCode = componentCreate.RCode,
+                        Status = ComponentImportStatus.Failed,
+                        Message = "Invalid format: PartNumber, RCode and Specification are required."
+                    });
+                    continue;
+                }
+
+                if (!seenPartNumbers.Add(componentCreate.PartNumber))
+                {
+                    results.Add(new ComponentBulkImportResult
+                    {
+                        Row = row,
+                        PartNumber = componentCreate.PartNumber,
+                        RCode = componentCreate.RCode,
+                        Status = ComponentImportStatus.Failed,
+                        Message = "Conflict: PartNumber is duplicated within the uploaded file."
+                    });
+                    continue;
+                }
+
+                try
+                {
+                    var existing = await _repository.GetByPartNumberAsync(componentCreate.PartNumber);
+                    var wasExisting = existing != null;
+
+                    await AddAsync(componentCreate);
+
+                    results.Add(new ComponentBulkImportResult
+                    {
+                        Row = row,
+                        PartNumber = componentCreate.PartNumber,
+                        RCode = componentCreate.RCode,
+                        Status = wasExisting ? ComponentImportStatus.Updated : ComponentImportStatus.Created,
+                        Message = wasExisting ? "Existing component updated." : "New component created."
+                    });
+                }
+                catch (System.Exception ex)
+                {
+                    results.Add(new ComponentBulkImportResult
+                    {
+                        Row = row,
+                        PartNumber = componentCreate.PartNumber,
+                        RCode = componentCreate.RCode,
+                        Status = ComponentImportStatus.Failed,
+                        Message = ex.Message
+                    });
+                }
+            }
+
+            return results;
+        }
+
         public async Task<ComponentResponse> ConnectAsync(string rcode, string partNumber)
         {
             var component = await _repository.FindAsync(p => p.RCode == rcode && p.IsActive == true);

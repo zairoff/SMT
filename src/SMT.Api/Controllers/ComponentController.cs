@@ -83,23 +83,13 @@ namespace SMT.Api.Controllers
         }
 
         [HttpPost("bulk")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> BulkUpload([FromBody] List<ComponentCreate> components)
         {
-            try
-            {
-                foreach (var component in components)
-                {
-                    var result = await _service.AddAsync(component);
-                }
-            }
-            catch (System.Exception ex)
-            {
-                _logger.LogError(ex.ToString());
-            }
+            var result = await _service.BulkAddAsync(components);
 
-            return new OkResult();
+            return Ok(result);
         }
 
         [HttpPost("connect")]

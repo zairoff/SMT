@@ -41,6 +41,25 @@ namespace SMT.Access.Repository.BoardFlowV2
                 .ToListAsync();
         }
 
+        public async Task<(IReadOnlyCollection<BoardV2> Items, int TotalCount)> GetFlaggedPagedAsync(int? lineId, int page, int pageSize)
+        {
+            var query = DbSet.Where(b =>
+                b.Status == BoardStatusV2.Flagged && (lineId == null || b.LineId == lineId));
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .Include(b => b.Model)
+                .Include(b => b.Line)
+                .Include(b => b.CurrentQrReader)
+                .OrderByDescending(b => b.UpdatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (items, totalCount);
+        }
+
         public async Task<IReadOnlyCollection<BoardStationCount>> GetStationCountsAsync(int lineId)
         {
             return await DbSet

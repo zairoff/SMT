@@ -64,5 +64,15 @@ namespace SMT.Access.Repository
 
             return employees;
         }
+
+        public async Task<IEnumerable<Employee>> SearchByFullNameAsync(string fullName, bool isActive)
+        {
+            var normalized = fullName.Trim().ToLower();
+
+            return await DbSet
+                .Include(e => e.Department)
+                .Where(e => e.IsActive == isActive && e.FullName.ToLower().Contains(normalized))
+                .ToListAsync();
+        }
     }
 }

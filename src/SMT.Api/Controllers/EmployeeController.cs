@@ -50,6 +50,14 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetByFullName")]
+        public async Task<IActionResult> GetByFullName(string fullName, bool isActive = true)
+        {
+            var result = await _service.SearchByFullNameAsync(fullName, isActive);
+
+            return Ok(result);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

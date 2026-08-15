@@ -46,9 +46,9 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet("Flagged")]
-        public async Task<IActionResult> GetFlagged(int? lineId)
+        public async Task<IActionResult> GetFlagged(int? lineId, int page = 1, int pageSize = 10)
         {
-            var result = await _service.GetFlaggedAsync(lineId);
+            var result = await _service.GetFlaggedAsync(lineId, page, pageSize);
 
             return Ok(result);
         }

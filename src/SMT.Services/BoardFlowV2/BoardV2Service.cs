@@ -226,12 +226,15 @@ namespace SMT.Services.BoardFlowV2
                 .ToList();
         }
 
-        public async Task<IEnumerable<BoardV2Response>> GetFlaggedAsync(int? lineId)
+        public async Task<FlaggedBoardsResponse> GetFlaggedAsync(int? lineId, int page, int pageSize)
         {
-            var boards = await _boardRepository.GetByAsync(b =>
-                b.Status == BoardStatusV2.Flagged && (lineId == null || b.LineId == lineId));
+            var (items, totalCount) = await _boardRepository.GetFlaggedPagedAsync(lineId, page, pageSize);
 
-            return _mapper.Map<IEnumerable<BoardV2Response>>(boards);
+            return new FlaggedBoardsResponse
+            {
+                TotalCount = totalCount,
+                Items = _mapper.Map<List<BoardV2Response>>(items),
+            };
         }
 
         // The actual boards behind a station's live counts (InProgress + Flagged),

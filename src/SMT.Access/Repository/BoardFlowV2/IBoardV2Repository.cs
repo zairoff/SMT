@@ -13,6 +13,8 @@ namespace SMT.Access.Repository.BoardFlowV2
 
         Task<IEnumerable<BoardV2>> GetByAsync(Expression<Func<BoardV2, bool>> expression);
 
+        Task<(IReadOnlyCollection<BoardV2> Items, int TotalCount)> GetFlaggedPagedAsync(int? lineId, int page, int pageSize);
+
         Task<IReadOnlyCollection<BoardStationCount>> GetStationCountsAsync(int lineId);
 
         Task<int> GetCompletedCountAsync(int lineId, DateTime from, DateTime to);

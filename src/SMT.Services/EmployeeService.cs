@@ -96,6 +96,13 @@ namespace SMT.Services
             return _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeResponse>>(employees);
         }
 
+        public async Task<IEnumerable<EmployeeResponse>> SearchByFullNameAsync(string fullName, bool isActive)
+        {
+            var employees = await _repository.SearchByFullNameAsync(fullName, isActive);
+
+            return _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeResponse>>(employees);
+        }
+
         public async Task<EmployeeResponse> UpdateAsync(int id, EmployeeUpdate employeeUpdate)
         {
             var employee = await _repository.FindAsync(p => p.Id == id);

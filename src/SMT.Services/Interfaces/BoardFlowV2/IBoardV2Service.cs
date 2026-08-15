@@ -11,7 +11,7 @@ namespace SMT.Services.Interfaces.BoardFlowV2
         Task<BoardV2Response> ScanAsync(BoardV2Create create);
         Task<LineFlowSnapshot> GetLineSnapshotAsync(int lineId, DateTime from, DateTime to);
         Task<IEnumerable<LineFlowSnapshot>> GetAllLineSnapshotsAsync(DateTime from, DateTime to);
-        Task<IEnumerable<BoardV2Response>> GetFlaggedAsync(int? lineId);
+        Task<FlaggedBoardsResponse> GetFlaggedAsync(int? lineId, int page, int pageSize);
         Task<IEnumerable<BoardV2Response>> GetBoardsAtStationAsync(int readerId);
         Task<BoardHistoryResponse> GetHistoryAsync(string qrCode);
         Task<IEnumerable<RecentMovementResponse>> GetRecentMovementsAsync(DateTime date);

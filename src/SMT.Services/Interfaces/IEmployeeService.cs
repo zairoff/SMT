@@ -21,5 +21,7 @@ namespace SMT.Services.Interfaces
         Task<IEnumerable<EmployeeResponse>> GetByDepartmentAsync(string departmentId, bool isActive);
 
         Task<IEnumerable<EmployeeResponse>> GetByStatusAsync(bool isActive);
+
+        Task<IEnumerable<EmployeeResponse>> SearchByFullNameAsync(string fullName, bool isActive);
     }
 }
