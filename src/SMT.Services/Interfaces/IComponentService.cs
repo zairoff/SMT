@@ -22,6 +22,8 @@ namespace SMT.Services.Interfaces
 
         Task<IEnumerable<ComponentBulkImportResult>> BulkAddAsync(List<ComponentCreate> components);
 
+        Task<HashSet<string>> GetAllPartNumbersAsync();
+
         Task<ComponentResponse> ConnectAsync(string rcode, string partNumber);
 
         Task<ComponentResponse> UpdateAsync(int id, ComponentUpdate componentUpdate);

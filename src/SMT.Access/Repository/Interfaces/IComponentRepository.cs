@@ -10,5 +10,7 @@ namespace SMT.Access.Repository.Interfaces
         Task<IEnumerable<Component>> GetComponentsAsync(int page, int pageSize);
 
         Task<Component> GetByPartNumberAsync(string partNumber);
+
+        Task<HashSet<string>> GetAllPartNumbersAsync();
     }
 }

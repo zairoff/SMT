@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SMT.Services.GoogleSheets;
 using SMT.Services.Interfaces;
 using SMT.ViewModel.Dto.ComponentDto;
 using System.Collections.Generic;
@@ -13,11 +14,13 @@ namespace SMT.Api.Controllers
     public class ComponentController : ControllerBase
     {
         private readonly IComponentService _service;
+        private readonly IGoogleSheetsComponentImportService _sheetsImportService;
         private readonly ILogger<ComponentController> _logger;
 
-        public ComponentController(IComponentService service, ILogger<ComponentController> logger)
+        public ComponentController(IComponentService service, IGoogleSheetsComponentImportService sheetsImportService, ILogger<ComponentController> logger)
         {
             _service = service;
+            _sheetsImportService = sheetsImportService;
             _logger = logger;
         }
 
@@ -88,6 +91,16 @@ namespace SMT.Api.Controllers
         public async Task<IActionResult> BulkUpload([FromBody] List<ComponentCreate> components)
         {
             var result = await _service.BulkAddAsync(components);
+
+            return Ok(result);
+        }
+
+        [HttpPost("sync-from-sheet")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> SyncFromSheet()
+        {
+            var result = await _sheetsImportService.SyncFromSheetAsync();
 
             return Ok(result);
         }

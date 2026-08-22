@@ -29,5 +29,18 @@ namespace SMT.Access.Repository
                     .OrderBy(c => c.Id)
                     .FirstOrDefaultAsync();
         }
+
+        public async Task<HashSet<string>> GetAllPartNumbersAsync()
+        {
+            var partNumbers = await _context.Components
+                .Where(c => c.IsActive)
+                .Select(c => c.PartNumber)
+                .ToListAsync();
+
+            return partNumbers
+                .Where(pn => pn != null && pn.Count > 0)
+                .Select(pn => pn[0])
+                .ToHashSet();
+        }
     }
 }

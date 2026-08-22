@@ -22,6 +22,7 @@ using SMT.Security;
 using SMT.Services;
 using SMT.Services.BoardFlow;
 using SMT.Services.BoardFlowV2;
+using SMT.Services.GoogleSheets;
 using SMT.Services.Interfaces;
 using SMT.Services.Interfaces.BoardFlowV2;
 using SMT.Services.Interfaces.FileSystem;
@@ -31,6 +32,7 @@ using SMT.Services.ReturnedProducts;
 using SMT.Services.Service;
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -191,6 +193,12 @@ namespace SMT.Api.Extensions
             services.AddTransient<IReturnedProductTransactionService, ReturnedProductTransactionService>();
             services.AddTransient<IHourlyPlanService, HourlyPlanService>();
             services.AddTransient<IComponentService, ComponentService>();
+            services.AddHttpClient();
+            services.AddTransient<IGoogleSheetsComponentImportService>(conf =>
+                new GoogleSheetsComponentImportService(
+                    conf.GetRequiredService<IHttpClientFactory>().CreateClient(),
+                    conf.GetRequiredService<IComponentService>(),
+                    configuration["AppSettings:ComponentImportSpreadsheetId"]));
             services.AddTransient<IPrinterService, PrinterService>();
             services.AddTransient<IPcbInstructionService, PcbInstructionService>();
             services.AddTransient<IPcbInstructionService, PcbInstructionService>();

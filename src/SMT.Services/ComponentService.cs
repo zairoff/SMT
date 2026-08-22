@@ -121,6 +121,11 @@ namespace SMT.Services
             return results;
         }
 
+        public async Task<HashSet<string>> GetAllPartNumbersAsync()
+        {
+            return await _repository.GetAllPartNumbersAsync();
+        }
+
         public async Task<ComponentResponse> ConnectAsync(string rcode, string partNumber)
         {
             var component = await _repository.FindAsync(p => p.RCode == rcode && p.IsActive == true);
