@@ -940,12 +940,12 @@ namespace SMT.Access.Migrations
                     b.Property<DateTime>("LastConfirmedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ReportId")
+                    b.Property<int>("ModelId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReportId");
+                    b.HasIndex("ModelId");
 
                     b.ToTable("RepairAudits");
                 });
@@ -1689,13 +1689,13 @@ namespace SMT.Access.Migrations
 
             modelBuilder.Entity("SMT.Domain.RepairAudit", b =>
                 {
-                    b.HasOne("SMT.Domain.Report", "Report")
+                    b.HasOne("SMT.Domain.Model", "Model")
                         .WithMany()
-                        .HasForeignKey("ReportId")
+                        .HasForeignKey("ModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Report");
+                    b.Navigation("Model");
                 });
 
             modelBuilder.Entity("SMT.Domain.Report", b =>

@@ -20,8 +20,7 @@ namespace SMT.Access.Repository
         public async override Task<RepairAudit> FindAsync(Expression<Func<RepairAudit, bool>> expression)
         {
             return await DbSet.Where(expression)
-                            .Include(a => a.Report).ThenInclude(r => r.Model)
-                            .Include(a => a.Report).ThenInclude(r => r.Line)
+                            .Include(a => a.Model)
                             .FirstOrDefaultAsync();
         }
 
@@ -32,16 +31,14 @@ namespace SMT.Access.Repository
 
         public async override Task<IEnumerable<RepairAudit>> GetAllAsync()
         {
-            return await DbSet.Include(a => a.Report).ThenInclude(r => r.Model)
-                            .Include(a => a.Report).ThenInclude(r => r.Line)
+            return await DbSet.Include(a => a.Model)
                             .ToListAsync();
         }
 
         public async Task<IEnumerable<RepairAudit>> GetByAsync(Expression<Func<RepairAudit, bool>> expression)
         {
             return await DbSet.Where(expression)
-                            .Include(a => a.Report).ThenInclude(r => r.Model)
-                            .Include(a => a.Report).ThenInclude(r => r.Line)
+                            .Include(a => a.Model)
                             .ToListAsync();
         }
     }

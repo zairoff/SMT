@@ -8,9 +8,9 @@ namespace SMT.Domain
 
         public string Barcode { get; set; }
 
-        public int ReportId { get; set; }
+        public int ModelId { get; set; }
 
-        public Report Report { get; set; }
+        public Model Model { get; set; }
 
         public string Employee { get; set; }
 

@@ -11,7 +11,7 @@ namespace SMT.Services.Interfaces
 
         Task<RepairAuditResponse> GetAsync(int id);
 
-        Task<IEnumerable<RepairAuditResponse>> GetByDateRangeAsync(DateTime from, DateTime to, int? modelId, int? lineId);
+        Task<IEnumerable<RepairAuditResponse>> GetByDateRangeAsync(DateTime from, DateTime to, int? modelId);
 
         Task<RepairAuditResponse> ScanAsync(RepairAuditCreate repairAuditCreate);
 

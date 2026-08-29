@@ -14,7 +14,7 @@ namespace SMT.Access.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Barcode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ReportId = table.Column<int>(type: "int", nullable: false),
+                    ModelId = table.Column<int>(type: "int", nullable: false),
                     Employee = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FirstScannedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastConfirmedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -23,17 +23,17 @@ namespace SMT.Access.Migrations
                 {
                     table.PrimaryKey("PK_RepairAudits", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RepairAudits_Reports_ReportId",
-                        column: x => x.ReportId,
-                        principalTable: "Reports",
+                        name: "FK_RepairAudits_Models_ModelId",
+                        column: x => x.ModelId,
+                        principalTable: "Models",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_RepairAudits_ReportId",
+                name: "IX_RepairAudits_ModelId",
                 table: "RepairAudits",
-                column: "ReportId");
+                column: "ModelId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

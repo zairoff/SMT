@@ -7,6 +7,7 @@ using SMT.Services.Interfaces;
 using SMT.ViewModel.Dto.RepairAuditDto;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SMT.Services
@@ -14,28 +15,43 @@ namespace SMT.Services
     public class RepairAuditService : IRepairAuditService
     {
         private readonly IRepairAuditRepository _repository;
-        private readonly IReportRepository _reportRepository;
+        private readonly IModelRepository _modelRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public RepairAuditService(IRepairAuditRepository repository, IReportRepository reportRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public RepairAuditService(IRepairAuditRepository repository, IModelRepository modelRepository, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _repository = repository;
-            _reportRepository = reportRepository;
+            _modelRepository = modelRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
 
+        // Boards aren't individually registered anywhere - the only thing we can validate a
+        // scanned barcode against is that it starts with a known, active model's barcode
+        // prefix (the same convention the /report page uses client-side for its own barcode
+        // format check). This intentionally does not require the board to already have a
+        // defect Report - the audit counts boards that exist, not boards already flagged broken.
+        private async Task<Model> FindModelByBarcodeAsync(string barcode)
+        {
+            var trimmed = barcode?.Trim().ToUpperInvariant() ?? string.Empty;
+
+            var models = await _modelRepository.GetByAsync(m => m.IsActive && !string.IsNullOrEmpty(m.Barcode));
+
+            return models
+                .Where(m => trimmed.StartsWith(m.Barcode.Trim().ToUpperInvariant()))
+                .OrderByDescending(m => m.Barcode.Length)
+                .FirstOrDefault();
+        }
+
         public async Task<RepairAuditResponse> ScanAsync(RepairAuditCreate repairAuditCreate)
         {
-            var report = await _reportRepository.FindAsync(r => r.Barcode == repairAuditCreate.Barcode && r.Status == false);
+            var model = await FindModelByBarcodeAsync(repairAuditCreate.Barcode);
 
-            if (report == null)
-                throw new NotFoundException($"{repairAuditCreate.Barcode} is not a known open board");
+            if (model == null)
+                throw new NotFoundException($"{repairAuditCreate.Barcode} does not match any known board model");
 
             var existing = await _repository.FindByBarcodeAsync(repairAuditCreate.Barcode);
-
-            bool reconfirmed;
 
             if (existing != null)
             {
@@ -46,17 +62,16 @@ namespace SMT.Services
                 await _unitOfWork.SaveAsync();
 
                 existing = await _repository.FindAsync(a => a.Id == existing.Id);
-                reconfirmed = true;
 
                 var updatedResponse = _mapper.Map<RepairAudit, RepairAuditResponse>(existing);
-                updatedResponse.Reconfirmed = reconfirmed;
+                updatedResponse.Reconfirmed = true;
                 return updatedResponse;
             }
 
             var repairAudit = new RepairAudit
             {
                 Barcode = repairAuditCreate.Barcode,
-                ReportId = report.Id,
+                ModelId = model.Id,
                 Employee = repairAuditCreate.Employee,
                 FirstScannedDate = DateTime.Now,
                 LastConfirmedDate = DateTime.Now,
@@ -111,12 +126,11 @@ namespace SMT.Services
             return _mapper.Map<RepairAudit, RepairAuditResponse>(repairAudit);
         }
 
-        public async Task<IEnumerable<RepairAuditResponse>> GetByDateRangeAsync(DateTime from, DateTime to, int? modelId, int? lineId)
+        public async Task<IEnumerable<RepairAuditResponse>> GetByDateRangeAsync(DateTime from, DateTime to, int? modelId)
         {
             var repairAudits = await _repository.GetByAsync(a => a.LastConfirmedDate.Date >= from.Date &&
                                                 a.LastConfirmedDate.Date <= to.Date &&
-                                                (!modelId.HasValue || modelId.Value == 0 || a.Report.ModelId == modelId) &&
-                                                (!lineId.HasValue || lineId.Value == 0 || a.Report.LineId == lineId));
+                                                (!modelId.HasValue || modelId.Value == 0 || a.ModelId == modelId));
 
             return _mapper.Map<IEnumerable<RepairAudit>, IEnumerable<RepairAuditResponse>>(repairAudits);
         }

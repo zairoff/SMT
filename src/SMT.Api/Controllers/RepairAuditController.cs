@@ -34,9 +34,9 @@ namespace SMT.Api.Controllers
 
         [HttpGet]
         [Route("GetByDateRange")]
-        public async Task<IActionResult> GetByDateRange(DateTime from, DateTime to, int? modelId, int? lineId)
+        public async Task<IActionResult> GetByDateRange(DateTime from, DateTime to, int? modelId)
         {
-            var result = await _service.GetByDateRangeAsync(from, to, modelId, lineId);
+            var result = await _service.GetByDateRangeAsync(from, to, modelId);
 
             return Ok(result);
         }
