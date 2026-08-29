@@ -132,6 +132,7 @@ namespace SMT.Api.Extensions
             services.AddTransient<ILineRepository, LineRepository>();
             services.AddTransient<ILineDefectRepository, LineDefectRepository>();
             services.AddTransient<IReportRepository, ReportRepository>();
+            services.AddTransient<IRepairAuditRepository, RepairAuditRepository>();
             services.AddTransient<IEmployeeRepository, EmployeeRepository>();
             services.AddTransient<IPcbRepairerRepository, PcbRepairerRepository>();
             services.AddTransient<IMachineRepository, MachineRepository>();
@@ -181,6 +182,7 @@ namespace SMT.Api.Extensions
             services.AddTransient<ILineService, LineService>();
             services.AddTransient<ILineDefectService, LineDefectService>();
             services.AddTransient<IReportService, ReportService>();
+            services.AddTransient<IRepairAuditService, RepairAuditService>();
             services.AddTransient<IEmployeeService, EmployeeService>();
             services.AddTransient<IPcbRepairerService, PcbRepairerService>();
             services.AddTransient<IMachineService, MachineService>();

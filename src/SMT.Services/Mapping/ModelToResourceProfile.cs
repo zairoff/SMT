@@ -17,6 +17,7 @@ using SMT.ViewModel.Dto.RepairerDto;
 using SMT.ViewModel.Dto.MachineDto;
 using SMT.ViewModel.Dto.MachineRepairDto;
 using SMT.ViewModel.Dto.MachineRepairerDto;
+using SMT.ViewModel.Dto.RepairAuditDto;
 using SMT.ViewModel.Dto.PlanDto;
 using SMT.ViewModel.Dto.PlanActivityDto;
 using SMT.ViewModel.Dto.ReadyProductDto;
@@ -74,6 +75,13 @@ namespace SMT.Services.Mapping
                                                 s.NotificationDate.Value.ToString("yyyy-MM-dd HH:mm") : ""));
 
             CreateMap<MachineRepairer, MachineRepairerResponse>();
+
+            CreateMap<RepairAudit, RepairAuditResponse>()
+                .ForMember(m => m.ModelName, s => s.MapFrom(s => s.Report.Model.Name))
+                .ForMember(m => m.LineName, s => s.MapFrom(s => s.Report.Line.Name))
+                .ForMember(m => m.FirstScannedDate, s => s.MapFrom(s => s.FirstScannedDate.ToString("yyyy-MM-dd HH:mm")))
+                .ForMember(m => m.LastConfirmedDate, s => s.MapFrom(s => s.LastConfirmedDate.ToString("yyyy-MM-dd HH:mm")))
+                .ForMember(m => m.Reconfirmed, s => s.Ignore());
 
             CreateMap<Plan, PlanResponse>()
                 .ForMember(m => m.Date, s => s.MapFrom(s => s.Date.ToString("yyyy-MM-dd")));

@@ -20,13 +20,15 @@ namespace SMT.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly INotificationService _notificationService;
+        private readonly IRepairAuditService _repairAuditService;
 
-        public ReportService(IReportRepository repository, IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService)
+        public ReportService(IReportRepository repository, IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService, IRepairAuditService repairAuditService)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _notificationService = notificationService;
+            _repairAuditService = repairAuditService;
         }
 
         public async Task<ReportResponse> AddAsync(ReportCreate reportCreate)
@@ -193,6 +195,9 @@ namespace SMT.Services
 
             _repository.Update(report);
             await _unitOfWork.SaveAsync();
+
+            if (report.Status)
+                await _repairAuditService.RemoveByBarcodeAsync(report.Barcode);
 
             return _mapper.Map<Report, ReportResponse>(report);
         }
