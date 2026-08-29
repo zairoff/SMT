@@ -10,6 +10,8 @@ namespace SMT.ViewModel.Dto.RepairAuditDto
 
         public string ModelName { get; set; }
 
+        public string SapCode { get; set; }
+
         public string FirstScannedDate { get; set; }
 
         public string LastConfirmedDate { get; set; }

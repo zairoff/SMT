@@ -78,6 +78,7 @@ namespace SMT.Services.Mapping
 
             CreateMap<RepairAudit, RepairAuditResponse>()
                 .ForMember(m => m.ModelName, s => s.MapFrom(s => s.Model.Name))
+                .ForMember(m => m.SapCode, s => s.MapFrom(s => s.Model.SapCode))
                 .ForMember(m => m.FirstScannedDate, s => s.MapFrom(s => s.FirstScannedDate.ToString("yyyy-MM-dd HH:mm")))
                 .ForMember(m => m.LastConfirmedDate, s => s.MapFrom(s => s.LastConfirmedDate.ToString("yyyy-MM-dd HH:mm")))
                 .ForMember(m => m.Reconfirmed, s => s.Ignore());
