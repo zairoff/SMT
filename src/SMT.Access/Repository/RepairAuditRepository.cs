@@ -24,9 +24,9 @@ namespace SMT.Access.Repository
                             .FirstOrDefaultAsync();
         }
 
-        public async Task<RepairAudit> FindByBarcodeAsync(string barcode)
+        public async Task<RepairAudit> FindByBarcodeAsync(string barcode, RepairAuditType type)
         {
-            return await FindAsync(a => a.Barcode == barcode);
+            return await FindAsync(a => a.Barcode == barcode && a.Type == type);
         }
 
         public async override Task<IEnumerable<RepairAudit>> GetAllAsync()

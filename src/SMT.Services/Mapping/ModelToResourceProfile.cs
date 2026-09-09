@@ -77,6 +77,7 @@ namespace SMT.Services.Mapping
             CreateMap<MachineRepairer, MachineRepairerResponse>();
 
             CreateMap<RepairAudit, RepairAuditResponse>()
+                .ForMember(m => m.Type, s => s.MapFrom(s => s.Type.ToString()))
                 .ForMember(m => m.ModelName, s => s.MapFrom(s => s.Model.Name))
                 .ForMember(m => m.SapCode, s => s.MapFrom(s => s.Model.SapCode))
                 .ForMember(m => m.FirstScannedDate, s => s.MapFrom(s => s.FirstScannedDate.ToString("yyyy-MM-dd HH:mm")))

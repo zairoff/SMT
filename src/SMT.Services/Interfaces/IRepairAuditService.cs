@@ -1,3 +1,4 @@
+using SMT.Domain;
 using SMT.ViewModel.Dto.RepairAuditDto;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace SMT.Services.Interfaces
 
         Task<RepairAuditResponse> GetAsync(int id);
 
-        Task<IEnumerable<RepairAuditResponse>> GetByDateRangeAsync(DateTime from, DateTime to, int? modelId);
+        Task<IEnumerable<RepairAuditResponse>> GetByDateRangeAsync(DateTime from, DateTime to, int? modelId, RepairAuditType type);
 
         Task<RepairAuditResponse> ScanAsync(RepairAuditCreate repairAuditCreate);
 

@@ -8,6 +8,8 @@ namespace SMT.ViewModel.Dto.RepairAuditDto
 
         public string Employee { get; set; }
 
+        public string Type { get; set; }
+
         public string ModelName { get; set; }
 
         public string SapCode { get; set; }

@@ -51,7 +51,7 @@ namespace SMT.Services
             if (model == null)
                 throw new NotFoundException($"{repairAuditCreate.Barcode} does not match any known board model");
 
-            var existing = await _repository.FindByBarcodeAsync(repairAuditCreate.Barcode);
+            var existing = await _repository.FindByBarcodeAsync(repairAuditCreate.Barcode, repairAuditCreate.Type);
 
             if (existing != null)
             {
@@ -72,6 +72,7 @@ namespace SMT.Services
             {
                 Barcode = repairAuditCreate.Barcode,
                 ModelId = model.Id,
+                Type = repairAuditCreate.Type,
                 Employee = repairAuditCreate.Employee,
                 FirstScannedDate = DateTime.Now,
                 LastConfirmedDate = DateTime.Now,
@@ -103,12 +104,16 @@ namespace SMT.Services
 
         public async Task RemoveByBarcodeAsync(string barcode)
         {
-            var repairAudit = await _repository.FindByBarcodeAsync(barcode);
+            // A repaired board is no longer awaiting repair or being scrapped for parts, so
+            // it should drop out of every RepairAudit category (Audit and Utilization alike).
+            var repairAudits = await _repository.GetByAsync(a => a.Barcode == barcode);
 
-            if (repairAudit == null)
+            if (!repairAudits.Any())
                 return;
 
-            _repository.Delete(repairAudit);
+            foreach (var repairAudit in repairAudits)
+                _repository.Delete(repairAudit);
+
             await _unitOfWork.SaveAsync();
         }
 
@@ -126,10 +131,11 @@ namespace SMT.Services
             return _mapper.Map<RepairAudit, RepairAuditResponse>(repairAudit);
         }
 
-        public async Task<IEnumerable<RepairAuditResponse>> GetByDateRangeAsync(DateTime from, DateTime to, int? modelId)
+        public async Task<IEnumerable<RepairAuditResponse>> GetByDateRangeAsync(DateTime from, DateTime to, int? modelId, RepairAuditType type)
         {
             var repairAudits = await _repository.GetByAsync(a => a.LastConfirmedDate.Date >= from.Date &&
                                                 a.LastConfirmedDate.Date <= to.Date &&
+                                                a.Type == type &&
                                                 (!modelId.HasValue || modelId.Value == 0 || a.ModelId == modelId));
 
             return _mapper.Map<IEnumerable<RepairAudit>, IEnumerable<RepairAuditResponse>>(repairAudits);

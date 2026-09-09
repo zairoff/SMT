@@ -12,6 +12,8 @@ namespace SMT.Domain
 
         public Model Model { get; set; }
 
+        public RepairAuditType Type { get; set; } = RepairAuditType.Audit;
+
         public string Employee { get; set; }
 
         public DateTime FirstScannedDate { get; set; } = DateTime.Now;

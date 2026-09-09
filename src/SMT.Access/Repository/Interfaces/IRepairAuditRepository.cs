@@ -9,7 +9,7 @@ namespace SMT.Access.Repository.Interfaces
 {
     public interface IRepairAuditRepository : IBaseRepository<RepairAudit>
     {
-        public Task<RepairAudit> FindByBarcodeAsync(string barcode);
+        public Task<RepairAudit> FindByBarcodeAsync(string barcode, RepairAuditType type);
 
         public Task<IEnumerable<RepairAudit>> GetByAsync(Expression<Func<RepairAudit, bool>> expression);
     }

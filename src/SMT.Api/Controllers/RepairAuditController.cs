@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SMT.Domain;
 using SMT.Services.Interfaces;
 using SMT.ViewModel.Dto.RepairAuditDto;
 using System;
@@ -34,9 +35,9 @@ namespace SMT.Api.Controllers
 
         [HttpGet]
         [Route("GetByDateRange")]
-        public async Task<IActionResult> GetByDateRange(DateTime from, DateTime to, int? modelId)
+        public async Task<IActionResult> GetByDateRange(DateTime from, DateTime to, int? modelId, RepairAuditType type = RepairAuditType.Audit)
         {
-            var result = await _service.GetByDateRangeAsync(from, to, modelId);
+            var result = await _service.GetByDateRangeAsync(from, to, modelId, type);
 
             return Ok(result);
         }
