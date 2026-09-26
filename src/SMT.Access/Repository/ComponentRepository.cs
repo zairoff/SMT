@@ -24,8 +24,11 @@ namespace SMT.Access.Repository
 
         public async Task<Component> GetByPartNumberAsync(string partNumber)
         {
+            // PrimaryPartNumber is a persisted, indexed computed column (see IX_Components_PrimaryPartNumber
+            // migration) mirroring JSON_VALUE(PartNumber, '$[0]') - querying it instead of the JSON
+            // expression directly lets SQL Server use the index instead of scanning every row.
             return await _context.Components
-                    .FromSqlRaw("SELECT * FROM Components WHERE IsActive = 1 AND JSON_VALUE(PartNumber, '$[0]') = {0}", partNumber)
+                    .FromSqlRaw("SELECT * FROM Components WHERE IsActive = 1 AND PrimaryPartNumber = {0}", partNumber)
                     .OrderBy(c => c.Id)
                     .FirstOrDefaultAsync();
         }

@@ -24,6 +24,7 @@ using SMT.ViewModel.Dto.ReadyProductDto;
 using SMT.ViewModel.Dto.ProductTransactionDto;
 using SMT.ViewModel.Dto.HourlyPlanDto;
 using SMT.ViewModel.Dto.ComponentDto;
+using SMT.ViewModel.Dto.ComponentRequestDto;
 using SMT.ViewModel.Dto.PcbInstructionDto;
 using System.Collections.Generic;
 using SMT.ViewModel.Dto.QrReaderDto;
@@ -111,6 +112,10 @@ namespace SMT.Services.Mapping
                 .ForMember(dest => dest.PartNumber, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.PartNumber) ? new List<string>() { src.PartNumber } : new List<string>()));
 
             CreateMap<ComponentUpdate, Component>();
+
+            CreateMap<ComponentRequestItemCreate, ComponentRequestItem>();
+
+            CreateMap<ComponentRequestCreate, ComponentRequest>();
 
             CreateMap<PcbInstructionCreate, PcbInstruction>();
 

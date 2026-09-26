@@ -67,6 +67,18 @@ namespace SMT.Api.Controllers
         }
 
         [HttpGet]
+        [Route("search")]
+        public async Task<IActionResult> Search(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return Ok(null);
+
+            var result = await _service.SearchAsync(query);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
         [Route("GetByStorePlace")]
         public async Task<IActionResult> GetByStorePlace(string storePlace)
         {

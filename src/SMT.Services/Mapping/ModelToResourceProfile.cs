@@ -27,6 +27,7 @@ using SMT.Domain.ReturnedProducts;
 using SMT.ViewModel.Dto.ReturnedProductTransactionDto;
 using SMT.ViewModel.Dto.HourlyPlanDto;
 using SMT.ViewModel.Dto.ComponentDto;
+using SMT.ViewModel.Dto.ComponentRequestDto;
 using SMT.ViewModel.Dto.QrReaderDto;
 using SMT.Domain.BoardFlow;
 using SMT.ViewModel.Dto.BoardReportDto;
@@ -120,6 +121,19 @@ namespace SMT.Services.Mapping
                .ForMember(m => m.Time, s => s.MapFrom(s => s.Time.ToString("yyyy-MM-dd HH:mm:ss")));
 
             CreateMap<Component, ComponentResponse>();
+
+            CreateMap<ComponentRequestItem, ComponentRequestItemResponse>()
+                .ForMember(i => i.RCode, s => s.MapFrom(s => s.Component.RCode))
+                .ForMember(i => i.PartNumber, s => s.MapFrom(s => s.Component.PartNumber != null ? string.Join(", ", s.Component.PartNumber) : ""))
+                .ForMember(i => i.Status, s => s.MapFrom(s => s.Status.ToString()))
+                .ForMember(i => i.TransferredDate, s => s.MapFrom(s => s.TransferredDate.HasValue ? s.TransferredDate.Value.ToString("yyyy-MM-dd HH:mm") : ""))
+                .ForMember(i => i.DurationMinutes, s => s.MapFrom(s => s.TransferredDate.HasValue && s.ComponentRequest != null
+                    ? (double?)Math.Round((s.TransferredDate.Value - s.ComponentRequest.CreatedDate).TotalMinutes, 1)
+                    : null));
+
+            CreateMap<ComponentRequest, ComponentRequestResponse>()
+                .ForMember(r => r.LineName, s => s.MapFrom(s => s.Line != null ? s.Line.Name : ""))
+                .ForMember(r => r.CreatedDate, s => s.MapFrom(s => s.CreatedDate.ToString("yyyy-MM-dd HH:mm")));
 
             CreateMap<QrReader, QrReaderResponse>();
             CreateMap<BoardReport, BoardReportResponse>()

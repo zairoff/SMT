@@ -18,6 +18,8 @@ namespace SMT.Services.Interfaces
 
         Task<ComponentResponse> GetByRcodeAsync(string rcode);
 
+        Task<ComponentResponse> SearchAsync(string query);
+
         Task<ComponentResponse> AddAsync(ComponentCreate componentCreate);
 
         Task<IEnumerable<ComponentBulkImportResult>> BulkAddAsync(List<ComponentCreate> components);

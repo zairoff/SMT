@@ -48,6 +48,8 @@ namespace SMT.Access.Data
         public DbSet<ReturnedProductBufferZone> ReturnedProductBufferZones { get; set; }
         public DbSet<HourlyPlan> HourlyPlans { get; set; }
         public DbSet<Component> Components { get; set; }
+        public DbSet<ComponentRequest> ComponentRequests { get; set; }
+        public DbSet<ComponentRequestItem> ComponentRequestItems { get; set; }
         public DbSet<PcbInstruction> PcbInstructions { get; set; }
         public DbSet<QrReader> QrReaders { get; set; }
         public DbSet<BoardReport> BoardReports { get; set; }
@@ -80,6 +82,15 @@ namespace SMT.Access.Data
                 (c1, c2) => c1.SequenceEqual(c2),          // Compare equality
                 c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())), // Generate hash code
                 c => c.ToList()));
+
+            // Bounded so RCode can carry a real index (nvarchar(max) can't be a key column) -
+            // technicians now look components up by RCode from a scan/typed input, so this needs to be fast.
+            modelBuilder.Entity<Component>()
+                .Property(c => c.RCode)
+                .HasMaxLength(450);
+
+            modelBuilder.Entity<Component>()
+                .HasIndex(c => c.RCode);
 
             // Board flow
             modelBuilder.Entity<BoardReport>()

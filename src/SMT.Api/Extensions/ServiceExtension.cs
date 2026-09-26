@@ -152,6 +152,8 @@ namespace SMT.Api.Extensions
 
             services.AddTransient<IHourlyPlanRepository, HourlyPlanRepository>();
             services.AddTransient<IComponentRepository, ComponentRepository>();
+            services.AddTransient<IComponentRequestRepository, ComponentRequestRepository>();
+            services.AddTransient<IComponentRequestItemRepository, ComponentRequestItemRepository>();
             services.AddTransient<IPcbInstructionRepository, PcbInstructionRepository>();
             services.AddTransient<IQrReaderRepository, QrReaderRepository>();
             services.AddTransient<IBoardReportRepository, BoardReportRepository>();
@@ -195,6 +197,8 @@ namespace SMT.Api.Extensions
             services.AddTransient<IReturnedProductTransactionService, ReturnedProductTransactionService>();
             services.AddTransient<IHourlyPlanService, HourlyPlanService>();
             services.AddTransient<IComponentService, ComponentService>();
+            services.AddTransient<IComponentRequestService, ComponentRequestService>();
+            services.AddTransient<IComponentRequestItemService, ComponentRequestItemService>();
             services.AddHttpClient();
             services.AddTransient<IGoogleSheetsComponentImportService>(conf =>
                 new GoogleSheetsComponentImportService(

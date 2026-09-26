@@ -206,6 +206,16 @@ namespace SMT.Services
             return _mapper.Map<Component, ComponentResponse>(component);
         }
 
+        public async Task<ComponentResponse> SearchAsync(string query)
+        {
+            var component = await _repository.FindAsync(p => p.RCode == query && p.IsActive == true);
+
+            if (component == null)
+                component = await _repository.GetByPartNumberAsync(query);
+
+            return component == null ? null : _mapper.Map<Component, ComponentResponse>(component);
+        }
+
         public async Task<ComponentResponse> GetByStorePlaceAsync(string storePlaceNumber)
         {
             var component = await _repository.FindAsync(p => p.StorePlaceNumber == storePlaceNumber && p.IsActive == true);
