@@ -22,6 +22,8 @@ namespace SMT.Services.Interfaces
 
         Task<ModelResponse> UpdateAsync(int id, ModelUpdate modelUpdate);
 
+        Task<ModelResponse> SetActiveAsync(int id, bool isActive);
+
         Task<ModelResponse> DeleteAsync(int id);
     }
 }

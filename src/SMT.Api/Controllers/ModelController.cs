@@ -89,6 +89,17 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
 
+        [HttpPut("{id}/status")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> SetStatus(int id, [FromQuery] bool isActive)
+        {
+            var result = await _service.SetActiveAsync(id, isActive);
+
+            return Ok(result);
+        }
+
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

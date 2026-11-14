@@ -16,6 +16,8 @@ namespace SMT.Services.Interfaces
 
         Task<DefectResponse> UpdateAsync(int id, DefectUpdate defectUpdate);
 
+        Task<DefectResponse> SetActiveAsync(int id, bool isActive);
+
         Task<DefectResponse> DeleteAsync(int id);
     }
 }

@@ -38,14 +38,19 @@ namespace SMT.Services
             return _mapper.Map<Defect, DefectResponse>(defect);
         }
 
-        public async Task<DefectResponse> DeleteAsync(int id)
+        public Task<DefectResponse> DeleteAsync(int id)
+        {
+            return SetActiveAsync(id, false);
+        }
+
+        public async Task<DefectResponse> SetActiveAsync(int id, bool isActive)
         {
             var defect = await _repository.FindAsync(p => p.Id == id);
 
             if (defect == null)
                 throw new NotFoundException("Not found");
 
-            defect.IsActive = false;
+            defect.IsActive = isActive;
 
             _repository.Update(defect);
             await _unitOfWork.SaveAsync();

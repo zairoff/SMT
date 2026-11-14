@@ -53,14 +53,19 @@ namespace SMT.Services
             return _mapper.Map<Model, ModelResponse>(model);
         }
 
-        public async Task<ModelResponse> DeleteAsync(int id)
+        public Task<ModelResponse> DeleteAsync(int id)
+        {
+            return SetActiveAsync(id, false);
+        }
+
+        public async Task<ModelResponse> SetActiveAsync(int id, bool isActive)
         {
             var model = await _repository.FindAsync(p => p.Id == id);
 
             if (model == null)
                 throw new NotFoundException("Model not found");
 
-            model.IsActive = false;
+            model.IsActive = isActive;
 
             _repository.Update(model);
             await _unitOfWork.SaveAsync();
