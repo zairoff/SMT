@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using SMT.Domain;
 using SMT.Domain.BoardFlow;
 using SMT.Domain.BoardFlow.V2;
+using SMT.Domain.Feeder;
 using SMT.Domain.ReturnedProducts;
 using SMT.Domain.Service;
 using System;
@@ -66,6 +67,14 @@ namespace SMT.Access.Data
         public DbSet<InstructionPosition> InstructionPositions { get; set; }
         public DbSet<LineActiveModel> LineActiveModels { get; set; }
         public DbSet<ModelInstructionImage> ModelInstructionImages { get; set; }
+        public DbSet<LineMachine> LineMachines { get; set; }
+        public DbSet<MachineModule> MachineModules { get; set; }
+        public DbSet<FeederSlot> FeederSlots { get; set; }
+        public DbSet<FeederSetup> FeederSetups { get; set; }
+        public DbSet<FeederSetupItem> FeederSetupItems { get; set; }
+        public DbSet<ChangeoverSession> ChangeoverSessions { get; set; }
+        public DbSet<ChangeoverItem> ChangeoverItems { get; set; }
+        public DbSet<FeederScanLog> FeederScanLogs { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -257,6 +266,95 @@ namespace SMT.Access.Data
                 .WithMany()
                 .HasForeignKey(i => i.InstructionPositionId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            ConfigureFeeder(modelBuilder);
+        }
+
+        // Feeder verification. Everything is Restrict except setup -> items, so SQL Server doesn't
+        // reject the schema for multiple cascade paths (slots, components and lines are shared by many tables).
+        private static void ConfigureFeeder(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<LineMachine>(e =>
+            {
+                e.Property(m => m.Name).HasMaxLength(100);
+                e.HasIndex(m => m.LineId).IsUnique();
+                e.HasOne(m => m.Line).WithMany().HasForeignKey(m => m.LineId).OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<MachineModule>(e =>
+            {
+                e.Property(m => m.Name).HasMaxLength(50);
+                e.HasIndex(m => new { m.LineMachineId, m.Name }).IsUnique();
+                e.HasOne(m => m.LineMachine).WithMany(l => l.Modules).HasForeignKey(m => m.LineMachineId).OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<FeederSlot>(e =>
+            {
+                e.Property(s => s.Number).HasMaxLength(20);
+                e.Property(s => s.SlotCode).HasMaxLength(64);
+                e.Property(s => s.CurrentReelCode).HasMaxLength(450);
+                e.Property(s => s.LoadedBy).HasMaxLength(256);
+                e.HasIndex(s => s.SlotCode).IsUnique();
+                e.HasIndex(s => new { s.MachineModuleId, s.Number }).IsUnique();
+                e.HasIndex(s => s.CurrentReelCode);
+                e.HasOne(s => s.MachineModule).WithMany(m => m.Slots).HasForeignKey(s => s.MachineModuleId).OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(s => s.CurrentComponent).WithMany().HasForeignKey(s => s.CurrentComponentId).OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<FeederSetup>(e =>
+            {
+                e.Property(s => s.SourceFileName).HasMaxLength(260);
+                e.Property(s => s.CreatedBy).HasMaxLength(256);
+                e.Property(s => s.ActivatedBy).HasMaxLength(256);
+                e.HasIndex(s => new { s.ModelId, s.LineId, s.Side, s.Version }).IsUnique();
+                e.HasIndex(s => new { s.LineId, s.Status });
+                e.HasOne(s => s.Model).WithMany().HasForeignKey(s => s.ModelId).OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(s => s.Line).WithMany().HasForeignKey(s => s.LineId).OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<FeederSetupItem>(e =>
+            {
+                e.Property(i => i.ImportedCode).HasMaxLength(256);
+                e.HasIndex(i => new { i.FeederSetupId, i.FeederSlotId }).IsUnique();
+                e.HasOne(i => i.FeederSetup).WithMany(s => s.Items).HasForeignKey(i => i.FeederSetupId).OnDelete(DeleteBehavior.Cascade);
+                e.HasOne(i => i.FeederSlot).WithMany().HasForeignKey(i => i.FeederSlotId).OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(i => i.Component).WithMany().HasForeignKey(i => i.ComponentId).OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<ChangeoverSession>(e =>
+            {
+                e.Property(s => s.StartedBy).HasMaxLength(256);
+                e.Property(s => s.CompletedBy).HasMaxLength(256);
+                e.HasIndex(s => new { s.LineId, s.Status });
+                e.HasOne(s => s.Line).WithMany().HasForeignKey(s => s.LineId).OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(s => s.FeederSetup).WithMany().HasForeignKey(s => s.FeederSetupId).OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(s => s.PreviousSetup).WithMany().HasForeignKey(s => s.PreviousSetupId).OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<ChangeoverItem>(e =>
+            {
+                e.HasIndex(i => new { i.ChangeoverSessionId, i.FeederSlotId }).IsUnique();
+                e.HasOne(i => i.ChangeoverSession).WithMany(s => s.Items).HasForeignKey(i => i.ChangeoverSessionId).OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(i => i.FeederSlot).WithMany().HasForeignKey(i => i.FeederSlotId).OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(i => i.RequiredComponent).WithMany().HasForeignKey(i => i.RequiredComponentId).OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<FeederScanLog>(e =>
+            {
+                e.Property(l => l.RawReelCode).HasMaxLength(450);
+                e.Property(l => l.RawSlotCode).HasMaxLength(450);
+                e.Property(l => l.ReelPartNumber).HasMaxLength(256);
+                e.Property(l => l.Username).HasMaxLength(256);
+                e.HasIndex(l => new { l.LineId, l.CreatedAt });
+                e.HasIndex(l => new { l.Result, l.CreatedAt });
+                e.HasIndex(l => l.ChangeoverSessionId);
+                e.HasOne(l => l.Line).WithMany().HasForeignKey(l => l.LineId).OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(l => l.ChangeoverSession).WithMany().HasForeignKey(l => l.ChangeoverSessionId).OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(l => l.FeederSetup).WithMany().HasForeignKey(l => l.FeederSetupId).OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(l => l.FeederSlot).WithMany().HasForeignKey(l => l.FeederSlotId).OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(l => l.ExpectedComponent).WithMany().HasForeignKey(l => l.ExpectedComponentId).OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(l => l.ScannedComponent).WithMany().HasForeignKey(l => l.ScannedComponentId).OnDelete(DeleteBehavior.Restrict);
+            });
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)

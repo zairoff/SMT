@@ -450,6 +450,347 @@ namespace SMT.Access.Migrations
                     b.ToTable("EmployeeHistories");
                 });
 
+            modelBuilder.Entity("SMT.Domain.Feeder.ChangeoverItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Action")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ChangeoverSessionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FeederSlotId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("RequiredComponentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("VerifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FeederSlotId");
+
+                    b.HasIndex("RequiredComponentId");
+
+                    b.HasIndex("ChangeoverSessionId", "FeederSlotId")
+                        .IsUnique();
+
+                    b.ToTable("ChangeoverItems");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Feeder.ChangeoverSession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CompletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("FeederSetupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LineId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PreviousSetupId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("StartedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FeederSetupId");
+
+                    b.HasIndex("PreviousSetupId");
+
+                    b.HasIndex("LineId", "Status");
+
+                    b.ToTable("ChangeoverSessions");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Feeder.FeederScanLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ChangeoverSessionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ExpectedComponentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FeederSetupId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FeederSlotId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LineId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NgReason")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RawReelCode")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RawSlotCode")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ReelPartNumber")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("Result")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ScanType")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ScannedComponentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChangeoverSessionId");
+
+                    b.HasIndex("ExpectedComponentId");
+
+                    b.HasIndex("FeederSetupId");
+
+                    b.HasIndex("FeederSlotId");
+
+                    b.HasIndex("ScannedComponentId");
+
+                    b.HasIndex("LineId", "CreatedAt");
+
+                    b.HasIndex("Result", "CreatedAt");
+
+                    b.ToTable("FeederScanLogs");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Feeder.FeederSetup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("ActivatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ActivatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("LineId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ModelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Side")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SourceFileName")
+                        .HasMaxLength(260)
+                        .HasColumnType("nvarchar(260)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LineId", "Status");
+
+                    b.HasIndex("ModelId", "LineId", "Side", "Version")
+                        .IsUnique();
+
+                    b.ToTable("FeederSetups");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Feeder.FeederSetupItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ComponentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FeederSetupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FeederSlotId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImportedCode")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ComponentId");
+
+                    b.HasIndex("FeederSlotId");
+
+                    b.HasIndex("FeederSetupId", "FeederSlotId")
+                        .IsUnique();
+
+                    b.ToTable("FeederSetupItems");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Feeder.FeederSlot", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CurrentComponentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CurrentReelCode")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LoadedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LoadedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("MachineModuleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Number")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("SlotCode")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurrentComponentId");
+
+                    b.HasIndex("CurrentReelCode");
+
+                    b.HasIndex("SlotCode")
+                        .IsUnique()
+                        .HasFilter("[SlotCode] IS NOT NULL");
+
+                    b.HasIndex("MachineModuleId", "Number")
+                        .IsUnique()
+                        .HasFilter("[Number] IS NOT NULL");
+
+                    b.ToTable("FeederSlots");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Feeder.LineMachine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LineId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Vendor")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LineId")
+                        .IsUnique();
+
+                    b.ToTable("LineMachines");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Feeder.MachineModule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("LineMachineId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LineMachineId", "Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
+
+                    b.ToTable("MachineModules");
+                });
+
             modelBuilder.Entity("SMT.Domain.HourlyPlan", b =>
                 {
                     b.Property<int>("Id")
@@ -1548,6 +1889,190 @@ namespace SMT.Access.Migrations
                     b.Navigation("Employee");
                 });
 
+            modelBuilder.Entity("SMT.Domain.Feeder.ChangeoverItem", b =>
+                {
+                    b.HasOne("SMT.Domain.Feeder.ChangeoverSession", "ChangeoverSession")
+                        .WithMany("Items")
+                        .HasForeignKey("ChangeoverSessionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SMT.Domain.Feeder.FeederSlot", "FeederSlot")
+                        .WithMany()
+                        .HasForeignKey("FeederSlotId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SMT.Domain.Component", "RequiredComponent")
+                        .WithMany()
+                        .HasForeignKey("RequiredComponentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("ChangeoverSession");
+
+                    b.Navigation("FeederSlot");
+
+                    b.Navigation("RequiredComponent");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Feeder.ChangeoverSession", b =>
+                {
+                    b.HasOne("SMT.Domain.Feeder.FeederSetup", "FeederSetup")
+                        .WithMany()
+                        .HasForeignKey("FeederSetupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SMT.Domain.Line", "Line")
+                        .WithMany()
+                        .HasForeignKey("LineId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SMT.Domain.Feeder.FeederSetup", "PreviousSetup")
+                        .WithMany()
+                        .HasForeignKey("PreviousSetupId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("FeederSetup");
+
+                    b.Navigation("Line");
+
+                    b.Navigation("PreviousSetup");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Feeder.FeederScanLog", b =>
+                {
+                    b.HasOne("SMT.Domain.Feeder.ChangeoverSession", "ChangeoverSession")
+                        .WithMany()
+                        .HasForeignKey("ChangeoverSessionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SMT.Domain.Component", "ExpectedComponent")
+                        .WithMany()
+                        .HasForeignKey("ExpectedComponentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SMT.Domain.Feeder.FeederSetup", "FeederSetup")
+                        .WithMany()
+                        .HasForeignKey("FeederSetupId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SMT.Domain.Feeder.FeederSlot", "FeederSlot")
+                        .WithMany()
+                        .HasForeignKey("FeederSlotId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SMT.Domain.Line", "Line")
+                        .WithMany()
+                        .HasForeignKey("LineId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SMT.Domain.Component", "ScannedComponent")
+                        .WithMany()
+                        .HasForeignKey("ScannedComponentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("ChangeoverSession");
+
+                    b.Navigation("ExpectedComponent");
+
+                    b.Navigation("FeederSetup");
+
+                    b.Navigation("FeederSlot");
+
+                    b.Navigation("Line");
+
+                    b.Navigation("ScannedComponent");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Feeder.FeederSetup", b =>
+                {
+                    b.HasOne("SMT.Domain.Line", "Line")
+                        .WithMany()
+                        .HasForeignKey("LineId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SMT.Domain.Model", "Model")
+                        .WithMany()
+                        .HasForeignKey("ModelId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Line");
+
+                    b.Navigation("Model");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Feeder.FeederSetupItem", b =>
+                {
+                    b.HasOne("SMT.Domain.Component", "Component")
+                        .WithMany()
+                        .HasForeignKey("ComponentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SMT.Domain.Feeder.FeederSetup", "FeederSetup")
+                        .WithMany("Items")
+                        .HasForeignKey("FeederSetupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SMT.Domain.Feeder.FeederSlot", "FeederSlot")
+                        .WithMany()
+                        .HasForeignKey("FeederSlotId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Component");
+
+                    b.Navigation("FeederSetup");
+
+                    b.Navigation("FeederSlot");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Feeder.FeederSlot", b =>
+                {
+                    b.HasOne("SMT.Domain.Component", "CurrentComponent")
+                        .WithMany()
+                        .HasForeignKey("CurrentComponentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SMT.Domain.Feeder.MachineModule", "MachineModule")
+                        .WithMany("Slots")
+                        .HasForeignKey("MachineModuleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CurrentComponent");
+
+                    b.Navigation("MachineModule");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Feeder.LineMachine", b =>
+                {
+                    b.HasOne("SMT.Domain.Line", "Line")
+                        .WithMany()
+                        .HasForeignKey("LineId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Line");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Feeder.MachineModule", b =>
+                {
+                    b.HasOne("SMT.Domain.Feeder.LineMachine", "LineMachine")
+                        .WithMany("Modules")
+                        .HasForeignKey("LineMachineId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("LineMachine");
+                });
+
             modelBuilder.Entity("SMT.Domain.HourlyPlan", b =>
                 {
                     b.HasOne("SMT.Domain.Line", "Line")
@@ -1991,6 +2516,26 @@ namespace SMT.Access.Migrations
             modelBuilder.Entity("SMT.Domain.ComponentRequest", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Feeder.ChangeoverSession", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Feeder.FeederSetup", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Feeder.LineMachine", b =>
+                {
+                    b.Navigation("Modules");
+                });
+
+            modelBuilder.Entity("SMT.Domain.Feeder.MachineModule", b =>
+                {
+                    b.Navigation("Slots");
                 });
 #pragma warning restore 612, 618
         }

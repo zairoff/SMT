@@ -12,5 +12,11 @@ namespace SMT.Access.Repository.Interfaces
         Task<Component> GetByPartNumberAsync(string partNumber);
 
         Task<HashSet<string>> GetAllPartNumbersAsync();
+
+        // All active components, untracked - for matching many codes (incl. alternate part numbers,
+        // which GetByPartNumberAsync can't find since it only looks at the primary one) in memory.
+        Task<List<Component>> GetActiveAsync();
+
+        Task<List<Component>> GetByIdsAsync(IEnumerable<int> ids);
     }
 }

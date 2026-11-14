@@ -33,6 +33,21 @@ namespace SMT.Access.Repository
                     .FirstOrDefaultAsync();
         }
 
+        public async Task<List<Component>> GetActiveAsync()
+        {
+            return await DbSet.AsNoTracking()
+                .Where(c => c.IsActive)
+                .ToListAsync();
+        }
+
+        public async Task<List<Component>> GetByIdsAsync(IEnumerable<int> ids)
+        {
+            var idList = ids.ToList();
+
+            return await DbSet.Where(c => idList.Contains(c.Id))
+                .ToListAsync();
+        }
+
         public async Task<HashSet<string>> GetAllPartNumbersAsync()
         {
             var partNumbers = await _context.Components

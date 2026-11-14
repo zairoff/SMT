@@ -10,6 +10,7 @@ using SMT.Access.Identity;
 using SMT.Access.Repository;
 using SMT.Access.Repository.Base;
 using SMT.Access.Repository.BoardFlowV2;
+using SMT.Access.Repository.Feeder;
 using SMT.Access.Repository.Interfaces;
 using SMT.Access.Repository.Interfaces.ReturnedProducts;
 using SMT.Access.Repository.Interfaces.Service;
@@ -22,9 +23,11 @@ using SMT.Security;
 using SMT.Services;
 using SMT.Services.BoardFlow;
 using SMT.Services.BoardFlowV2;
+using SMT.Services.Feeder;
 using SMT.Services.GoogleSheets;
 using SMT.Services.Interfaces;
 using SMT.Services.Interfaces.BoardFlowV2;
+using SMT.Services.Interfaces.Feeder;
 using SMT.Services.Interfaces.FileSystem;
 using SMT.Services.Interfaces.ReturnedProducts;
 using SMT.Services.Mapping;
@@ -172,6 +175,10 @@ namespace SMT.Api.Extensions
             services.AddTransient<IInstructionPositionRepository, InstructionPositionRepository>();
             services.AddTransient<ILineActiveModelRepository, LineActiveModelRepository>();
             services.AddTransient<IModelInstructionImageRepository, ModelInstructionImageRepository>();
+            services.AddTransient<ILineMachineRepository, LineMachineRepository>();
+            services.AddTransient<IMachineModuleRepository, MachineModuleRepository>();
+            services.AddTransient<IFeederSlotRepository, FeederSlotRepository>();
+            services.AddTransient<IFeederSetupRepository, FeederSetupRepository>();
 
             /*************   Services  ************/
 
@@ -224,6 +231,8 @@ namespace SMT.Api.Extensions
             services.AddTransient<IInstructionPositionService, InstructionPositionService>();
             services.AddTransient<ILineActiveModelService, LineActiveModelService>();
             services.AddTransient<IModelInstructionImageService, ModelInstructionImageService>();
+            services.AddTransient<ILineMachineService, LineMachineService>();
+            services.AddTransient<IFeederSetupService, FeederSetupService>();
 
             /*************   Security  ************/
             services.AddTransient<IUserService, UserService>();
