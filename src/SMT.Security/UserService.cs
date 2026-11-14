@@ -56,6 +56,11 @@ namespace SMT.Security
             return (UserResponse)applicationUser;
         }
 
+        public async Task<bool> AnyUserInRoleAsync(string role)
+        {
+            return (await _userManager.GetUsersInRoleAsync(role)).Count > 0;
+        }
+
         public async Task<UserResponse> GetUserByUsername(string username)
         {
             var user = await _userManager.FindByNameAsync(username);
@@ -91,7 +96,7 @@ namespace SMT.Security
             claims.Add(new Claim("username", user.UserName));
 
             var token = new JwtSecurityToken(
-                expires: DateTime.Now.AddSeconds(10),
+                expires: DateTime.Now.AddHours(1),
                 claims: claims,
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
                 );

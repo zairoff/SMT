@@ -27,12 +27,18 @@ namespace SMT.Api.Controllers
             return Ok(result);
         }
         
+        // Only an admin may create another admin. The very first admin can still be created
+        // anonymously, otherwise a fresh database could never get one.
         [HttpPost]
         [Route("/admin/register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateAdmin([FromBody] UserCreate userCreate)
         {
+            if (!User.IsInRole("admin") && await _userService.AnyUserInRoleAsync("admin"))
+                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Only an admin can create admin users" });
+
             var result = await _userService.Create(userCreate, "admin");
 
             return Ok(result);

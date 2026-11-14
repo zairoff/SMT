@@ -12,5 +12,7 @@ namespace SMT.Security
         Task<UserResponse> Authenticate(string username, string password);
 
         Task<UserResponse> GetUserByUsername(string username);
+
+        Task<bool> AnyUserInRoleAsync(string role);
     }
 }
