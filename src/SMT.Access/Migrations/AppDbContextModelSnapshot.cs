@@ -1114,6 +1114,41 @@ namespace SMT.Access.Migrations
                     b.ToTable("ReturnedProductRepairs");
                 });
 
+            modelBuilder.Entity("SMT.Domain.ReturnedProducts.ReturnedProductScan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Barcode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ModelId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SapCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SerialCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TransactionType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModelId");
+
+                    b.ToTable("ReturnedProductScans");
+                });
+
             modelBuilder.Entity("SMT.Domain.ReturnedProducts.ReturnedProductStore", b =>
                 {
                     b.Property<int>("Id")
@@ -1843,6 +1878,15 @@ namespace SMT.Access.Migrations
                     b.Navigation("Model");
 
                     b.Navigation("ReturnedProductTransaction");
+                });
+
+            modelBuilder.Entity("SMT.Domain.ReturnedProducts.ReturnedProductScan", b =>
+                {
+                    b.HasOne("SMT.Domain.Model", "Model")
+                        .WithMany()
+                        .HasForeignKey("ModelId");
+
+                    b.Navigation("Model");
                 });
 
             modelBuilder.Entity("SMT.Domain.ReturnedProducts.ReturnedProductStore", b =>

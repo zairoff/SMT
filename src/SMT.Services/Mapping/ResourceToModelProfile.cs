@@ -34,6 +34,8 @@ using SMT.ViewModel.Dto.ServiceCenterDto;
 using SMT.Domain.Service;
 using SMT.ViewModel.Dto.InstructionPositionDto;
 using SMT.ViewModel.Dto.ModelInstructionImageDto;
+using SMT.Domain.ReturnedProducts;
+using SMT.ViewModel.Dto.ReturnedProductScanDto;
 
 namespace SMT.Services.Mapping
 {
@@ -129,6 +131,8 @@ namespace SMT.Services.Mapping
 
             CreateMap<InstructionPositionCreate, InstructionPosition>();
             CreateMap<ModelInstructionImageCreate, ModelInstructionImage>();
+
+            CreateMap<ReturnedProductScanCreate, ReturnedProductScan>();
         }
     }
 }

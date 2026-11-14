@@ -149,6 +149,7 @@ namespace SMT.Api.Extensions
             services.AddTransient<IReturnedProductUtilizeRepository, ReturnedProductUtilizeRepository>();
             services.AddTransient<IReturnedProductTransactionRepository, ReturnedProductTransactionRepository>();
             services.AddTransient<IReturnedProductBufferRepository, ReturnedProductBufferRepository>();
+            services.AddTransient<IReturnedProductScanRepository, ReturnedProductScanRepository>();
 
             services.AddTransient<IHourlyPlanRepository, HourlyPlanRepository>();
             services.AddTransient<IComponentRepository, ComponentRepository>();
@@ -195,6 +196,7 @@ namespace SMT.Api.Extensions
             services.AddTransient<IReadyProductService, ReadyProductService>();
             services.AddTransient<IReadyProductTransactionService, ReadyProductTransactionService>();
             services.AddTransient<IReturnedProductTransactionService, ReturnedProductTransactionService>();
+            services.AddTransient<IReturnedProductScanService, ReturnedProductScanService>();
             services.AddTransient<IHourlyPlanService, HourlyPlanService>();
             services.AddTransient<IComponentService, ComponentService>();
             services.AddTransient<IComponentRequestService, ComponentRequestService>();
