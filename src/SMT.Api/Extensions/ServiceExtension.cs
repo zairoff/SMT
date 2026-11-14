@@ -179,6 +179,7 @@ namespace SMT.Api.Extensions
             services.AddTransient<IMachineModuleRepository, MachineModuleRepository>();
             services.AddTransient<IFeederSlotRepository, FeederSlotRepository>();
             services.AddTransient<IFeederSetupRepository, FeederSetupRepository>();
+            services.AddTransient<IFeederScanLogRepository, FeederScanLogRepository>();
 
             /*************   Services  ************/
 
@@ -233,6 +234,7 @@ namespace SMT.Api.Extensions
             services.AddTransient<IModelInstructionImageService, ModelInstructionImageService>();
             services.AddTransient<ILineMachineService, LineMachineService>();
             services.AddTransient<IFeederSetupService, FeederSetupService>();
+            services.AddTransient<IFeederStationService, FeederStationService>();
 
             /*************   Security  ************/
             services.AddTransient<IUserService, UserService>();

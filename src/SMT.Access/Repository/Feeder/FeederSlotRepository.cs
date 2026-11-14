@@ -42,6 +42,13 @@ namespace SMT.Access.Repository.Feeder
             return await DbSet.AnyAsync(s => s.SlotCode == slotCode);
         }
 
+        public async Task<IEnumerable<FeederSlot>> GetByCurrentReelCodeAsync(string reelCode)
+        {
+            return await WithModule()
+                .Where(s => s.CurrentReelCode == reelCode)
+                .ToListAsync();
+        }
+
         private IQueryable<FeederSlot> WithModule()
         {
             return DbSet.Include(s => s.MachineModule)

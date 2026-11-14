@@ -12,5 +12,8 @@ namespace SMT.Access.Repository.Feeder
         Task<IEnumerable<FeederSlot>> GetByIdsAsync(IEnumerable<int> ids);
 
         Task<bool> SlotCodeExistsAsync(string slotCode);
+
+        // Slots (on any line) that currently hold this reel.
+        Task<IEnumerable<FeederSlot>> GetByCurrentReelCodeAsync(string reelCode);
     }
 }

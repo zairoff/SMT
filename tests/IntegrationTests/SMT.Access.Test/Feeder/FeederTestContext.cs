@@ -77,6 +77,13 @@ namespace SMT.Access.Test.Feeder
                 new ModelRepository(Db), Mapper, UnitOfWork());
         }
 
+        public FeederStationService FeederStationService()
+        {
+            return new FeederStationService(new FeederSetupRepository(Db), new FeederSlotRepository(Db),
+                new FeederScanLogRepository(Db), new LineMachineRepository(Db), new LineActiveModelRepository(Db),
+                new LineRepository(Db), new ComponentRepository(Db), UnitOfWork());
+        }
+
         public void Dispose()
         {
             Db.Dispose();
