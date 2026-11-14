@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SMT.Domain.Feeder;
@@ -8,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace SMT.Api.Controllers
 {
-    // Operators preview and import setups (drafts); only setup managers make a version live.
-    [Authorize]
+    // Open to everyone on the line - no login. Whoever is logged in (if anyone) is recorded.
     public class FeederSetupController : BaseController
     {
         private readonly IFeederSetupService _service;
@@ -61,19 +59,18 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Import([FromBody] FeederSetupImport import)
         {
-            var result = await _service.ImportAsync(import, FeederRoles.Username(User));
+            var result = await _service.ImportAsync(import, FeederUser.Username(User));
 
             return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }
 
         [HttpPut("{id}/activate")]
-        [Authorize(Roles = FeederRoles.SetupManagers)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> Activate(int id)
         {
-            var result = await _service.ActivateAsync(id, FeederRoles.Username(User));
+            var result = await _service.ActivateAsync(id, FeederUser.Username(User));
 
             return Ok(result);
         }
@@ -84,7 +81,7 @@ namespace SMT.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> CopyToLine(int id, [FromBody] FeederSetupCopy copy)
         {
-            var result = await _service.CopyToLineAsync(id, copy, FeederRoles.Username(User));
+            var result = await _service.CopyToLineAsync(id, copy, FeederUser.Username(User));
 
             return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }

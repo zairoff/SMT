@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SMT.Services.Interfaces.Feeder;
@@ -7,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace SMT.Api.Controllers
 {
-    [Authorize]
     public class LineMachineController : BaseController
     {
         private readonly ILineMachineService _service;
@@ -34,7 +32,6 @@ namespace SMT.Api.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = FeederRoles.SetupManagers)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Save([FromBody] LineMachineSave save)
@@ -45,7 +42,6 @@ namespace SMT.Api.Controllers
         }
 
         [HttpPost("line/{lineId}/module")]
-        [Authorize(Roles = FeederRoles.SetupManagers)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> AddModule(int lineId, [FromBody] MachineModuleSave save)
@@ -56,7 +52,6 @@ namespace SMT.Api.Controllers
         }
 
         [HttpPut("module/{moduleId}")]
-        [Authorize(Roles = FeederRoles.SetupManagers)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -68,7 +63,6 @@ namespace SMT.Api.Controllers
         }
 
         [HttpPost("module/{moduleId}/slots")]
-        [Authorize(Roles = FeederRoles.SetupManagers)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> AddSlots(int moduleId, [FromBody] FeederSlotsCreate create)
@@ -79,7 +73,6 @@ namespace SMT.Api.Controllers
         }
 
         [HttpPut("slot/{slotId}/active")]
-        [Authorize(Roles = FeederRoles.SetupManagers)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> SetSlotActive(int slotId, bool isActive)
