@@ -32,7 +32,15 @@ namespace SMT.ViewModel.Dto.DocumentDto
     {
         public string Username { get; set; }
 
+        /// <summary>Name shown for the folder, e.g. "1 Метрология". Falls back to the username.</summary>
+        public string Title { get; set; }
+
         public bool IsAdmin { get; set; }
+    }
+
+    public class DocumentTitleUpdate
+    {
+        public string Title { get; set; }
     }
 
     public class DocumentCreateFolder
@@ -59,6 +67,9 @@ namespace SMT.ViewModel.Dto.DocumentDto
         public string Username { get; set; }
 
         public string Password { get; set; }
+
+        /// <summary>Folder display name, e.g. "1 Метрология"; a leading number sets the order.</summary>
+        public string Title { get; set; }
 
         /// <summary>Admins can manage every folder and the staff accounts.</summary>
         public bool IsAdmin { get; set; }

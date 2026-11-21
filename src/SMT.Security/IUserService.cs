@@ -25,5 +25,11 @@ namespace SMT.Security
         Task ResetPasswordAsync(string username, string newPassword);
 
         Task DeleteByUsernameAsync(string username);
+
+        /// <summary>Value of the user's first claim of this type, or null.</summary>
+        Task<string> GetClaimValueAsync(string username, string claimType);
+
+        /// <summary>Replaces all of the user's claims of this type with one claim (none when value is empty).</summary>
+        Task SetClaimValueAsync(string username, string claimType, string value);
     }
 }

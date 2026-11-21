@@ -102,6 +102,22 @@ namespace SMT.Security
             EnsureSucceeded(await _userManager.DeleteAsync(user));
         }
 
+        public async Task<string> GetClaimValueAsync(string username, string claimType)
+        {
+            var user = await FindRequiredAsync(username);
+            return (await _userManager.GetClaimsAsync(user)).FirstOrDefault(c => c.Type == claimType)?.Value;
+        }
+
+        public async Task SetClaimValueAsync(string username, string claimType, string value)
+        {
+            var user = await FindRequiredAsync(username);
+            var existing = (await _userManager.GetClaimsAsync(user)).Where(c => c.Type == claimType).ToList();
+            if (existing.Count > 0)
+                EnsureSucceeded(await _userManager.RemoveClaimsAsync(user, existing));
+            if (!string.IsNullOrWhiteSpace(value))
+                EnsureSucceeded(await _userManager.AddClaimAsync(user, new Claim(claimType, value.Trim())));
+        }
+
         private async Task<ApplicationUser> FindRequiredAsync(string username)
         {
             var user = await _userManager.FindByNameAsync(username);

@@ -144,6 +144,40 @@ namespace SMT.Access.Test.Documents
             await Assert.ThrowsAsync<InvalidOperationException>(() => boss.DeleteStaff("boss"));
         }
 
+        [Fact]
+        public async Task Folders_ShowTitles_InProcessStepOrder()
+        {
+            var boss = As("boss", "admin");
+            foreach (var (login, title) in new[]
+            {
+                ("Smk", "10 Менеджер СМК"), ("Metrologiya", "1 Метрология"), ("Znaniya", "11 Внутрифирменные знание"),
+                ("Kto", "2 КТО"), ("Sklad", "8 Склад"),
+            })
+                await boss.CreateStaff(new DocumentStaffCreate { Username = login, Password = "x", Title = title });
+
+            var owners = (DocumentFolderOwner[])((OkObjectResult)await As("ali", "Engineer").GetOwners()).Value;
+
+            // Numbered first by step (1, 2, 8, 10, 11 - not 1, 10, 11, 2), untitled logins after.
+            Assert.Equal(
+                new[] { "1 Метрология", "2 КТО", "8 Склад", "10 Менеджер СМК", "11 Внутрифирменные знание", "ali", "bob" },
+                owners.Select(o => o.Title).ToArray());
+            Assert.Equal("Metrologiya", owners[0].Username);
+        }
+
+        [Fact]
+        public async Task OnlyAdmins_CanRenameFolderTitles()
+        {
+            Assert.Equal(403, Status(await As("ali", "Engineer").SetTitle("ali", new DocumentTitleUpdate { Title = "1 Мой" })));
+
+            Assert.Equal(204, Status(await As("boss", "admin").SetTitle("ali", new DocumentTitleUpdate { Title = " 3 Отдел Закупок " })));
+            Assert.Equal("3 Отдел Закупок", await _users.GetClaimValueAsync("ali", DocumentController.TitleClaim));
+
+            // Clearing the title falls back to the login.
+            await As("boss", "admin").SetTitle("ali", new DocumentTitleUpdate { Title = "" });
+            var owners = (DocumentFolderOwner[])((OkObjectResult)await As("ali", "Engineer").GetOwners()).Value;
+            Assert.Contains(owners, o => o.Username == "ali" && o.Title == "ali");
+        }
+
         private class FakeUserService : IUserService
         {
             private readonly Dictionary<string, HashSet<string>> _roles = new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
@@ -188,6 +222,20 @@ namespace SMT.Access.Test.Documents
             public Task DeleteByUsernameAsync(string username)
             {
                 _roles.Remove(username);
+                return Task.CompletedTask;
+            }
+
+            public Dictionary<(string, string), string> Claims { get; } = new Dictionary<(string, string), string>();
+
+            public Task<string> GetClaimValueAsync(string username, string claimType) =>
+                Task.FromResult(Claims.TryGetValue((username.ToLowerInvariant(), claimType), out var v) ? v : null);
+
+            public Task SetClaimValueAsync(string username, string claimType, string value)
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    Claims.Remove((username.ToLowerInvariant(), claimType));
+                else
+                    Claims[(username.ToLowerInvariant(), claimType)] = value.Trim();
                 return Task.CompletedTask;
             }
 

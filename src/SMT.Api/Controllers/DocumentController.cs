@@ -10,6 +10,7 @@ using SMT.Services.Interfaces.Documents;
 using SMT.ViewModel.Dto.DocumentDto;
 using SMT.ViewModel.Dto.UserDto;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,6 +27,9 @@ namespace SMT.Api.Controllers
     public class DocumentController : BaseController
     {
         private const long DefaultMaxFileSizeMb = 500;
+
+        /// <summary>Identity claim holding a folder's display name ("1 Метрология").</summary>
+        public const string TitleClaim = "documents:title";
 
         private readonly IDocumentStorage _storage;
         private readonly IUserService _userService;
@@ -184,13 +188,37 @@ namespace SMT.Api.Controllers
 
             if (request.IsAdmin)
                 await _userService.AddToRoleAsync(username, ApplicationUserRoles.Admin);
+            if (!string.IsNullOrWhiteSpace(request.Title))
+                await _userService.SetClaimValueAsync(username, TitleClaim, ValidateTitle(request.Title));
 
             return Ok(new
             {
                 username,
+                title = string.IsNullOrWhiteSpace(request.Title) ? username : request.Title.Trim(),
                 isAdmin = request.IsAdmin || await _userService.IsInRoleAsync(username, ApplicationUserRoles.Admin),
                 existingAccount,
             });
+        }
+
+        /// <summary>Changes the folder's display name (the login and the folder on disk stay the same).</summary>
+        [HttpPut("staff/title")]
+        public async Task<IActionResult> SetTitle([FromQuery] string username, [FromBody] DocumentTitleUpdate request)
+        {
+            if (!IsAdmin)
+                return Denied("Only an admin can manage staff accounts");
+            await EnsureOwnerAsync(username);
+
+            var title = string.IsNullOrWhiteSpace(request?.Title) ? null : ValidateTitle(request.Title);
+            await _userService.SetClaimValueAsync(username, TitleClaim, title);
+            return NoContent();
+        }
+
+        private static string ValidateTitle(string title)
+        {
+            title = title.Trim();
+            if (title.Length > 100)
+                throw new InvalidOperationException("Folder name is too long (100 characters max)");
+            return title;
         }
 
         [HttpPut("staff/password")]
@@ -248,9 +276,35 @@ namespace SMT.Api.Controllers
             var admins = (await _userService.GetUsernamesInRoleAsync(ApplicationUserRoles.Admin))
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-            return engineers
-                .Select(u => new DocumentFolderOwner { Username = u, IsAdmin = admins.Contains(u) })
-                .ToArray();
+            var owners = new List<DocumentFolderOwner>();
+            foreach (var username in engineers)
+            {
+                var title = await _userService.GetClaimValueAsync(username, TitleClaim);
+                owners.Add(new DocumentFolderOwner
+                {
+                    Username = username,
+                    Title = string.IsNullOrWhiteSpace(title) ? username : title,
+                    IsAdmin = admins.Contains(username),
+                });
+            }
+            return SortByStep(owners).ToArray();
+        }
+
+        /// <summary>
+        /// Folder titles start with the process step ("1 Метрология", "10 Менеджер СМК"): order by
+        /// that number (1, 2 ... 10, 11 - not 1, 10, 11, 2), untitled/unnumbered folders last.
+        /// </summary>
+        public static IEnumerable<DocumentFolderOwner> SortByStep(IEnumerable<DocumentFolderOwner> owners)
+        {
+            static int Step(string title)
+            {
+                var digits = new string((title ?? "").TakeWhile(char.IsDigit).ToArray());
+                return digits.Length > 0 && digits.Length < 9 ? int.Parse(digits) : int.MaxValue;
+            }
+
+            return owners
+                .OrderBy(o => Step(o.Title))
+                .ThenBy(o => o.Title, StringComparer.CurrentCultureIgnoreCase);
         }
 
         private IActionResult Denied(string message) =>
