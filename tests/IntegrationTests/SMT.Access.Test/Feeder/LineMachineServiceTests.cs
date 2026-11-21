@@ -23,10 +23,18 @@ namespace SMT.Access.Test.Feeder
             var service = _ctx.LineMachineService();
 
             var created = await service.SaveAsync(new LineMachineSave { LineId = _ctx.Line1.Id, Name = "NXT", Vendor = MachineVendor.Fuji });
-            var updated = await service.SaveAsync(new LineMachineSave { LineId = _ctx.Line1.Id, Name = "NPM-W2", Vendor = MachineVendor.Panasonic });
+            var updated = await service.SaveAsync(new LineMachineSave
+            {
+                LineId = _ctx.Line1.Id,
+                Name = "NPM-W2",
+                Vendor = MachineVendor.Panasonic,
+                RequireSlotScan = true,
+            });
 
             Assert.Equal(created.Id, updated.Id);
+            Assert.False(created.RequireSlotScan);
             Assert.Equal(MachineVendor.Panasonic, updated.Vendor);
+            Assert.True(updated.RequireSlotScan);
             Assert.Single(_ctx.Db.LineMachines);
         }
 

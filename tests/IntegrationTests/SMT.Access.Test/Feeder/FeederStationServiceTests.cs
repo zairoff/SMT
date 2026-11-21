@@ -18,6 +18,9 @@ namespace SMT.Access.Test.Feeder
 
         private readonly FeederTestContext _ctx = new FeederTestContext();
 
+        // Most tests exercise the sticker step; the no-sticker tests switch this off first.
+        private bool _requireSlotScan = true;
+
         public void Dispose()
         {
             _ctx.Dispose();
@@ -28,7 +31,9 @@ namespace SMT.Access.Test.Feeder
         // M1-1 resistor (imported by part number), M1-2 capacitor (imported by RCode), active.
         private async Task<int> ActiveSetupAsync(params (string Module, string Feeder, string Code)[] rows)
         {
-            _ctx.AddMachine(_ctx.Line1, ("M1", 3));
+            var machine = _ctx.AddMachine(_ctx.Line1, ("M1", 3));
+            machine.RequireSlotScan = _requireSlotScan;
+            _ctx.Db.SaveChanges();
             var service = _ctx.FeederSetupService();
 
             var import = new FeederSetupImport
@@ -206,6 +211,49 @@ namespace SMT.Access.Test.Feeder
             Assert.Equal(FeederScanResult.Ok, moved.Result);
             var slots = await _ctx.Db.FeederSlots.Where(s => s.CurrentReelCode == ResistorQr).ToListAsync();
             Assert.Equal(Slot("M1", 3), Assert.Single(slots).SlotCode);
+        }
+
+        [Fact]
+        public async Task GetStation_ReportsWhetherSlotScanIsRequired()
+        {
+            _requireSlotScan = false;
+            await ActiveSetupAsync();
+
+            var station = await _ctx.FeederStationService().GetStationAsync(_ctx.Line1.Id);
+
+            Assert.False(station.RequireSlotScan);
+        }
+
+        [Fact]
+        public async Task Lookup_WithoutSlotScan_LogsOkAndRecordsTheOnlyFeeder()
+        {
+            _requireSlotScan = false;
+            var setupId = await ActiveSetupAsync();
+
+            var result = await _ctx.FeederStationService().LookupAsync(Scan(setupId, ResistorQr), "op");
+
+            Assert.Equal(FeederScanResult.Ok, result.Result);
+            var log = await _ctx.Db.FeederScanLogs.SingleAsync();
+            Assert.Equal(FeederScanResult.Ok, log.Result);
+            Assert.Null(log.RawSlotCode);
+
+            var slot = await _ctx.Db.FeederSlots.SingleAsync(s => s.SlotCode == Slot("M1", 1));
+            Assert.Equal(slot.Id, log.FeederSlotId);
+            Assert.Equal(ResistorQr, slot.CurrentReelCode);
+        }
+
+        [Fact]
+        public async Task Lookup_WithoutSlotScan_SeveralFeeders_LogsWithoutGuessingTheSlot()
+        {
+            _requireSlotScan = false;
+            var setupId = await ActiveSetupAsync(("M1", "1", "R0001"), ("M1", "3", "R0001"));
+
+            await _ctx.FeederStationService().LookupAsync(Scan(setupId, ResistorQr), "op");
+
+            var log = await _ctx.Db.FeederScanLogs.SingleAsync();
+            Assert.Equal(FeederScanResult.Ok, log.Result);
+            Assert.Null(log.FeederSlotId);
+            Assert.False(await _ctx.Db.FeederSlots.AnyAsync(s => s.CurrentReelCode != null));
         }
 
         [Fact]

@@ -13,6 +13,9 @@ namespace SMT.ViewModel.Dto.FeederStationDto
 
         public string MachineName { get; set; }
 
+        // False: the station shows where the reel goes and logs it; no slot sticker scan.
+        public bool RequireSlotScan { get; set; }
+
         public int? ActiveModelId { get; set; }
 
         public List<FeederStationSetup> Setups { get; set; } = new List<FeederStationSetup>();

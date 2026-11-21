@@ -60,6 +60,7 @@ namespace SMT.Services.Feeder
                 LineId = line.Id,
                 LineName = line.Name,
                 MachineName = machine?.Name,
+                RequireSlotScan = machine?.RequireSlotScan ?? false,
                 ActiveModelId = activeModel?.ModelId,
                 Setups = setups
                     .OrderBy(s => s.Model.Name)
@@ -85,6 +86,18 @@ namespace SMT.Services.Feeder
             if (reel.Response.Result == FeederScanResult.Ng)
             {
                 await LogAsync(scan, setup, null, reel, null, username);
+                await _unitOfWork.SaveAsync();
+            }
+            else if (!await RequiresSlotScanAsync(scan.LineId))
+            {
+                // No sticker step on this line (like the old model-changer): the lookup is the whole
+                // scan, so it's logged here. With a single possible feeder the reel is recorded there;
+                // with several we can't know which one the operator used.
+                var target = reel.Targets.Count == 1 ? reel.Targets[0] : null;
+                if (target != null)
+                    await LoadReelIntoSlotAsync(target, reel, scan.ReelCode, username);
+
+                await LogAsync(scan, setup, target, reel, reel.Component.Id, username);
                 await _unitOfWork.SaveAsync();
             }
 
@@ -155,6 +168,13 @@ namespace SMT.Services.Feeder
 
         // The station holds on to a setup id; if that setup was replaced (a newer version activated)
         // or doesn't belong to the line, scans must not be verified against it.
+        private async Task<bool> RequiresSlotScanAsync(int lineId)
+        {
+            var machine = await _machineRepository.FindAsync(m => m.LineId == lineId);
+
+            return machine != null && machine.RequireSlotScan;
+        }
+
         private async Task<FeederSetup> GetActiveSetupAsync(FeederReelScan scan)
         {
             var setup = await _setupRepository.GetWithItemsAsync(scan.SetupId);
@@ -199,11 +219,12 @@ namespace SMT.Services.Feeder
             SetComponent(reel, lookup.Component);
 
             var items = setup.Items.Where(i => i.ComponentId == lookup.Component.Id).ToList();
-            reel.Response.Targets = items
-                .OrderBy(i => i.FeederSlot.MachineModule.Order)
-                .ThenBy(i => i.FeederSlot.Number, FeederSlotNumberComparer.Instance)
-                .Select(i => ToTarget(i.FeederSlot))
+            reel.Targets = items
+                .Select(i => i.FeederSlot)
+                .OrderBy(s => s.MachineModule.Order)
+                .ThenBy(s => s.Number, FeederSlotNumberComparer.Instance)
                 .ToList();
+            reel.Response.Targets = reel.Targets.Select(ToTarget).ToList();
 
             var reelPartNumber = parsed.PartNumber ?? (lookup.Match == ComponentMatch.RCode ? null : lookup.MatchedCode);
             reel.Response.IsAlternate = items.Any(i => IsAlternate(reelPartNumber, i));
@@ -312,6 +333,9 @@ namespace SMT.Services.Feeder
             public ParsedReelCode Parsed { get; set; }
 
             public Component Component { get; set; }
+
+            // Setup slots this component goes to (tracked entities, empty when NG).
+            public List<FeederSlot> Targets { get; set; } = new List<FeederSlot>();
 
             public FeederScanResponse Response { get; set; }
         }

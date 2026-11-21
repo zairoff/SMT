@@ -72,6 +72,7 @@ namespace SMT.Services.Feeder
 
             machine.Name = save.Name.Trim();
             machine.Vendor = save.Vendor;
+            machine.RequireSlotScan = save.RequireSlotScan;
             machine.IsActive = true;
 
             await _unitOfWork.SaveAsync();

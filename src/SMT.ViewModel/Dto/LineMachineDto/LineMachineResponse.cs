@@ -15,6 +15,8 @@ namespace SMT.ViewModel.Dto.LineMachineDto
 
         public MachineVendor Vendor { get; set; }
 
+        public bool RequireSlotScan { get; set; }
+
         public bool IsActive { get; set; }
 
         public List<MachineModuleResponse> Modules { get; set; } = new List<MachineModuleResponse>();

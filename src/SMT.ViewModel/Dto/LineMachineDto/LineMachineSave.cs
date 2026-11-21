@@ -10,5 +10,7 @@ namespace SMT.ViewModel.Dto.LineMachineDto
         public string Name { get; set; }
 
         public MachineVendor Vendor { get; set; }
+
+        public bool RequireSlotScan { get; set; }
     }
 }
