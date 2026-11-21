@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <IsPackable>false</IsPackable>
+    <!-- SMT.Agents exposes Anthropic SDK types, which need a C# 11+ compiler. -->
+    <LangVersion>12</LangVersion>
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +25,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\SMT.Access\SMT.Access.csproj" />
     <ProjectReference Include="..\..\..\src\SMT.Services\SMT.Services.csproj" />
+    <ProjectReference Include="..\..\..\src\SMT.Agents\SMT.Agents.csproj" />
+    <ProjectReference Include="..\..\..\src\SMT.Api\SMT.Api.csproj" />
   </ItemGroup>
 
 </Project>

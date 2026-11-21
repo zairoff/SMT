@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Anthropic;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +19,7 @@ using SMT.Access.Repository.ReturnedProducts;
 using SMT.Access.Repository.Service;
 using SMT.Access.Repository.Statics;
 using SMT.Access.Unit;
+using SMT.Agents.DataAssistant;
 using SMT.Notification;
 using SMT.Security;
 using SMT.Services;
@@ -26,7 +28,9 @@ using SMT.Services.BoardFlowV2;
 using SMT.Services.Feeder;
 using SMT.Services.GoogleSheets;
 using SMT.Services.Interfaces;
+using SMT.Services.Documents;
 using SMT.Services.Interfaces.BoardFlowV2;
+using SMT.Services.Interfaces.Documents;
 using SMT.Services.Interfaces.Feeder;
 using SMT.Services.Interfaces.FileSystem;
 using SMT.Services.Interfaces.ReturnedProducts;
@@ -239,6 +243,31 @@ namespace SMT.Api.Extensions
             /*************   Security  ************/
             services.AddTransient<IUserService, UserService>();
 
+
+            /*************  AI data assistant  **************/
+            // The API key comes from configuration "Anthropic:ApiKey" (e.g. env var Anthropic__ApiKey or
+            // user-secrets) or the standard ANTHROPIC_API_KEY env var - never put it in appsettings.json.
+            // Without a key the app still starts; the assistant endpoint answers 503.
+            var assistantOptions = new DataAssistantOptions
+            {
+                ApiKey = configuration["Anthropic:ApiKey"] ?? configuration["ANTHROPIC_API_KEY"],
+            };
+            var assistantModel = configuration["Anthropic:Model"];
+            if (!string.IsNullOrWhiteSpace(assistantModel))
+                assistantOptions.Model = assistantModel;
+            services.AddSingleton(assistantOptions);
+            services.AddSingleton(_ => new AnthropicClient { ApiKey = assistantOptions.ApiKey ?? "" });
+            services.AddTransient<DataAssistantTools>();
+            services.AddTransient<IDataAssistantService, DataAssistantService>();
+
+            /*************  Staff document folders  **************/
+            // Relative paths resolve against the working directory (the project folder under
+            // `dotnet run`, /app in Docker - mount a volume there or the files die with the container).
+            services.AddSingleton(new DocumentStorageOptions
+            {
+                RootFolder = System.IO.Path.GetFullPath(configuration["Documents:RootFolder"] ?? "documents"),
+            });
+            services.AddSingleton<IDocumentStorage, DocumentStorage>();
 
             /*************  Other  **************/
             services.AddTransient<IImageService, ImageService>();

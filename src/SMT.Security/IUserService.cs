@@ -1,4 +1,5 @@
 ﻿using SMT.ViewModel.Dto.UserDto;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SMT.Security
@@ -14,5 +15,15 @@ namespace SMT.Security
         Task<UserResponse> GetUserByUsername(string username);
 
         Task<bool> AnyUserInRoleAsync(string role);
+
+        Task<IList<string>> GetUsernamesInRoleAsync(string role);
+
+        Task<bool> IsInRoleAsync(string username, string role);
+
+        Task AddToRoleAsync(string username, string role);
+
+        Task ResetPasswordAsync(string username, string newPassword);
+
+        Task DeleteByUsernameAsync(string username);
     }
 }

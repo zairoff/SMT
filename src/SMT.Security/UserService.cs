@@ -61,6 +61,61 @@ namespace SMT.Security
             return (await _userManager.GetUsersInRoleAsync(role)).Count > 0;
         }
 
+        public async Task<IList<string>> GetUsernamesInRoleAsync(string role)
+        {
+            if (!await _roleManager.RoleExistsAsync(role))
+                return new List<string>();
+
+            return (await _userManager.GetUsersInRoleAsync(role))
+                .Select(u => u.UserName)
+                .OrderBy(n => n, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+        }
+
+        public async Task<bool> IsInRoleAsync(string username, string role)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            return user != null && await _userManager.IsInRoleAsync(user, role);
+        }
+
+        public async Task AddToRoleAsync(string username, string role)
+        {
+            var user = await FindRequiredAsync(username);
+
+            if (!await _roleManager.RoleExistsAsync(role))
+                await _roleManager.CreateAsync(new IdentityRole(role));
+
+            if (!await _userManager.IsInRoleAsync(user, role))
+                EnsureSucceeded(await _userManager.AddToRoleAsync(user, role));
+        }
+
+        public async Task ResetPasswordAsync(string username, string newPassword)
+        {
+            var user = await FindRequiredAsync(username);
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            EnsureSucceeded(await _userManager.ResetPasswordAsync(user, token, newPassword));
+        }
+
+        public async Task DeleteByUsernameAsync(string username)
+        {
+            var user = await FindRequiredAsync(username);
+            EnsureSucceeded(await _userManager.DeleteAsync(user));
+        }
+
+        private async Task<ApplicationUser> FindRequiredAsync(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+                throw new NotFoundException($"{username} user not found");
+            return user;
+        }
+
+        private static void EnsureSucceeded(IdentityResult result)
+        {
+            if (!result.Succeeded)
+                throw new InvalidOperationException(string.Join(" ", result.Errors.Select(e => e.Description)));
+        }
+
         public async Task<UserResponse> GetUserByUsername(string username)
         {
             var user = await _userManager.FindByNameAsync(username);

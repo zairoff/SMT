@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <!-- The Anthropic SDK uses C# 11+ features (required members), so this project
+         needs a newer compiler than net5.0's default C# 9. Build with the .NET 8 SDK. -->
+    <LangVersion>12</LangVersion>
+    <Nullable>disable</Nullable>
+    <!-- System.Text.Json / Microsoft.Extensions.AI (SDK dependencies) warn that net5.0 is untested. -->
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Anthropic" Version="13.12.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SMT.Access\SMT.Access.csproj" />
+    <ProjectReference Include="..\SMT.Services\SMT.Services.csproj" />
+  </ItemGroup>
+
+</Project>

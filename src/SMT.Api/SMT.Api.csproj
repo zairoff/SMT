@@ -5,6 +5,7 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
     <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
+    <UserSecretsId>75737a59-c788-484c-87cc-199a68172e6b</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -27,6 +28,7 @@
     <ProjectReference Include="..\SMT.Security\SMT.Security.csproj" />
     <ProjectReference Include="..\SMT.Services\SMT.Services.csproj" />
     <ProjectReference Include="..\SMT.ViewModel\SMT.ViewModel.csproj" />
+    <ProjectReference Include="..\SMT.Agents\SMT.Agents.csproj" />
   </ItemGroup>
 
   <ItemGroup>

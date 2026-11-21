@@ -47,6 +47,10 @@ namespace SMT.Api.ExceptionHandler
                     code = HttpStatusCode.Conflict;
                     break;
 
+                case ServiceUnavailableException:
+                    code = HttpStatusCode.ServiceUnavailable;
+                    break;
+
                 case InvalidOperationException:
                     code = HttpStatusCode.BadRequest;
                     break;

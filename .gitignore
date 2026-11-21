@@ -364,3 +364,5 @@ FodyWeavers.xsd
 
 # Directories
 wwwroot/
+# Staff document folders (DocumentController) - real user files, never commit
+src/SMT.Api/documents/

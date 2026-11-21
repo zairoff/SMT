@@ -19,6 +19,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Notification", "src\SMT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMT.Access.Test", "tests\IntegrationTests\SMT.Access.Test\SMT.Access.Test.csproj", "{5337B07D-0A09-4A4A-A9D7-7DB6535625C0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F76EF596-3D67-453A-9DE0-EF7A18008347}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMT.Agents", "src\SMT.Agents\SMT.Agents.csproj", "{D5091364-F4D9-40CF-8EB5-3174DC02B5DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,11 +95,22 @@ Global
 		{5337B07D-0A09-4A4A-A9D7-7DB6535625C0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5337B07D-0A09-4A4A-A9D7-7DB6535625C0}.Release|x64.ActiveCfg = Release
 		{5337B07D-0A09-4A4A-A9D7-7DB6535625C0}.Release|x64.Build.0 = Release
+		{D5091364-F4D9-40CF-8EB5-3174DC02B5DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5091364-F4D9-40CF-8EB5-3174DC02B5DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5091364-F4D9-40CF-8EB5-3174DC02B5DB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D5091364-F4D9-40CF-8EB5-3174DC02B5DB}.Debug|x64.Build.0 = Debug|Any CPU
+		{D5091364-F4D9-40CF-8EB5-3174DC02B5DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5091364-F4D9-40CF-8EB5-3174DC02B5DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5091364-F4D9-40CF-8EB5-3174DC02B5DB}.Release|x64.ActiveCfg = Release|Any CPU
+		{D5091364-F4D9-40CF-8EB5-3174DC02B5DB}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2EA9BAF1-1A7B-4A63-889A-741EE18A7A99}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D5091364-F4D9-40CF-8EB5-3174DC02B5DB} = {F76EF596-3D67-453A-9DE0-EF7A18008347}
 	EndGlobalSection
 EndGlobal

@@ -4,7 +4,9 @@ FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+# .NET 8 SDK (C# 12 compiler) is needed to build SMT.Agents (Anthropic SDK); the app still targets
+# net5.0 and runs on the aspnet:5.0 runtime image below.
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["SMT.Api/SMT.Api.csproj", "SMT.Api/"]
 COPY ["SMT.Services/SMT.Services.csproj", "SMT.Services/"]
@@ -13,6 +15,7 @@ COPY ["SMT.Domain/SMT.Domain.csproj", "SMT.Domain/"]
 COPY ["SMT.ViewModel/SMT.ViewModel.csproj", "SMT.ViewModel/"]
 COPY ["SMT.Notification/SMT.Notification.csproj", "SMT.Notification/"]
 COPY ["SMT.Security/SMT.Security.csproj", "SMT.Security/"]
+COPY ["SMT.Agents/SMT.Agents.csproj", "SMT.Agents/"]
 RUN dotnet restore "SMT.Api/SMT.Api.csproj"
 COPY . .
 WORKDIR "/src/SMT.Api"
